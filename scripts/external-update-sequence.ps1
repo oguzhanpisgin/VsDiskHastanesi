@@ -11,6 +11,8 @@ Enhancements:
  - 2025-10-05: Added -Force option, stronger regex (case-insensitive), fallback version derivation, unconditional refresh when forced.
  - 2025-10-05 (late): Added branch fallback logic (master/main) for FluentUI & KeywordGap to avoid 404.
  - 2025-10-05 (v2): Additional FluentUI & Wappalyzer fallback paths (monorepo structure changes).
+ - 2025-10-05 (v3): ExternalFetchLog integration (logs each source attempt with version/hash or failure note).
+ - 2025-10-05 (v3-fix): Replaced PowerShell 7 operators (?? / ternary style) with PS 5.1 compatible code.
 #>
 [CmdletBinding()]param(
   [string]$Server = '(localdb)\\MSSQLLocalDB',
@@ -53,6 +55,27 @@ function Update-MetadataIfChanged($key,$value){
   if($DryRun){ Info "DRYRUN metadata $key => $value" } else { sqlcmd -S $Server -d $Database -b -Q $sql | Out-Null }
 }
 
+# Logging helper (writes to ExternalFetchLog if table exists)
+function Log-Fetch($source,$version,$hash,$status,$notes){
+  if($DryRun){ Info "DRYRUN log $source $status"; return }
+  # PS 5.1 compatible null handling
+  $v = ''
+  if($null -ne $version -and $version -ne ''){ $v = $version.Replace("'","''") }
+  $h = ''
+  if($null -ne $hash -and $hash -ne ''){ $h = $hash.Replace("'","''") }
+  $s = $status.Replace("'","''")
+  $n = ''
+  if($notes){
+    $trimmed = $notes.Substring(0,[Math]::Min(390,$notes.Length))
+    $n = $trimmed.Replace("'","''")
+  }
+  $sql = @(
+    "IF OBJECT_ID('ExternalFetchLog','U') IS NOT NULL",
+    " INSERT INTO ExternalFetchLog(SourceName,VersionValue,HashValue,Status,Notes) VALUES('$source',NULLIF('$v',''),'$h','$s',NULLIF('$n',''))"
+  ) -join ' '
+  try { sqlcmd -S $Server -d $Database -b -Q $sql | Out-Null } catch { Warn ("Log insert failed for {0}: {1}" -f $source, $_.Exception.Message) }
+}
+
 $cacheRoot = Join-Path $PSScriptRoot '../external-cache'; if(-not (Test-Path $cacheRoot)){ New-Item -ItemType Directory -Path $cacheRoot | Out-Null }
 $utcNow = (Get-Date).ToUniversalTime().ToString('yyyyMMdd_HHmmss')
 $overallOk=0; $failCount=0; $processed=0
@@ -73,8 +96,16 @@ function Fetch-And-Process { param([string]$Name,[scriptblock]$Getter,[scriptblo
     $dir = Join-Path $cacheRoot $Name; if(-not (Test-Path $dir)){ New-Item -ItemType Directory -Path $dir | Out-Null }
     $rawPath = Join-Path $dir ("${utcNow}." + $RawExt); if(-not $DryRun){ [IO.File]::WriteAllText($rawPath,$raw,[Text.UTF8Encoding]::new($false)) }
     $result = & $Parser $raw; foreach($k in $result.Keys){ Update-MetadataIfChanged -key $k -value $result[$k] }
+    # Extract version/hash safely (PS 5.1 style)
+    $versionKey = ($result.Keys | Where-Object { $_ -match '_Version$' -or $_ -match '_RefDate$' } | Select-Object -First 1)
+    $hashKey = ($result.Keys | Where-Object { $_ -match '_Hash$' } | Select-Object -First 1)
+    $verVal = $null; if($versionKey){ $verVal = $result[$versionKey] }
+    $hashVal = $null; if($hashKey){ $hashVal = $result[$hashKey] }
+    Log-Fetch -source $Name -version $verVal -hash $hashVal -status 'OK' -notes ''
     $script:overallOk++
-  } catch { $script:failCount++; Fail ("{0} fetch/process failed: {1}" -f $Name, $_.Exception.Message) }
+  } catch {
+    $script:failCount++; Fail ("{0} fetch/process failed: {1}" -f $Name, $_.Exception.Message); Log-Fetch -source $Name -version $null -hash $null -status 'FAIL' -notes $_.Exception.Message
+  }
 }
 
 if(-not $SkipFluentUI){
