@@ -1,0 +1,120 @@
+﻿Harika—Diskhastanesi web sitesi için “CMS Admin Panel” gereksinimlerini; “diğer CMS’lerde iyi çalışan özellikleri” de içerecek şekilde özellik listesi + sayfa yapısı formatında, kodsuz ve doğrudan VS Code AI’ye verilebilecek netlikte hazırladım.
+🎯 Amaç ve Kapsam
+Amaç: Pazarlama/kurumsal ekibin web sitesindeki tüm içerikleri (sayfalar, hizmetler, sektör çözümleri, blog/case, medya, SEO, yönlendirmeler, formlar) hızlı ve güvenli biçimde yönetmesi.
+Sınır: CMS yalnızca içerik yönetir; PII/form verileri CRM’e akar (CMS veri depolamaz).
+Mimari: Headless CMS (APIfirst) + Next.js tarzı ön yüz; çokdilli, versiyonlama, preview, iş akışları.
+🧭 Ana Navigasyon / Sayfa Yapısı (Admin Panel)
+Dashboard
+Son içerikler (taslak/yayın), planlı yayınlar, bekleyen onaylar
+Kırık link uyarıları, SEO/erişilebilirlik hızlı sağlık kartları
+İçerikler
+Collections (içerik türleri): Pages, Services, Sector Solutions, Case Studies, Blog, Resources (Whitepaper/Webinar), FAQs, Legal Docs, Team, Partners, Certificates, References
+Entries: Liste, filtre/sıralama, bulk edit, hızlı durum değişimi
+Blocks/Components: Hero, Feature grid, FAQ accordion, Tabs, Timeline, Testimonial, CTA, Stats, Media gallery, Code snippet, Download card
+Menüler & Site Yapısı
+Ana menü, alt menüler, footer; sürüklebırak sıralama
+Medya Kütüphanesi
+Görsel/video/PDF yönetimi, otomatik varyasyon/thumbnail, alt metin zorunluluğu, toplu yükleme
+SEO & Teknik
+Sayfa bazlı: Title, Meta, OG/Twitter, Canonical, hreflang, Schema builder
+Redirect Manager (301/302), Robots.txt, Sitemap üretimi
+Formlar (Bağlantılar)
+“Kariyer” ve “İletişim/Teklif” formları için CRM endpoint tanımı (secret, IP allowlist, HMAC)
+Deneme/monitoring, hata günlükleri
+Çokdilli Yönetim
+Diller, çeviri durumları, lokalizasyon fallback
+Yayınlama & İş Akışları
+Draft → Review → Approve → Publish → Schedule/Unpublish
+İçerik takvimi (Content Calendar), görev/atama, yorumlar
+Versiyonlama & Revizyonlar
+Diff görünümü, geçmişten geri alma, açıklama (commit message)
+Kullanıcılar & Roller
+Editor, SEO Editor, Publisher, Admin; alan/saha bazlı yetkiler
+“İçerik sahibi” atama, devralma
+Entegrasyonlar
+Webhooks: değişiklikte build/edge cache temizleme, arama indeks güncelleme
+Analytics, Tag Manager, Arama (Algolia/OpenSearch) bağlantıları
+Sistem & Denetim
+Audit log (kim/ne/zaman), ortamlar (dev/stage/prod), içerik politikaları
+A/B Test Bayrakları (opsiyonel)
+Hero/CTA varyasyon bayrağı, hedef kitle koşulları
+🧱 İçerik Türleri (Collections) – Alanlar (Özet)
+Not: Alanlar örnek şemadır; CMS tarafında “Content Type Builder/Modeler” ekranıyla değiştirilebilir.
+Page: title, slug, locale, blocks[], seo{}, status, publish_at
+Service Category: name, slug, description, icon, order
+Service (Alt hizmet): category_ref, title, hero, body (rich/blocks), benefits[], faq[], media[], seo{}
+Sector Solution: sector (Finans/Üretim/Sağlık/Kamu/Perakende), problem→çözüm→sonuç, related_services[]
+Case Study: müşteri adı (ops.), sorun, çözüm, sonuç KPI, alıntı, görseller, pdf
+Blog/Article: title, excerpt, body (rich/MDX), tags[], author_ref, cover, seo{}
+Resource (Whitepaper/Webinar): type, title, abstract, file/video_url, gated? (CRM linki), seo{}
+FAQ: question, answer (rich), kategori
+Legal Document: type (kvkk/çerez/kullanım), content, version, effective_date
+Team Member / Partner / Certificate / Reference: ad, açıklama, logo/medya, sıra
+✨ “Diğer CMS’lerden iyi özellikler” → Panelimize Eklenenler
+(Ürün adı vermeden, modern CMS’lerin en iyi pratikleri toplanmıştır)
+Blok Tabanlı Editör (Gutenbergvari): Sayfaları yeniden kullanılabilir bloklarla kurma; blok kütüphanesi ve “tasarım kilidi” (örn. kurumsal renk/font otomatik).
+Gerçek Zamanlı Ortak Düzenleme: Çakışma önleme, “presence” avatarları, alan bazlı kilitleme.
+Preview Linkleri: Yayınlanmadan canlı site görünümü; zaman planlı preview (gelecekteki sürüm).
+Çokdilli Akışlar: “Kaynağı klonla → çeviri yap → taahhüt et”; hreflang otomatik eşleme.
+İş Akışı & Onay: Çok adımlı onay (örn. Editör → SEO → Publisher), her adımda görev/yorum.
+Versiyon Diff & Rollback: Rich text ve blok seviyesinde karşılaştırma, tek tık geri al.
+İçerik Takvimi: Tüm yayın/schedule’lar tek takvimde; sürüklebırak tarih değiştirme.
+Redirect & 404 Yönetimi: Toplu import (CSV), çakışma uyarısı, hedef test.
+Schema Builder: Organization, Breadcrumb, Article, FAQ, Product/Service şemaları için görsel sihirbaz.
+Link & Medya Denetimi: Kırık link tarayıcı, alt metin eksikse uyarı, dosya tekrar kullanımı.
+Kütüphane Dönüşümleri: Görselden otomatik WebP/AVIF, boyut sınırı, odak noktası kırpma.
+Erişilebilirlik & SEO Kontrolleri: Başlık hiyerarşisi/kontrast/alt metin; title/meta uzunluğu/duplikasyon.
+Kişiselleştirme Bayrakları: Basit “A/B bayrak” tanımı; varyasyon etiketleri ön yüze JSON olarak çıkar.
+Environments: dev/stage/prod içerik kopyalama/klon, güvenli “içeriği taşı” adımları.
+Audit & İnceleme: Her kayıt için kim/ne/zaman; içerik onayı imzaları; exportable audit.
+🔌 Formlar ve CRM Entegrasyonu (Kritik Ayrım)
+Kariyer / İletişim formları CMS’de sadece render edilir, gönderim CRM API’sine post edilir.
+CMS’de PII depolanmaz; yalnız teslimat logu (ID, zaman, durum).
+CRM endpoint için secret, IP allowlist, HMAC imza, throttle; başarısızlıkta yeniden deneme ve uyarı.
+🌍 Çokdilli / SEO / Teknik
+Diller: TR/EN (artan). Dil başına slug, otomatik hreflang ve canonical.
+Sitemap: Dil ve içerik türü bazlı; otomatik güncellenir.
+Robots: Ortam bazında (stage noindex), özel dizinler için kurallar.
+Structured Data: Schema builder’dan JSONLD üretimi.
+OG/Twitter: Görsel şablonları; sosyal başlık/açıklama kontrolleri.
+👥 Roller ve Yetkiler
+Editor: içerik oluştur/düzenle; yayınlayamaz.
+SEO Editor: SEO/Schema alanlarını düzenler; içerik görebilir.
+Publisher: yayınlar/geri alır; redirect/sitemap yönetir.
+Admin: içerik modeli, webhooks, kullanıcılar/roller, ortam yönetimi.
+Alan Bazlı Yetki: Belirli alan/sekme yalnız bazı rollere.
+İçerik Sahipliği: Kayıt sahipliği ve devir mekanizması.
+🧪 Yayınlama & İş Akışı
+Draft → Review → Approve → Publish; her adım için koşullar ve zorunlu alanlar.
+Schedule/Unpublish: Zamanlanmış yayın ve geri alma; çakışma uyarıları.
+İçerik Yorumları: Satıriçi not/mention, görev atama, tarih.
+Bildirimler: Bekleyen onay, yaklaşan yayınlar, link/erişilebilirlik sorunları.
+📈 Kalite & Sağlık Göstergeleri (Admin Dashboard içinden)
+İçerik Kalite Kartları: SEO skoru, erişilebilirlik uyarıları, okunabilirlik, okunma süresi tahmini.
+Site Sağlığı: Build/webhook gecikmesi, edge cache temizleme durumu.
+Kırık Link & 404 Trendleri.
+⛑ Güvenlik / Uyumluluk
+Audit Log: Tüm CRUD ve yayın olayları; export edilebilir.
+Ortam İzolasyonu: Stage içerikleri arama motorlarına kapalı.
+Asset Politikası: PII içeren dosyalar CMS’ye yüklenemez (yalnız CRM’de şifreli alan).
+Secrets Yönetimi: Entegrasyon anahtarları maskeli; dönüşümlere sınırlı erişim.
+✅ Kabul Kriterleri (örnek)
+Preview: Bir içerik taslakken 10 sn içinde ön izleme linki üretilmeli; erişim token’lı.
+Versiyonlama: Kaydetme anında otomatik versiyon; diff görünümü blok seviyesinde.
+Onay Akışı: Onaylanmamış içerik “Publish” tuşu pasif; onaylayıcı farklı rol olmalı.
+Redirect: Aynı kaynak path iki kez kullanılamaz; test butonu hedefe 200 döndürmeli.
+FormtoCRM: Fail durumunda CMS kullanıcıya genel mesaj gösterir, ayrıntı logda; 3 retry + uyarı.
+Media Alt Metin: Alt metni boş görsel yayınlanamaz (uyarı ve atlama opsiyonu yalnız Admin’de).
+🗺️ Yol Haritası
+MVP (Önerilen ilk dilim)
+Collections (Page/Service/Blog/Case/Legal/FAQ), Blocks, Medya, SEO temel, Preview, Çokdilli, Redirect, Sitemap, FormtoCRM entegrasyonu, Roller (Editor/Publisher/Admin), Versiyonlama, Basit onay akışı.
+Faz 2
+İçerik takvimi, gelişmiş onay, link/erişilebilirlik denetimleri, Schema builder, A/B bayrakları, gerçek zamanlı ortak düzenleme.
+Faz 3
+Environments “promote content”, kişiselleştirme kuralları, gelişmiş Analytics entegrasyonu, içerik performans skoru.
+Kısa özet
+CMS Admin Panel: içerik/SEO/menü/medya/redirect/çokdilli/yayın akışları.
+“İyi özellikler”: blok editör, gerçek zamanlı ortak düzenleme, preview, çok adımlı onay, diff & rollback, schema builder, link/erişilebilirlik kontrolleri, redirect yönetimi, environments.
+Formlar CRM’e: PII CMS’de tutulmaz; güvenli webhook/secret/HMAC ile doğrudan CRM’e gider.
+İstersen bunu cms_admin_requirements.md adıyla bölümbölüm maddelendirilmiş bir dosya halinde da verebilirim.
+

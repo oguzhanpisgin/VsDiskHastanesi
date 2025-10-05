@@ -1,0 +1,42 @@
+#!/bin/sh
+# pre-commit hook (suggested). Place content into .git/hooks/pre-commit (ensure executable)
+# Runs migration lint + repeatable hash verify + drift check (json) + surgical + sql safety guards.
+
+set -e
+RED='\033[0;31m'; GREEN='\033[0;32m'; NC='\033[0m'
+
+run_ps(){
+  # Prefer pwsh, fallback to powershell (Windows)
+  if command -v pwsh >/dev/null 2>&1; then
+    pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$1" ${2:-}
+  else
+    powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$1" ${2:-}
+  fi
+}
+
+printf "[PRE-COMMIT] Migration lint...\n"
+run_ps migration-lint.ps1 || { printf "${RED}Migration lint failed${NC}\n"; exit 1; }
+
+printf "[PRE-COMMIT] Repeatable hash verify...\n"
+run_ps verify-repeatable.ps1 || { printf "${RED}Repeatable hash drift${NC}\n"; exit 1; }
+
+printf "[PRE-COMMIT] Surgical guards...\n"
+if [ -f .githooks/precommit-guards.ps1 ]; then
+  run_ps .githooks/precommit-guards.ps1 || { printf "${RED}Surgical guard violations${NC}\n"; exit 1; }
+else
+  printf "[WARN] precommit-guards.ps1 missing, skipping surgical checks\n"
+fi
+
+printf "[PRE-COMMIT] SQL safety guards...\n"
+if [ -f .githooks/sql-safety-guards.ps1 ]; then
+  run_ps .githooks/sql-safety-guards.ps1 || { printf "${RED}SQL safety violations${NC}\n"; exit 1; }
+else
+  printf "[WARN] sql-safety-guards.ps1 missing, skipping sql safety checks\n"
+fi
+
+printf "[PRE-COMMIT] Drift check (non-fatal)...\n"
+# Provide dummy DB or skip if not available
+echo "Skipping DB drift (configure CI for actual)" || true
+
+printf "${GREEN}[PRE-COMMIT] All checks passed${NC}\n"
+exit 0

@@ -1,0 +1,136 @@
+========================================
+APPROVED TECH STACK SUMMARY
+========================================
+Decision Date: January 2025
+Approved By: Human Developer
+AI Council Consensus: 78%
+
+========================================
+BACKEND
+========================================
+? Framework: ASP.NET Core 8.0
+? Architecture: Vertical Slice Architecture
+? ORM: Entity Framework Core 8
+? API Style: RESTful + Minimal APIs
+
+========================================
+FRONTEND
+========================================
+? Framework: Vue.js 3
+? Features: Composition API + TypeScript
+? Build Tool: Vite
+? UI Design: Microsoft Fluent 2 Design System
+? CSS: Tailwind CSS + Fluent UI Web Components
+
+========================================
+AZURE CLOUD INFRASTRUCTURE
+========================================
+? Hosting: Azure Container Apps
+? Database: Azure SQL Database (Standard S3)
+   - Migration path: Elastic Pool (multi-tenant)
+? Authentication: Azure AD B2C + ASP.NET Core Identity
+? Storage: Azure Blob Storage (Hot/Cool tiers)
+? CDN: Azure CDN + Azure Front Door
+? CI/CD: GitHub Actions (OpenID Connect)
+
+========================================
+MIGRATION PATH
+========================================
+Phase 1 (MVP - Months 1-3):
+- Start with Azure Container Apps
+- Azure SQL Standard S3
+- Basic Vue.js 3 dashboards
+- GitHub Actions deployment
+
+Phase 2 (Scale - Months 4-12):
+- Migrate to Elastic Pool
+- Advanced Vue.js features
+- Application Insights monitoring
+- Azure Front Door optimization
+
+========================================
+ESTIMATED COSTS (USD/month)
+========================================
+MVP Phase:
+- Container Apps: ~$150
+- SQL Database S3: $229
+- Blob Storage: $20
+- CDN: $30
+- AD B2C: $0 (50k MAU free)
+Total: ~$429/month
+
+Scale Phase: ~$600-800/month
+
+========================================
+AI COUNCIL VOTING RESULTS
+========================================
+Backend Framework:
+???? ASP.NET Core 8 (Unanimous)
+
+Frontend Framework:
+?? Vue.js 3 (GPT-4, Claude) ? APPROVED
+???? Alpine.js (Gemini, Copilot)
+
+Architecture:
+? Vertical Slice Architecture ? APPROVED
+?? Clean Architecture (GPT-4)
+?? Modular Monolith (Claude)
+?? Minimal APIs + MediatR (Gemini)
+
+Hosting:
+? Azure Container Apps ? APPROVED
+?? Azure App Service (Gemini, Claude)
+
+Authentication:
+??? Azure AD B2C (GPT-4, Claude, Copilot) ? APPROVED
+?? Duende IdentityServer (Gemini)
+
+CSS Framework:
+???? Tailwind CSS (Unanimous)
+
+========================================
+RATIONALE
+========================================
+1. Vue.js 3 chosen over Alpine.js:
+   - Complex CMS/CRM dashboards need robust framework
+   - TypeScript support for type safety
+   - Better component reusability
+   - Easier migration to advanced features
+
+2. Container Apps chosen:
+   - Better scalability than App Service
+   - Microservices-ready architecture
+   - Lower cost than AKS
+   - Kubernetes-compatible (future AKS migration)
+
+3. Vertical Slice Architecture:
+   - Feature independence
+   - Faster development cycles
+   - Perfect for modular system (CMS/CRM/Website/Chatbot)
+   - Easier to maintain than Clean Architecture
+
+4. Azure AD B2C:
+   - Microsoft-managed security
+   - Built-in MFA and conditional access
+   - Social logins (Google, Microsoft, Apple)
+   - No per-user fees (vs IdentityServer hosting costs)
+
+========================================
+NEXT ACTIONS
+========================================
+1. ? Update PROJECT_INDEX.md
+2. ? Update .github/copilot-instructions.md
+3. ? Generate ASP.NET Core solution structure
+4. ? Setup Vue.js 3 + Vite project
+5. ? Create Entity Framework migrations
+6. ? Configure Azure AD B2C
+7. ? Setup GitHub Actions CI/CD
+
+========================================
+FULL REPORT
+========================================
+See: ai_council/TECH_STACK_DECISION.txt
+
+========================================
+END OF SUMMARY
+========================================

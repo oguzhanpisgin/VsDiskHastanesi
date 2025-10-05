@@ -1,0 +1,80 @@
+﻿Ürün ve Hizmet Listesi:
+1. Başlık: Teknoloji ve Network Entegratörlüğü Hizmetleri(Odak: IT altyapısının tasarımı, kurulumu, yapılandırılması, entegrasyonu ve temel bakımı)
+1.1. Network Altyapı Kurulum ve Yapılandırma1.1.1. LAN/WAN Tasarım, Kurulum ve Optimizasyon1.1.2. Kablosuz Ağ (Wi-Fi) Kurulumu ve Performans Ayarları1.1.3. Router ve Switch Konfigürasyon ve Kurulumu1.1.4. Yapısal Kablolama Tasarım ve Uygulaması (Bakır/Fiber)
+1.2. Sunucu ve Depolama Sistemi Kurulumu1.2.1. Fiziksel Sunucu Kurulum ve Konfigürasyonu1.2.2. Veri Depolama Ünitesi Kurulumu (SAN/NAS)1.2.3. Sunucu Sanallaştırma Kurulumu (VMware, Hyper-V)1.2.4. Yedekleme Sistemi Kurulum ve Yapılandırması
+1.3. Bulut Altyapı Geçiş ve Entegrasyon Hizmetleri1.3.1. Bulut Hazırlık Değerlendirmesi ve Geçiş Planlaması1.3.2. Bulut Altyapı Kurulumu (IaaS - Azure/AWS/GCP)1.3.3. Hibrit Bulut Mimarisi Kurulum ve Entegrasyonu
+1.4. Temel Güvenlik Altyapısı Kurulumu1.4.1. Güvenlik Duvarı (Firewall) Kurulum ve Temel Yapılandırma1.4.2. VPN Altyapısı Kurulum Hizmeti1.4.3. Temel Uç Nokta Güvenlik Yazılımı Kurulumu (Antivirüs vb.)Not: İleri düzey yönetim, izleme ve danışmanlık için Siber Güvenlik Hizmetlerine bakınız.
+1.5. Birleşik İletişim Sistemleri Kurulumu1.5.1. IP Telefon Santrali (VoIP PBX) Kurulumu1.5.2. Video Konferans Sistemleri Kurulum ve Entegrasyonu1.5.3. Çağrı Merkezi Altyapı Kurulum Hizmetleri
+1.6. Ağ Yönetimi ve İzleme Sistemi Kurulumu1.6.1. Ağ İzleme Yazılımı Kurulum ve Konfigürasyonu1.6.2. Merkezi Yönetim Platformu Kurulum Desteği
+1.7. Yazılım Lisanslama ve Varlık Yönetimi Danışmanlığı1.7.1. Yazılım Lisans Tedarik ve Yönetim Danışmanlığı1.7.2. Yazılım Envanter ve Varlık Yönetimi (SAM) Hizmeti
+1.8. IT Altyapı Danışmanlığı ve Proje Yönetimi1.8.1. IT Altyapı Mevcut Durum Analizi ve İyileştirme Planı1.8.2. Teknoloji Seçimi ve Tedarik Danışmanlığı1.8.3. IT Proje Planlama ve Yönetim Hizmeti1.8.4. Dijital Dönüşüm Altyapı Danışmanlığı
+1.9. Teknik Bakım ve Destek Hizmetleri1.9.1. Periyodik Sistem Bakım Anlaşmaları1.9.2. Uzaktan ve Yerinde Teknik Destek Hizmetleri1.9.3. SLA Bazlı Destek Paketleri
+2. Başlık: Siber Güvenlik Hizmetleri(Odak: Siber tehditlere karşı korunma, tespit, müdahale, yönetim ve danışmanlık)
+2.1. Sızma Testi (Penetration Testing) Hizmetleri2.1.1. Web Uygulama Güvenlik Açığı Testi (Pentest)2.1.2. Ağ Altyapısı Sızma Testi (İç/Dış)2.1.3. Mobil Uygulama Güvenlik Denetimi (iOS/Android)2.1.4. Kablosuz Ağ Güvenlik Zafiyeti Testi2.1.5. Sosyal Mühendislik ve Oltalama (Phishing) Testleri
+2.2. Siber Güvenlik Danışmanlığı ve Risk Yönetimi2.2.1. Kapsamlı Siber Güvenlik Risk Değerlendirmesi2.2.2. Siber Güvenlik Stratejisi ve Yol Haritası Geliştirme2.2.3. Güvenlik Mimarisi Tasarım ve İyileştirme Danışmanlığı2.2.4. Güvenlik Politikaları ve Prosedürleri GeliştirmeNot: ISO 27001 ve KVKK özelindeki danışmanlıklar ilgili bölümlerde yer almaktadır.
+2.3. Yönetilen Güvenlik Hizmetleri (MSSP/SOC)2.3.1. 7/24 Güvenlik İzleme ve Olay Yönetimi (SIEM/SOC)2.3.2. Yönetilen Güvenlik Duvarı (Firewall) Hizmeti2.3.3. Yönetilen Sızma Tespit ve Önleme (IDS/IPS) Sistemi2.3.4. Tehdit İstihbaratı ve Proaktif Savunma Hizmetleri2.3.5. Yönetilen Zafiyet Tarama ve Değerlendirme2.3.6. Yönetilen Yama ve Zafiyet Giderme Hizmeti
+2.4. Ağ ve Sistem Güvenliği Yönetimi2.4.1. Güvenlik Duvarı (Firewall) Kural Yönetimi ve Optimizasyonu2.4.2. VPN Yapılandırma ve Güvenlik Yönetimi2.4.3. Ağ Erişim Kontrolü (NAC) Çözümleri Yönetimi2.4.4. Güvenli Ağ Segmentasyonu ve Mikrosegmentasyon
+2.5. Bulut Güvenliği Çözümleri ve Yönetimi2.5.1. Bulut Güvenlik Durum Değerlendirmesi (CSPM)2.5.2. Bulut Güvenlik Mimarisi Danışmanlığı (Azure, AWS, GCP)2.5.3. Bulut Kimlik ve Erişim Yönetimi (IAM) Danışmanlığı2.5.4. Bulut Tabanlı Web Uygulama Güvenlik Duvarı (Cloud WAF) Yönetimi
+2.6. Uç Nokta Güvenliği Yönetimi (Endpoint Security)2.6.1. Yönetilen Uç Nokta Koruma (EPP) Hizmeti2.6.2. Yönetilen Uç Nokta Tespit ve Müdahale (EDR) Hizmeti2.6.3. Mobil Cihaz Güvenliği Yönetimi (MDM/UEM)2.6.4. Uç Nokta Veri Şifreleme Yönetimi
+2.7. Veri Kaybı Önleme (DLP) Hizmetleri2.7.1. DLP Politika Oluşturma ve Uygulama Danışmanlığı2.7.2. Hassas Veri Keşfi ve Sınıflandırma Hizmeti2.7.3. Yönetilen DLP Çözümleri ve İzleme
+2.8. Siber Olay Müdahalesi ve Adli Bilişim2.8.1. Acil Siber Olay Müdahale Desteği (Incident Response)2.8.2. Zararlı Yazılım Analizi ve Temizleme2.8.3. Siber Saldırı Sonrası Sistem Kurtarma Desteği2.8.4. Adli Bilişim İncelemesi ve Delil Toplama (Forensics)
+2.9. Güvenli Veri İmha Hizmetleri2.9.1. Yazılımsal Güvenli Veri Silme (DoD, NIST Standartları)2.9.2. Manyetik Medya İmhası (Degaussing)2.9.3. Fiziksel İmha (Kırma, Parçalama)2.9.4. Sertifikalı Veri İmha ve Raporlama2.9.5. Yerinde Güvenli Veri İmha Hizmeti
+2.10. Siber Güvenlik Farkındalık Eğitimleri2.10.1. Uygulamalı Siber Güvenlik Bilinçlendirme Eğitimi2.10.2. Oltalama (Phishing) Simülasyonları ve Eğitimi2.10.3. Güvenli İnternet Kullanımı Eğitimleri
+3. Başlık: Veri Kurtarma Hizmetleri(Odak: Kayıp, silinmiş veya erişilemeyen verilerin teknik yöntemlerle geri getirilmesi)
+3.1. Hard Disk (HDD) Veri Kurtarma3.1.1. Mekanik Arızalı HDD Kurtarma (Kafa Vurma vb.)3.1.2. Elektriksel Arızalı HDD Kart Tamiri ve Kurtarma3.1.3. Yazılımsal HDD Sorunları İçin Veri Kurtarma3.1.4. Formatlanmış / Silinmiş HDD Veri Kurtarma3.1.5. Bad Sector Oluşan HDD Veri Kurtarma
+3.2. SSD & NVMe Veri Kurtarma3.2.1. Kontrolcü Arızalı SSD Veri Kurtarma3.2.2. NAND Çip Arızası SSD/NVMe Kurtarma3.2.3. Mantıksal/Firmware Sorunlu SSD Kurtarma3.2.4. Silinmiş Dosyalar İçin SSD/NVMe Kurtarma
+3.3. RAID & Sunucu Veri Kurtarma3.3.1. RAID 0, 1, 5, 6, 10 Yapılandırma Kurtarma3.3.2. Bozulmuş RAID Dizilerinden Veri Kurtarma3.3.3. Fiziksel ve Sanal Sunucu Veri Kurtarma3.3.4. NAS/SAN Depolama Ünitesi Veri Kurtarma
+3.4. Mobil Cihaz Veri Kurtarma3.4.1. Android Telefon Veri Kurtarma (Bozuk, Silinmiş)3.4.2. iPhone (iOS) Veri Kurtarma (Fotoğraf, Mesaj vb.)3.4.3. Tablet (Android/iPad) Veri Kurtarma Hizmeti3.4.4. WhatsApp ve Diğer Uygulama Verisi Kurtarma
+3.5. Taşınabilir Medya Veri Kurtarma3.5.1. Harici Disk Veri Kurtarma (USB/Thunderbolt)3.5.2. USB Bellek Veri Kurtarma (Fiziksel/Mantıksal Hasar)3.5.3. Hafıza Kartı Veri Kurtarma (SD, MicroSD, CF vb.)
+3.6. Özel Veri Kurtarma Çözümleri3.6.1. Veritabanı Dosyaları Kurtarma (SQL, Oracle, MySQL vb.)3.6.2. Şifrelenmiş Disklerden Veri Kurtarma (Bitlocker vb.)3.6.3. Güvenlik Kamerası (DVR/NVR) Kayıt KurtarmaNot: Siber Saldırı Sonrası Veri Kurtarma için Siber Olay Müdahalesi bölümüne bakınız.
+4. Başlık: KVKK Uyum Danışmanlığı ve Entegrasyon Hizmetleri(Odak: Kişisel Verilerin Korunması Kanunu'na tam uyumun sağlanması)
+4.1. KVKK Uyum Süreci Danışmanlığı4.1.1. KVKK Mevcut Durum ve Fark Analizi (GAP Analizi)4.1.2. Kişisel Veri İşleme Envanteri Hazırlama Desteği4.1.3. VERBİS Kayıt Danışmanlığı ve İşlemleri4.1.4. KVKK Uyum Yol Haritası ve Proje Planı Oluşturma
+4.2. KVKK Hukuki Dokümantasyon Hazırlama4.2.1. Aydınlatma Metinleri Oluşturma ve Güncelleme4.2.2. Açık Rıza Metinleri ve Yönetimi Danışmanlığı4.2.3. KVKK Politikaları Oluşturma (Veri Saklama/İmha vb.)4.2.4. Gizlilik Politikası ve Çerez Politikası Hazırlama4.2.5. Veri İşleme ve Aktarım Sözleşmeleri Hazırlama
+4.3. KVKK Teknik Tedbirler Danışmanlığı ve Uygulama Desteği4.3.1. Veri Güvenliği İçin Teknik Tedbirler Belirleme4.3.2. Erişim Yetki Matrisi ve Kontrolü Danışmanlığı4.3.3. Veri Şifreleme Yöntemleri Danışmanlığı4.3.4. Loglama ve İzleme Sistemleri İçin KVKK Danışmanlığı4.3.5. KVKK Kapsamında Güvenlik Testi (Pentest) Koordinasyonu
+4.4. KVKK İdari Tedbirler Danışmanlığı ve Uygulama Desteği4.4.1. Kurumsal Farkındalık ve Sorumluluk Matrisi Oluşturma4.4.2. İlgili Kişi Başvuru Süreçleri Yönetimi Danışmanlığı4.4.3. Veri İhlali Bildirim Süreci Yönetimi Danışmanlığı
+4.5. KVKK Risk Yönetimi4.5.1. KVKK Veri İşleme Risk Değerlendirmesi ve Analizi4.5.2. Risk Azaltma Aksiyon Planı Geliştirme Desteği
+4.6. KVKK Eğitim ve Farkındalık Programları4.6.1. Çalışanlar İçin KVKK Temel Farkındalık Eğitimi4.6.2. Veri Sorumlusu/İşleyen İçin KVKK Sorumluluk Eğitimi4.6.3. Departman Bazlı Özel KVKK Eğitimleri
+4.7. Dış Kaynaklı Veri Koruma Görevlisi (DPO) Hizmeti4.7.1. Atanmış DPO Olarak Uyum Süreçlerinin Yönetimi4.7.2. Kurul İle İletişim ve Başvuruların Yönetimi
+4.8. KVKK Uyum Denetimi ve Süreklilik Hizmetleri4.8.1. Periyodik KVKK Uyum Denetimi ve Raporlama4.8.2. Mevzuat Değişiklikleri Takibi ve Bilgilendirme4.8.3. KVKK Süreç İyileştirme DanışmanlığıNot: GDPR uyumu için ayrı bir değerlendirme veya ek hizmet belirtilebilir.
+5. Başlık: ISO Yönetim Sistemleri Danışmanlığı(Odak: Uluslararası standartlara uygun yönetim sistemlerinin kurulması, belgelendirilmesi ve iyileştirilmesi)
+5.1. ISO 9001 Kalite Yönetim Sistemi Danışmanlığı5.1.1. ISO 9001 Belgelendirme Süreci Yönetimi5.1.2. ISO 9001 İç Tetkik ve Performans Değerlendirme5.1.3. ISO 9001 Dokümantasyon ve Süreç Optimizasyonu5.1.4. ISO 10002 Müşteri Memnuniyeti Yönetimi Danışmanlığı
+5.2. ISO 27001 Bilgi Güvenliği Yönetimi Sistemi (BGYS) Danışmanlığı5.2.1. ISO 27001 BGYS Kurulum ve Belgelendirme Danışmanlığı5.2.2. ISO 27001 Risk Değerlendirme ve Yönetim Metodolojisi5.2.3. ISO 27001 Ek-A Kontrolleri Uygulama Danışmanlığı5.2.4. ISO 27701 Kişisel Veri Yönetimi Standardı Danışmanlığı5.2.5. ISO 27001 İç Denetim ve Gözden Geçirme Hizmeti
+5.3. ISO 14001 Çevre Yönetim Sistemi Danışmanlığı5.3.1. ISO 14001 Sistem Kurulumu ve Belgelendirme Desteği5.3.2. Çevresel Boyut ve Etki Değerlendirmesi Danışmanlığı
+5.4. ISO 45001 İş Sağlığı ve Güvenliği (İSG) Yönetim Sistemi Danışmanlığı5.4.1. ISO 45001 İSG Sistemi Kurulum ve Belgelendirme5.4.2. İSG Risk Değerlendirmesi ve Yasal Uyum Danışmanlığı
+5.5. ISO 22000 Gıda Güvenliği Yönetim Sistemi Danışmanlığı5.5.1. ISO 22000 / HACCP Sistem Kurulum ve Belgelendirme5.5.2. BRCGS Gıda Standardı Uyum Danışmanlığı5.5.3. Helal Gıda Belgelendirme Danışmanlığı
+5.6. Sektörel ve Diğer ISO Standartları Danışmanlığı5.6.1. ISO 13485 Tıbbi Cihaz Kalite Yönetimi Danışmanlığı5.6.2. IATF 16949 Otomotiv Kalite Yönetimi Danışmanlığı5.6.3. ISO 50001 Enerji Yönetimi Sistemi Danışmanlığı5.6.4. ISO 17025 Laboratuvar Akreditasyonu Danışmanlığı5.6.5. ISO 20000 BT Hizmet Yönetimi Danışmanlığı5.6.6. ISO 22301 İş Sürekliliği Yönetimi Danışmanlığı5.6.7. ISO 31000 Kurumsal Risk Yönetimi Danışmanlığı
+5.7. Entegre Yönetim Sistemleri (EYS) Danışmanlığı5.7.1. Çoklu Standart (9001, 14001, 45001 vb.) EYS Kurulumu5.7.2. Entegre Sistem İç Tetkik ve Yönetim Kolaylığı
+5.8. Yönetim Sistemleri Eğitimleri5.8.1. ISO Standartları Temel Bilgilendirme Eğitimleri5.8.2. ISO Standartları İç Tetkikçi Eğitimleri5.8.3. Yönetim Sistemi Uygulama ve Dokümantasyon Eğitimleri
+5.9. Diğer Belgelendirme ve Tescil Danışmanlığı5.9.1. CE İşareti Uygunluk Değerlendirme Danışmanlığı5.9.2. TSE / TSEK Ürün Belgelendirme Danışmanlığı5.9.3. Marka, Patent ve Faydalı Model Tescil Danışmanlığı5.9.4. Kapasite Raporu ve Sanayi Sicil Belgesi Danışmanlığı
+Genel Web Sitesi Sayfaları
+(Odak: Yeni hizmet yapısını desteklemek, kullanıcı deneyimini iyileştirmek, şirket hakkında kapsamlı bilgi vermek ve yasal gereklilikleri karşılamak için temel ve destekleyici sayfalar)
+Hakkımızda: Şirketinizin misyonu, vizyonu, değerleri ve teknoloji, güvenlik, veri kurtarma gibi alanlardaki uzmanlığını birleştiren hikayesi.
+Ekibimiz / Yönetim Kadrosu: Her bir ana hizmet başlığı (Teknoloji Entegratörlüğü, Siber Güvenlik, Veri Kurtarma, KVKK, ISO Danışmanlığı) altındaki uzmanların ve danışmanların yetkinliklerini ve sertifikalarını vurgulayan bir sayfa.
+İletişim: Detaylı adres, telefon, e-posta, harita ve iletişim formu. (Birden fazla şube varsa her biri için ayrı bilgi)
+Blog / Bilgi Bankası / Makaleler: İçeriklerin 5 ana hizmet kategorisine göre etiketlendiği, sektörel gelişmelerin, ipuçlarının, vaka analizlerinin ve bilgilendirici yazıların yer aldığı bölüm. (Örn: "Siber Güvenlik" kategorisindeki yazılar, "KVKK" kategorisindeki yazılar vb.)
+Sıkça Sorulan Sorular (SSS): Her ana hizmet kategorisi için özel SSS bölümleri:
+Teknoloji ve Network Entegratörlüğü SSS
+Siber Güvenlik SSS
+Veri Kurtarma SSS
+KVKK Danışmanlığı SSS
+ISO Danışmanlığı SSS
+Kullanım Koşulları / Hizmet Şartları: Web sitesi ve sunulan tüm hizmetlerin kullanımına dair yasal metin.
+Gizlilik Politikası: Kişisel verilerin nasıl toplandığı, işlendiği ve korunduğuna dair detaylı bilgi (KVKK ve GDPR uyumlu).
+Çerez Politikası: Web sitesinde kullanılan çerezler hakkında bilgi ve kullanıcı tercihleri.
+Referanslarımız / Başarı Hikayeleri: Tamamlanan projelerin, hizmet kategorisine göre (Örn: Başarılı Veri Kurtarma Operasyonları, Tamamlanan ISO 27001 Projeleri vb.) filtrelenebildiği, müşteri memnuniyetini ve uzmanlığı kanıtlayan örnekler.
+Kariyer / İş Fırsatları: Açık pozisyonlar ve şirketinizde çalışmanın avantajları.
+Süreçlerimiz:
+Veri Kurtarma Süreci: Adım adım cihaz gönderme rehberi, formlar ve dikkat edilmesi gerekenler.
+Danışmanlık Süreci (KVKK/ISO): İlk analizden belgelendirmeye kadar olan sürecin adımları.
+Proje Süreci (Teknoloji/Siber Güvenlik): Keşif, planlama, uygulama ve destek aşamalarını açıklayan bölüm.
+Teklif Al: Her ana hizmet için özelleştirilmiş ve kullanıcıyı doğru bilgilere yönlendiren ayrı teklif formları. (Örn: "Sızma Testi Teklifi Al", "Veri Kurtarma Fiyat Al", "KVKK Danışmanlığı Teklifi İste")
+Neden Diskhastanesi? / Avantajlarımız: Tüm hizmetleri tek çatı altında (360 derece teknoloji ve güvenlik ortağı) sunmanın avantajlarını vurgulayan, rakiplerden ayıran temel özellikleri anlatan sayfa.
+Sertifikalarımız ve Yetkinliklerimiz: Sahip olunan tüm hizmet alanlarını kapsayan ISO belgeleri (9001, 27001 vb.), TSE belgeleri, ekip üyelerinin teknik sertifikaları (CISSP, CEH vb.) ve kurumsal yetkinlikleri gösteren bir bölüm.
+Site Haritası: Kullanıcıların ve arama motorlarının sitede gezinmesini kolaylaştıran bir harita.
+Basında Biz (Eğer Varsa): Şirketinizle ilgili haberler, röportajlar veya yayınlar.
+Sosyal Sorumluluk Projelerimiz (Eğer Varsa): Kurumsal sosyal sorumluluk faaliyetleriniz.
+Çözüm Ortaklarımız: İşbirliği yapılan teknoloji sağlayıcıları (Microsoft, Cisco, VMware vb.), güvenlik firmaları (Fortinet, Palo Alto vb.) ve diğer stratejik partnerler.
+Garanti ve Servis Koşulları: Sunulan hizmetler (donanım, danışmanlık, teknik destek) için geçerli olan garanti ve servis seviyesi anlaşması (SLA) şartları.
+Acil Durum Müdahale Hattı: Özellikle Veri Kurtarma ve Siber Olay Müdahalesi (Incident Response) için 7/24 ulaşılabilecek acil durum numarası veya iletişim yöntemi.
+Veri Güvenliği ve Gizlilik Taahhüdümüz: Müşterilerin hem kurtarılan verilerinin, hem KVKK/ISO süreçlerinde paylaşılan kurumsal bilgilerinin, hem de siber güvenlik analizlerinde emanet edilen sistemlerinin gizliliğine ve güvenliğine verilen önemi vurgulayan, KVKK ve ISO 27001 gibi standartlara atıfta bulunan bir sayfa.
+

@@ -1,0 +1,122 @@
+﻿<div class='document-content'>
+<p><strong>Harika—Diskhastanesi web sitesi i&#231;in “CMS Admin Panel”&#160;gereksinimlerini; “diğer CMS’lerde iyi &#231;alışan &#246;zellikleri” de i&#231;erecek şekilde&#160;&#246;zellik listesi + sayfa yapısı&#160;formatında, kodsuz ve doğrudan VS Code AI’ye verilebilecek netlikte hazırladım.</strong></p>
+<p>&#127919; Ama&#231; ve Kapsam</p>
+<p><strong>Ama&#231;:&#160;Pazarlama/kurumsal ekibin web sitesindeki t&#252;m i&#231;erikleri (sayfalar, hizmetler, sekt&#246;r &#231;&#246;z&#252;mleri, blog/case, medya, SEO, y&#246;nlendirmeler, formlar)&#160;hızlı ve g&#252;venli&#160;bi&#231;imde y&#246;netmesi.</strong></p>
+<p><strong>Sınır:&#160;CMS yalnızca&#160;i&#231;erik&#160;y&#246;netir;&#160;PII/form verileri CRM’e akar&#160;(CMS veri depolamaz).</strong></p>
+<p><strong>Mimari:&#160;Headless CMS (APIfirst) + Next.js tarzı &#246;n y&#252;z; &#231;okdilli, versiyonlama, preview, iş akışları.</strong></p>
+<p>&#129517; Ana Navigasyon / Sayfa Yapısı (Admin Panel)</p>
+<p><strong>Dashboard</strong></p>
+<p>Son i&#231;erikler (taslak/yayın), planlı yayınlar, bekleyen onaylar</p>
+<p>Kırık link uyarıları, SEO/erişilebilirlik hızlı sağlık kartları</p>
+<p><strong>İ&#231;erikler</strong></p>
+<p><strong>Collections (i&#231;erik t&#252;rleri):&#160;Pages, Services, Sector Solutions, Case Studies, Blog, Resources (Whitepaper/Webinar), FAQs, Legal Docs, Team, Partners, Certificates, References</strong></p>
+<p><strong>Entries:&#160;Liste, filtre/sıralama, bulk edit, hızlı durum değişimi</strong></p>
+<p><strong>Blocks/Components:&#160;Hero, Feature grid, FAQ accordion, Tabs, Timeline, Testimonial, CTA, Stats, Media gallery, Code snippet, Download card</strong></p>
+<p><strong>Men&#252;ler &amp; Site Yapısı</strong></p>
+<p>Ana men&#252;, alt men&#252;ler, footer; s&#252;r&#252;klebırak sıralama</p>
+<p><strong>Medya K&#252;t&#252;phanesi</strong></p>
+<p>G&#246;rsel/video/PDF y&#246;netimi, otomatik varyasyon/thumbnail, alt metin zorunluluğu, toplu y&#252;kleme</p>
+<p><strong>SEO &amp; Teknik</strong></p>
+<p><strong>Sayfa bazlı: Title, Meta, OG/Twitter, Canonical,&#160;hreflang, Schema builder</strong></p>
+<p><strong>Redirect Manager (301/302),&#160;Robots.txt,&#160;Sitemap&#160;&#252;retimi</strong></p>
+<p><strong>Formlar (Bağlantılar)</strong></p>
+<p><strong>“Kariyer” ve “İletişim/Teklif” formları i&#231;in&#160;CRM endpoint tanımı&#160;(secret, IP allowlist, HMAC)</strong></p>
+<p>Deneme/monitoring, hata g&#252;nl&#252;kleri</p>
+<p><strong>&#199;okdilli Y&#246;netim</strong></p>
+<p><strong>Diller, &#231;eviri durumları,&#160;lokalizasyon fallback</strong></p>
+<p><strong>Yayınlama &amp; İş Akışları</strong></p>
+<p>Draft → Review → Approve → Publish → Schedule/Unpublish</p>
+<p>İ&#231;erik takvimi (Content Calendar), g&#246;rev/atama, yorumlar</p>
+<p><strong>Versiyonlama &amp; Revizyonlar</strong></p>
+<p>Diff g&#246;r&#252;n&#252;m&#252;, ge&#231;mişten geri alma, a&#231;ıklama (commit message)</p>
+<p><strong>Kullanıcılar &amp; Roller</strong></p>
+<p>Editor, SEO Editor, Publisher, Admin; alan/saha bazlı yetkiler</p>
+<p>“İ&#231;erik sahibi” atama, devralma</p>
+<p><strong>Entegrasyonlar</strong></p>
+<p><strong>Webhooks:&#160;değişiklikte build/edge cache temizleme, arama indeks g&#252;ncelleme</strong></p>
+<p>Analytics, Tag Manager, Arama (Algolia/OpenSearch) bağlantıları</p>
+<p><strong>Sistem &amp; Denetim</strong></p>
+<p>Audit log (kim/ne/zaman), ortamlar (dev/stage/prod), i&#231;erik politikaları</p>
+<p><strong>A/B Test Bayrakları (opsiyonel)</strong></p>
+<p>Hero/CTA varyasyon bayrağı, hedef kitle koşulları</p>
+<p>&#129521; İ&#231;erik T&#252;rleri (Collections) – Alanlar (&#214;zet)</p>
+<p><strong>Not:&#160;Alanlar &#246;rnek şemadır; CMS tarafında “Content Type Builder/Modeler” ekranıyla değiştirilebilir.</strong></p>
+<p><strong>Page:&#160;title, slug, locale, blocks[], seo{}, status, publish_at</strong></p>
+<p><strong>Service Category:&#160;name, slug, description, icon, order</strong></p>
+<p><strong>Service (Alt hizmet):&#160;category_ref, title, hero, body (rich/blocks), benefits[], faq[], media[], seo{}</strong></p>
+<p><strong>Sector Solution:&#160;sector (Finans/&#220;retim/Sağlık/Kamu/Perakende), problem→&#231;&#246;z&#252;m→sonu&#231;, related_services[]</strong></p>
+<p><strong>Case Study:&#160;m&#252;şteri adı (ops.), sorun, &#231;&#246;z&#252;m, sonu&#231; KPI, alıntı, g&#246;rseller, pdf</strong></p>
+<p><strong>Blog/Article:&#160;title, excerpt, body (rich/MDX), tags[], author_ref, cover, seo{}</strong></p>
+<p><strong>Resource (Whitepaper/Webinar):&#160;type, title, abstract, file/video_url, gated? (CRM linki), seo{}</strong></p>
+<p><strong>FAQ:&#160;question, answer (rich), kategori</strong></p>
+<p><strong>Legal Document:&#160;type (kvkk/&#231;erez/kullanım), content, version, effective_date</strong></p>
+<p><strong>Team Member / Partner / Certificate / Reference:&#160;ad, a&#231;ıklama, logo/medya, sıra</strong></p>
+<p>✨ “Diğer CMS’lerden iyi &#246;zellikler” → Panelimize Eklenenler</p>
+<p>(&#220;r&#252;n adı vermeden, modern CMS’lerin en iyi pratikleri toplanmıştır)</p>
+<p><strong>Blok Tabanlı Edit&#246;r (Gutenbergvari):&#160;Sayfaları yeniden kullanılabilir bloklarla kurma; blok k&#252;t&#252;phanesi ve “tasarım kilidi” (&#246;rn. kurumsal renk/font otomatik).</strong></p>
+<p><strong>Ger&#231;ek Zamanlı Ortak D&#252;zenleme:&#160;&#199;akışma &#246;nleme, “presence” avatarları, alan bazlı kilitleme.</strong></p>
+<p><strong>Preview Linkleri:&#160;Yayınlanmadan canlı site g&#246;r&#252;n&#252;m&#252;;&#160;zaman planlı preview&#160;(gelecekteki s&#252;r&#252;m).</strong></p>
+<p><strong>&#199;okdilli Akışlar:&#160;“Kaynağı klonla → &#231;eviri yap → taahh&#252;t et”;&#160;hreflang otomatik eşleme.</strong></p>
+<p><strong>İş Akışı &amp; Onay:&#160;&#199;ok adımlı onay (&#246;rn. Edit&#246;r → SEO → Publisher), her adımda g&#246;rev/yorum.</strong></p>
+<p><strong>Versiyon Diff &amp; Rollback:&#160;Rich text ve blok seviyesinde karşılaştırma, tek tık geri al.</strong></p>
+<p><strong>İ&#231;erik Takvimi:&#160;T&#252;m yayın/schedule’lar tek takvimde; s&#252;r&#252;klebırak tarih değiştirme.</strong></p>
+<p><strong>Redirect &amp; 404 Y&#246;netimi:&#160;Toplu import (CSV), &#231;akışma uyarısı, hedef test.</strong></p>
+<p><strong>Schema Builder:&#160;Organization, Breadcrumb, Article, FAQ, Product/Service şemaları i&#231;in g&#246;rsel sihirbaz.</strong></p>
+<p><strong>Link &amp; Medya Denetimi:&#160;Kırık link tarayıcı, alt metin eksikse uyarı, dosya tekrar kullanımı.</strong></p>
+<p><strong>K&#252;t&#252;phane D&#246;n&#252;ş&#252;mleri:&#160;G&#246;rselden otomatik WebP/AVIF, boyut sınırı, odak noktası kırpma.</strong></p>
+<p><strong>Erişilebilirlik &amp; SEO Kontrolleri:&#160;Başlık hiyerarşisi/kontrast/alt metin; title/meta uzunluğu/duplikasyon.</strong></p>
+<p><strong>Kişiselleştirme Bayrakları:&#160;Basit “A/B bayrak” tanımı; varyasyon etiketleri &#246;n y&#252;ze JSON olarak &#231;ıkar.</strong></p>
+<p><strong>Environments:&#160;dev/stage/prod&#160;i&#231;erik kopyalama/klon, g&#252;venli “i&#231;eriği taşı” adımları.</strong></p>
+<p><strong>Audit &amp; İnceleme:&#160;Her kayıt i&#231;in kim/ne/zaman; i&#231;erik onayı imzaları; exportable audit.</strong></p>
+<p>&#128268; Formlar ve CRM Entegrasyonu (Kritik Ayrım)</p>
+<p><strong>Kariyer / İletişim formları CMS’de sadece render edilir, g&#246;nderim&#160;CRM API’sine&#160;post edilir.</strong></p>
+<p><strong>CMS’de&#160;PII depolanmaz; yalnız teslimat logu (ID, zaman, durum).</strong></p>
+<p><strong>CRM endpoint i&#231;in&#160;secret, IP allowlist, HMAC imza, throttle; başarısızlıkta yeniden deneme ve uyarı.</strong></p>
+<p>&#127757; &#199;okdilli / SEO / Teknik</p>
+<p><strong>Diller:&#160;TR/EN (artan). Dil başına slug, otomatik hreflang ve canonical.</strong></p>
+<p><strong>Sitemap:&#160;Dil ve i&#231;erik t&#252;r&#252; bazlı; otomatik g&#252;ncellenir.</strong></p>
+<p><strong>Robots:&#160;Ortam bazında (stage noindex), &#246;zel dizinler i&#231;in kurallar.</strong></p>
+<p><strong>Structured Data:&#160;Schema builder’dan JSONLD &#252;retimi.</strong></p>
+<p><strong>OG/Twitter:&#160;G&#246;rsel şablonları; sosyal başlık/a&#231;ıklama kontrolleri.</strong></p>
+<p>&#128101; Roller ve Yetkiler</p>
+<p><strong>Editor:&#160;i&#231;erik oluştur/d&#252;zenle; yayınlayamaz.</strong></p>
+<p><strong>SEO Editor:&#160;SEO/Schema alanlarını d&#252;zenler; i&#231;erik g&#246;rebilir.</strong></p>
+<p><strong>Publisher:&#160;yayınlar/geri alır; redirect/sitemap y&#246;netir.</strong></p>
+<p><strong>Admin:&#160;i&#231;erik modeli, webhooks, kullanıcılar/roller, ortam y&#246;netimi.</strong></p>
+<p><strong>Alan Bazlı Yetki:&#160;Belirli alan/sekme yalnız bazı rollere.</strong></p>
+<p><strong>İ&#231;erik Sahipliği:&#160;Kayıt sahipliği ve&#160;devir&#160;mekanizması.</strong></p>
+<p>&#129514; Yayınlama &amp; İş Akışı</p>
+<p><strong>Draft → Review → Approve → Publish; her adım i&#231;in koşullar ve zorunlu alanlar.</strong></p>
+<p><strong>Schedule/Unpublish:&#160;Zamanlanmış yayın ve geri alma; &#231;akışma uyarıları.</strong></p>
+<p><strong>İ&#231;erik Yorumları:&#160;Satıri&#231;i not/mention, g&#246;rev atama, tarih.</strong></p>
+<p><strong>Bildirimler:&#160;Bekleyen onay, yaklaşan yayınlar, link/erişilebilirlik sorunları.</strong></p>
+<p>&#128200; Kalite &amp; Sağlık G&#246;stergeleri (Admin Dashboard i&#231;inden)</p>
+<p><strong>İ&#231;erik Kalite Kartları:&#160;SEO skoru, erişilebilirlik uyarıları, okunabilirlik, okunma s&#252;resi tahmini.</strong></p>
+<p><strong>Site Sağlığı:&#160;Build/webhook gecikmesi, edge cache temizleme durumu.</strong></p>
+<p><strong>Kırık Link &amp; 404 Trendleri.</strong></p>
+<p>⛑ G&#252;venlik / Uyumluluk</p>
+<p><strong>Audit Log:&#160;T&#252;m CRUD ve yayın olayları; export edilebilir.</strong></p>
+<p><strong>Ortam İzolasyonu:&#160;Stage i&#231;erikleri arama motorlarına kapalı.</strong></p>
+<p><strong>Asset Politikası:&#160;PII i&#231;eren dosyalar CMS’ye&#160;y&#252;klenemez&#160;(yalnız CRM’de şifreli alan).</strong></p>
+<p><strong>Secrets Y&#246;netimi:&#160;Entegrasyon anahtarları maskeli; d&#246;n&#252;ş&#252;mlere sınırlı erişim.</strong></p>
+<p>✅ Kabul Kriterleri (&#246;rnek)</p>
+<p><strong>Preview:&#160;Bir i&#231;erik taslakken 10 sn i&#231;inde&#160;&#246;n izleme linki&#160;&#252;retilmeli; erişim token’lı.</strong></p>
+<p><strong>Versiyonlama:&#160;Kaydetme anında otomatik versiyon; diff g&#246;r&#252;n&#252;m&#252; blok seviyesinde.</strong></p>
+<p><strong>Onay Akışı:&#160;Onaylanmamış i&#231;erik “Publish” tuşu pasif; onaylayıcı farklı rol olmalı.</strong></p>
+<p><strong>Redirect:&#160;Aynı kaynak path iki kez kullanılamaz; test butonu hedefe 200 d&#246;nd&#252;rmeli.</strong></p>
+<p><strong>FormtoCRM:&#160;Fail durumunda CMS kullanıcıya genel mesaj g&#246;sterir,&#160;ayrıntı logda; 3 retry + uyarı.</strong></p>
+<p><strong>Media Alt Metin:&#160;Alt metni boş g&#246;rsel yayınlanamaz (uyarı ve atlama opsiyonu yalnız Admin’de).</strong></p>
+<p>&#128506;️ Yol Haritası</p>
+<p><strong>MVP (&#214;nerilen ilk dilim)</strong></p>
+<p>Collections (Page/Service/Blog/Case/Legal/FAQ), Blocks, Medya, SEO temel, Preview, &#199;okdilli, Redirect, Sitemap, FormtoCRM entegrasyonu, Roller (Editor/Publisher/Admin), Versiyonlama, Basit onay akışı.</p>
+<p><strong>Faz 2</strong></p>
+<p>İ&#231;erik takvimi, gelişmiş onay, link/erişilebilirlik denetimleri, Schema builder, A/B bayrakları, ger&#231;ek zamanlı ortak d&#252;zenleme.</p>
+<p><strong>Faz 3</strong></p>
+<p>Environments “promote content”, kişiselleştirme kuralları, gelişmiş Analytics entegrasyonu, i&#231;erik performans skoru.</p>
+<p>Kısa &#246;zet</p>
+<p><strong>CMS Admin Panel: i&#231;erik/SEO/men&#252;/medya/redirect/&#231;okdilli/yayın akışları.</strong></p>
+<p><strong>“İyi &#246;zellikler”: blok edit&#246;r, ger&#231;ek zamanlı ortak d&#252;zenleme, preview, &#231;ok adımlı onay, diff &amp; rollback, schema builder, link/erişilebilirlik kontrolleri, redirect y&#246;netimi, environments.</strong></p>
+<p><strong>Formlar CRM’e: PII CMS’de tutulmaz; g&#252;venli webhook/secret/HMAC ile doğrudan CRM’e gider.</strong></p>
+<p><strong>İstersen bunu&#160;cms_admin_requirements.md&#160;adıyla b&#246;l&#252;mb&#246;l&#252;m maddelendirilmiş bir dosya halinde da verebilirim.</strong></p>
+</div>
+

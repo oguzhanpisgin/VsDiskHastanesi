@@ -1,0 +1,16 @@
+#!/bin/sh
+# prepare-commit-msg hook sample.
+# Auto-inject Conventional Commit prefix scaffold if message is empty or starts with 'WIP'.
+# Copy to .git/hooks/prepare-commit-msg and make executable.
+
+MSG_FILE="$1"
+ORIG=$(head -n1 "$MSG_FILE" 2>/dev/null || echo "")
+if [ -z "$ORIG" ] || echo "$ORIG" | grep -qi '^wip'; then
+  echo "fix(scope): açıklama" > "$MSG_FILE"
+  if [ -n "$ORIG" ]; then
+    echo "" >> "$MSG_FILE"
+    echo "$ORIG" >> "$MSG_FILE"
+  fi
+  echo "[prepare-commit-msg] Conventional scaffold eklendi" >&2
+fi
+exit 0

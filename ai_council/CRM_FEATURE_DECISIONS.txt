@@ -1,0 +1,188 @@
+========================================
+CRM FEATURE DECISIONS
+Approved by: Human Developer
+Date: January 2025
+========================================
+
+**APPROVED DECISIONS:**
+
+**Question 1: Account/Contact Split (B2B/B2C)?**
+? APPROVED: Account/Contact Split
+
+**Reasoning:**
+- Hedef kitle: B2B (orta/yüksek hacim firmalar, devlet kurumlarý) + B2C
+- B2B odaklý: Kurumdaki karar vericileri ayrý yönetmek kritik
+- CTO, IT Manager, Satýnalma Müdürü gibi roller
+
+**Implementation:**
+```
+CrmAccounts (Kurumlar/Kamu)
+?? ABC Teknoloji A.Þ.
+?   ?? Contact: CTO (Karar Verici)
+?   ?? Contact: IT Manager
+?   ?? Contact: Satýnalma Müdürü
+?? XYZ Kamu Kurumu
+?? ...
+
+CrmContacts (Bireyler)
+?? AccountId = NULL ? Bireysel müþteri (B2C)
+?? AccountId = 123 ? Kurum çalýþaný
+```
+
+**Question 2: Lead Scoring MVP'de olsun mu?**
+? APPROVED: YES (MVP'de olacak)
+
+**Reasoning:**
+- Salesforce Einstein AI benzeri özellik
+- Lead kalitesini otomatik deðerlendirme
+- Satýþ ekibinin priori belirleme
+
+**Question 3: Custom Fields MVP'de olsun mu?**
+? APPROVED: YES (MVP'de olacak)
+
+**Reasoning:**
+- Gemini & Copilot önerisi (2/4 consensus)
+- Flexibility for future needs
+- WordPress Custom Post Types equivalent
+- Industry-specific fields (data recovery)
+
+========================================
+ADMIN DASHBOARD DESIGN - EVALUATION
+========================================
+
+**Strong Points:**
+? Operasyon, SOC/IR, Telephony, Satýþ, Uyum tek merkezde
+? Salesforce Security Health Check benzeri skor sistemi
+? Data residency kontrolü (KVKV/GDPR için kritik)
+? Real-time agent/call monitoring
+? Unified Timeline (Email/Call/Meeting)
+? Paylaþýlabilir dashboard links (Pipedrive benzeri)
+
+**Cautions:**
+?? Çok fazla widget (karmaþýk olabilir) ? **önceliklendir**
+?? Telephony (Bitrix24/Asterisk) ? **3. parti entegrasyon gerekli**
+?? AI insights (Freddy benzeri) ? **Phase 2'ye býrak**
+?? Omnichannel War-Room ? **Phase 2-3**
+
+**Recommendation:** 
+**MVP için 10-12 core widget ile baþla, kalaný Phase 2.**
+
+========================================
+MVP DASHBOARD WIDGETS (Priority)
+========================================
+
+**High Priority (MVP - 10 widgets):**
+1. ? SLA Ýhlal Sayacý (hedef: 0)
+2. ? Açýk Ticket Sayýsý (kritik oraný)
+3. ? Pipeline Kanban + conversion grafiði
+4. ? Deal Value Trend (aylýk)
+5. ? Activity Heatmap (calls/meetings)
+6. ? DSR Kuyruðu (KVKK/GDPR SLA geri sayýmý)
+7. ? Security Health Score (Salesforce benzeri)
+8. ? Data Residency Map (bölge dýþý eriþim uyarýlarý)
+9. ? Webhook Delivery Success (entegrasyon saðlýðý)
+10. ? Monthly Cost Trend (FinOps)
+
+**Medium Priority (Phase 2 - 8 widgets):**
+11. ?? Telephony Real-time Panel (aktif çaðrýlar, agent durumu)
+12. ?? IR Aþama Hunisi (SOC/Recovery)
+13. ?? RTO/RPO Uyum (veri kurtarma)
+14. ?? Lead Scoring Trend
+15. ?? Email Open/Click Rate
+16. ?? Role/Permission Matrix
+17. ?? API Rate Limit Usage
+18. ?? Baþvuru Hunisi (ATS)
+
+**Low Priority (Phase 3 - AI/Advanced):**
+19. ?? AI Deal Insights (Freddy benzeri risk/win prediction)
+20. ?? Omnichannel War-Room (full-screen monitoring)
+21. ?? AI Operasyon Ýçgörüleri (IR/Recovery özeti)
+22. ?? Data Residency What-If Simulator
+
+========================================
+INTEGRATION REQUIREMENTS
+========================================
+
+**Must-Have (MVP):**
+- Azure AD B2C (authentication)
+- Azure Blob Storage (documents/media)
+- Email service (SendGrid/Azure Communication Services)
+- Webhook system (internal)
+
+**Should-Have (Phase 2):**
+- Telephony integration (Bitrix24 API OR Twilio)
+- Calendar sync (Outlook/Google)
+- SMS/WhatsApp (Twilio/Azure)
+
+**Nice-to-Have (Phase 3):**
+- AI services (Azure OpenAI for insights)
+- Advanced analytics (Power BI embed)
+- Video call (Teams integration)
+
+========================================
+TECHNICAL ARCHITECTURE
+========================================
+
+**Frontend:**
+- Vue.js 3 + Composition API + TypeScript
+- Dashboard: Drag-drop widget layout (SuiteCRM benzeri)
+- Real-time: SignalR for live updates
+- Charts: Chart.js or ECharts
+
+**Backend:**
+- ASP.NET Core 8 + Vertical Slice Architecture
+- Dashboard API: `/api/dashboard/widgets/{widgetType}`
+- Real-time Hub: SignalR for live metrics
+- Caching: Redis for hot data (pipeline stages, health scores)
+
+**Database:**
+- Dashboard config stored in `UserDashboardLayouts` table
+- Widget data aggregated in views (e.g., `vw_CrmPipelineSummary`)
+
+========================================
+SECURITY & COMPLIANCE
+========================================
+
+**Dashboard Security:**
+- RBAC: Widgets visible based on user roles
+- Field-level masking: PII hidden for non-authorized users
+- Audit: Dashboard access logged in `SecurityAuditLog`
+- Data residency: Region-based data filtering
+
+**GDPR/KVKK:**
+- DSR widget: Real-time SLA tracking
+- Data retention: Auto-delete countdown
+- Consent tracking: Per-contact consent status
+
+========================================
+NEXT STEPS
+========================================
+
+1. ? Fix CRM migration (create missing tables)
+2. ? Document admin dashboard MVP scope
+3. ? Create dashboard mockups (Figma/Sketch)
+4. ? Define widget API contracts
+5. ? Setup ASP.NET Core solution
+6. ? Implement 10 MVP widgets
+
+========================================
+MIGRATION STATUS
+========================================
+
+**Current Issue:**
+- CRM migration failed: `CrmCustomers` and `CrmTickets` tables missing
+- These tables exist in `database/08_CRM_SYSTEM.sql` (old migration)
+
+**Resolution:**
+- Run `database/08_CRM_SYSTEM.sql` first (creates base CRM tables)
+- Then run `database/12_CRM_SYSTEM.sql` (adds advanced features)
+
+**Total Tables After Both Migrations:**
+- Current: 16 tables
+- After 08_CRM: 19 tables (16 + 3 CRM base)
+- After 11_CMS: 43 tables (19 + 24 CMS)
+- After 12_CRM: 64 tables (43 + 21 CRM advanced)
+
+========================================
+END OF DECISIONS DOCUMENT
+========================================

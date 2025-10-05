@@ -1,0 +1,31 @@
+#!/bin/sh
+# pre-push hook (sample). Copy to .git/hooks/pre-push and make executable.
+# Fast safety net before remote push.
+# 1. Migration lint
+# 2. Repeatable drift verify
+# 3. Smoke DB tests (optional if sqlcmd available)
+# 4. Wrapper include lint
+# Skips on empty diff or if tools missing.
+
+set -e
+RED='\033[0;31m'; GREEN='\033[0;32m'; NC='\033[0m'
+
+run_ps(){
+  if command -v pwsh >/dev/null 2>&1; then pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$1" ${2:-};
+  else powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$1" ${2:-}; fi
+}
+
+printf "[PRE-PUSH] Migration lint...\n"
+if [ -f migration-lint.ps1 ]; then run_ps migration-lint.ps1 || { echo "${RED}Migration lint fail${NC}"; exit 1; }; else echo "[WARN] migration-lint.ps1 yok"; fi
+
+printf "[PRE-PUSH] Repeatable drift...\n"
+if [ -f verify-repeatable.ps1 ]; then run_ps verify-repeatable.ps1 || { echo "${RED}Repeatable drift${NC}"; exit 1; }; else echo "[WARN] verify-repeatable.ps1 yok"; fi
+
+printf "[PRE-PUSH] Wrapper include lint...\n"
+if [ -f scripts/wrapper-include-lint.ps1 ]; then run_ps scripts/wrapper-include-lint.ps1 || { echo "${RED}Wrapper lint fail${NC}"; exit 1; }; fi
+
+printf "[PRE-PUSH] DB Smoke (optional) ...\n"
+if [ -f test/run_db_smoke.ps1 ]; then run_ps test/run_db_smoke.ps1 || { echo "${RED}Smoke fail (dev env?)${NC}"; exit 1; }; else echo "[WARN] Smoke script yok"; fi
+
+printf "${GREEN}[PRE-PUSH] OK${NC}\n"
+exit 0

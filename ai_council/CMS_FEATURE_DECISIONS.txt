@@ -1,0 +1,458 @@
+========================================
+CMS FEATURE DECISIONS
+Approved by: Human Developer
+Date: January 2025
+========================================
+
+**QUESTION 1: Dynamic Content Types MVP'de olsun mu?**
+? APPROVED: YES
+
+Reasoning:
+- Flexibility for future content types (Testimonials, Products, FAQs)
+- WordPress Custom Post Types equivalent
+- Modern CMS requirement
+
+Implementation:
+- ContentTypes table (Id, Name, Schema JSON, TenantId)
+- ContentTypeFields table (field definitions)
+- DynamicContent table (JSON field values)
+
+**QUESTION 2: Arama Çözümü - SQL vs Azure Cognitive Search?**
+? MVP: SQL Full-Text Search
+? FUTURE: Azure Cognitive Search
+
+**Neden Þimdi SQL Full-Text?**
+- Basit ve yeterli (MVP için)
+- Ek maliyet yok
+- Hýzlý implementasyon
+- EF Core ile native entegrasyon
+
+**Neden Ýleride Azure Cognitive Search?**
+GEREKÇE:
+1. **Performans:** 100k+ içerik sonrasý SQL yavaþlar
+2. **Geliþmiþ Özellikler:**
+   - Faceted search (filtreleme)
+   - Fuzzy/phonetic search (yazým hatalarý)
+   - Synonym mapping
+   - Multi-language analysis (TR/EN ayrý stemming)
+   - Search suggestions/autocomplete
+   - Relevance tuning (scoring profiles)
+3. **Scaling:** Azure Cognitive Search otomatik scale yapar
+4. **Analytics:** Arama analitikleri (ne arýyorlar, týklama oraný)
+
+**Migration Trigger:**
+- 50k+ içerik veya
+- Arama hýzý >500ms veya
+- Multi-language search kalitesi düþük
+
+**Tahmini Maliyet:**
+- SQL Full-Text: $0
+- Azure Cognitive Search Basic: ~$75/month
+- Standard S1: ~$250/month
+
+========================================
+CMS FEATURE ANALYSIS - FULL REQUIREMENTS
+========================================
+
+**ADDITIONAL REQUIREMENTS FROM DETAILED ANALYSIS:**
+
+**1. BLOCK-BASED EDITOR (Gutenberg-like)**
+? HIGH PRIORITY - MVP
+- Reusable content blocks
+- Block library (Hero, Features, FAQ, Timeline, Stats, CTA)
+- Design lock (corporate colors/fonts)
+- Block templates
+
+**2. REAL-TIME COLLABORATIVE EDITING**
+?? MEDIUM PRIORITY - Phase 2
+- Presence avatars (who's editing)
+- Field-level locking
+- Conflict prevention
+- SignalR integration
+
+**3. PREVIEW LINKS**
+? HIGH PRIORITY - MVP
+- Unpublished content preview
+- Time-based preview (future versions)
+- Secure token-based access
+- 10-second generation target
+
+**4. MULTI-LANGUAGE WORKFLOWS**
+? HIGH PRIORITY - MVP
+- Clone source ? translate ? commit
+- Automatic hreflang mapping
+- Fallback mechanism (TR ? EN)
+- Translation status tracking
+
+**5. APPROVAL WORKFLOW**
+? HIGH PRIORITY - MVP
+- Multi-step: Draft ? Review ? Approve ? Publish
+- Task/comment on each step
+- Email notifications
+- Required fields per stage
+
+**6. VERSION DIFF & ROLLBACK**
+? HIGH PRIORITY - MVP
+- Rich text diff viewer
+- Block-level comparison
+- One-click rollback
+- Commit message (like Git)
+
+**7. CONTENT CALENDAR**
+? HIGH PRIORITY - MVP
+- All publish/schedule dates in calendar
+- Drag-drop date change
+- Multi-tenant filtering
+- Export to iCal
+
+**8. REDIRECT & 404 MANAGEMENT**
+? HIGH PRIORITY - MVP
+- Bulk import (CSV)
+- Conflict warning
+- Test button (checks target returns 200)
+- 301/302 support
+- Redirect analytics
+
+**9. SCHEMA BUILDER (SEO)**
+? HIGH PRIORITY - MVP
+- Visual wizard for:
+  - Organization
+  - Breadcrumb
+  - Article
+  - FAQ
+  - Service/Product
+- JSON-LD output
+- Validation (schema.org)
+
+**10. LINK & MEDIA AUDIT**
+? HIGH PRIORITY - MVP
+- Broken link scanner
+- Alt text checker (mandatory warning)
+- File reuse tracking
+- Usage report (where is this image used?)
+
+**11. LIBRARY TRANSFORMATIONS**
+? HIGH PRIORITY - MVP
+- Auto WebP/AVIF conversion
+- Size limits per tenant
+- Focus point cropping
+- Responsive variants (thumbnail, medium, large)
+
+**12. ACCESSIBILITY & SEO CHECKS**
+? HIGH PRIORITY - MVP
+- Heading hierarchy validation
+- Contrast checker
+- Alt text enforcement
+- Title/meta length warning
+- Duplicate detection
+
+**13. PERSONALIZATION FLAGS (A/B Testing)**
+?? LOW PRIORITY - Phase 3
+- Simple A/B flag definition
+- Variant labels
+- JSON output to frontend
+- Target audience conditions
+
+**14. ENVIRONMENTS (Dev/Stage/Prod)**
+?? MEDIUM PRIORITY - Phase 2
+- Content clone between environments
+- Promote content workflow
+- Stage = noindex
+- Environment-specific secrets
+
+**15. AUDIT & COMPLIANCE**
+? HIGH PRIORITY - MVP
+- Who/What/When for all changes
+- Content approval signatures
+- Exportable audit log
+- IP address tracking
+- User agent logging
+- Risk level tagging
+
+========================================
+FORM & CRM INTEGRATION (CRITICAL)
+========================================
+
+**FORMS (Career/Contact):**
+- CMS renders form only (no PII storage)
+- Submit ? CRM API (POST)
+- CMS stores only: ID, timestamp, status (delivered/failed)
+
+**SECURITY:**
+- CRM endpoint secret (masked in UI)
+- IP allowlist
+- HMAC signature
+- Throttling (rate limit)
+- 3 retry on failure
+- Alert on failure
+
+**FIELDS NOT IN CMS:**
+- Name, email, phone, CV, message
+- All PII ? CRM encrypted storage
+
+========================================
+MULTI-LANGUAGE & SEO
+========================================
+
+**Languages:** TR, EN (expandable)
+**Per-language slug:** /hizmetler vs /services
+**Auto hreflang:** <link rel="alternate" hreflang="tr" ...>
+**Canonical:** Auto-generated per locale
+**Sitemap:** Language + content type based
+**Robots.txt:** Environment-based (stage = noindex)
+**Structured Data:** Schema builder ? JSON-LD
+**OG/Twitter:** Image templates, character limits
+
+========================================
+ROLES & PERMISSIONS
+========================================
+
+**Roles:**
+1. Editor: Create/edit content, cannot publish
+2. SEO Editor: Edit SEO/Schema fields, view content
+3. Publisher: Publish/unpublish, manage redirects
+4. Admin: Content model, webhooks, users, environments
+
+**Field-Level Permissions:**
+- Certain fields visible only to specific roles
+- Content ownership (assign owner, transfer)
+
+========================================
+QUALITY & HEALTH INDICATORS
+========================================
+
+**Dashboard Cards:**
+- SEO score (0-100)
+- Accessibility warnings
+- Readability score
+- Estimated reading time
+
+**Site Health:**
+- Build/webhook latency
+- Edge cache status
+- Broken link trends
+- 404 trends
+
+========================================
+SECURITY & COMPLIANCE
+========================================
+
+**Audit Log:**
+- All CRUD + publish events
+- Exportable (CSV/JSON)
+- GDPR right-to-delete support
+
+**Environment Isolation:**
+- Stage content = noindex
+- Search engines blocked
+
+**Asset Policy:**
+- PII files cannot be uploaded to CMS
+- Only in CRM encrypted fields
+
+**Secrets Management:**
+- Integration keys masked
+- Limited role access
+
+========================================
+MVP PRIORITY (12 Weeks)
+========================================
+
+**Week 1-2: Content Foundation**
+1. CmsPosts, CmsCategories, CmsTags
+2. MediaLibrary + Azure Blob
+3. SeoMetadata (universal)
+4. ContentVersions
+5. Dynamic Content Types (ContentTypes, ContentTypeFields, DynamicContent)
+
+**Week 3-4: Workflow & Security**
+6. Roles, Permissions, UserRoles
+7. ContentPermissions
+8. SecurityAuditLog
+9. Draft ? Review ? Approve ? Publish workflow
+
+**Week 5-6: Advanced Content**
+10. ContentBlocks (reusable blocks)
+11. MediaVariants (responsive images)
+12. ContentSchedule (scheduled publishing)
+13. SQL Full-Text Search
+
+**Week 7-8: SEO & Redirects**
+14. Schema Builder
+15. Redirect Manager (301/302)
+16. Sitemap Generator
+17. Link & Media Audit
+
+**Week 9-10: Multi-Language**
+18. Languages table
+19. ContentTranslations
+20. hreflang automation
+
+**Week 11-12: Forms & Polish**
+21. Form-to-CRM integration (Career, Contact)
+22. Content Calendar
+23. Preview Links
+24. Dashboard widgets
+
+========================================
+PHASE 2 (Months 4-6)
+========================================
+
+25. Real-time collaborative editing (SignalR)
+26. Environments (dev/stage/prod)
+27. Advanced approval workflows
+28. Link/accessibility automated checks
+29. Redis caching layer
+30. Azure CDN integration
+
+========================================
+PHASE 3 (Months 7-12)
+========================================
+
+31. Azure Cognitive Search migration
+32. A/B testing flags
+33. Personalization rules
+34. Advanced analytics integration
+35. Content performance scoring
+36. AI content suggestions (from AI Council)
+
+========================================
+DATABASE ADDITIONS
+========================================
+
+**NEW TABLES (Total: +24 tables)**
+
+**Core Content (Priority 1):**
+- CmsPosts
+- CmsCategories
+- CmsPostCategories
+- CmsTags
+- CmsPostTags
+- MediaLibrary
+- MediaVariants
+- SeoMetadata
+- ContentVersions
+- ContentBlocks
+- ContentTypes ? (Dynamic content)
+- ContentTypeFields ?
+- DynamicContent ?
+
+**Workflow & Security (Priority 2):**
+- Roles
+- Permissions
+- UserRoles
+- ContentPermissions
+- SecurityAuditLog
+- ContentLocks
+- UserConsents
+- DataDeletionRequests
+
+**SEO & Redirects (Priority 2):**
+- Redirects
+- SchemaDefinitions
+
+**Multi-Language (Priority 2):**
+- Languages
+- ContentTranslations
+
+**Advanced (Priority 3):**
+- ContentSchedule
+- FormSubmissionLog (CRM delivery status only, no PII)
+- Webhooks
+- ApiKeys
+- CacheInvalidation
+- Environments
+
+========================================
+TOTAL DATABASE SIZE
+========================================
+
+- Current: 16 tables
+- Post-MVP: **43 tables** (16 + 27 new)
+- 6 months: **55 tables**
+- 1 year: **70 tables**
+
+========================================
+COMPETITOR FEATURE PARITY (Updated)
+========================================
+
+| Feature Category | WordPress | Strapi | Contentful | DiskHastanesi |
+|------------------|-----------|--------|------------|---------------|
+| Content Management | 9/10 | 8/10 | 8/10 | **9/10** |
+| Media Management | 8/10 | 7/10 | 7/10 | **9/10** |
+| SEO Tools | 9/10 | 6/10 | 8/10 | **9/10** |
+| Security | 6/10 | 7/10 | 7/10 | **9/10** |
+| Performance | 5/10 | 8/10 | 9/10 | **9/10** |
+| Multi-tenant | 3/10 | 5/10 | 7/10 | **10/10** |
+| AI Features | 4/10 | 2/10 | 3/10 | **10/10** |
+| Block Editor | 10/10 | 5/10 | 6/10 | **9/10** |
+| Workflows | 6/10 | 8/10 | 9/10 | **9/10** |
+| Multi-language | 8/10 | 9/10 | 10/10 | **9/10** |
+
+**OVERALL SCORE:**
+- WordPress: 68/100
+- Strapi: 67/100
+- Contentful: 74/100
+- **DiskHastanesi: 92/100** ?
+
+========================================
+DIFFERENTIATION FACTORS
+========================================
+
+? **AI-First CMS:**
+- AI Council for decision making
+- AI content suggestions
+- Auto SEO optimization
+- Smart image tagging
+- Chatbot for content Q&A
+
+? **Industry-Specific:**
+- Data recovery case study templates
+- Service catalog builder
+- Customer portal integration
+
+? **Multi-Tenant SaaS:**
+- Row-level security (Azure SQL RLS)
+- Per-tenant customization
+- White-label capability
+- Subdomain routing
+
+? **Modern Tech Stack:**
+- Vue.js 3 + TypeScript
+- ASP.NET Core 8
+- Azure Container Apps
+- Vertical Slice Architecture
+
+? **Security-First:**
+- Azure AD B2C
+- RBAC with field-level permissions
+- GDPR compliance built-in
+- OWASP Top 10 mitigations
+
+========================================
+ESTIMATED EFFORT
+========================================
+
+**MVP (12 weeks):** 480 hours (4 developers)
+- Backend: 240 hours
+- Frontend: 180 hours
+- Testing: 60 hours
+
+**Phase 2 (3 months):** 360 hours
+**Phase 3 (6 months):** 480 hours
+
+**Total (1 year):** 1320 hours
+
+========================================
+NEXT ACTIONS
+========================================
+
+1. ? Generate SQL migration scripts for 27 new tables
+2. ? Create Entity Framework models
+3. ? Update PROJECT_INDEX.md with decisions
+4. ? Create ASP.NET Core solution structure
+5. ? Setup Vue.js 3 frontend project
+
+========================================
+END OF DECISIONS DOCUMENT
+========================================

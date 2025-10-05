@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiskHastanesi.com - Proje Dokümanlarý</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        
+        .category-title {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .doc-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .doc-title {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .doc-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .doc-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-html {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-html:hover {
+            background: #5568d3;
+        }
+        
+        .btn-txt {
+            background: #e0e7ff;
+            color: #667eea;
+        }
+        
+        .btn-txt:hover {
+            background: #c7d2fe;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>?? DiskHastanesi.com</h1>
+        <p class="subtitle">Proje Dokümanlarý - SQL'den Aktarýlmýþ Ýçerik</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Toplam Doküman</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">135,637</div>
+                <div class="stat-label">Karakter</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">14</div>
+                <div class="stat-label">Dosya (HTML + TXT)</div>
+            </div>
+        </div>
+        
+        <!-- Teknik Dokümantasyon -->
+        <div class="category-section">
+            <h2 class="category-title">??? Teknik Dokümantasyon</h2>
+            <div class="doc-grid">
+                <div class="doc-card">
+                    <div class="doc-title">CMS Admin Panel</div>
+                    <div class="doc-meta">
+                        <span class="badge">CMS</span>
+                        8,459 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="1-Diskhastanesi - CMS Admin Panel.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="1-Diskhastanesi - CMS Admin Panel.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="doc-title">CRM Gereksinimler Raporu</div>
+                    <div class="doc-meta">
+                        <span class="badge">CRM</span>
+                        20,801 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="3-Diskhastanesi -CRM Gereksinimler Raporu.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="3-Diskhastanesi -CRM Gereksinimler Raporu.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Strateji ve Planlama -->
+        <div class="category-section">
+            <h2 class="category-title">?? Strateji ve Planlama</h2>
+            <div class="doc-grid">
+                <div class="doc-card">
+                    <div class="doc-title">Stratejik Yol Haritasý</div>
+                    <div class="doc-meta">
+                        <span class="badge">Strateji</span>
+                        38,393 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="4-DiskHastanesi.com - Stratejik Yol Haritasý.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="4-DiskHastanesi.com - Stratejik Yol Haritasý.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ürün Kataloðu -->
+        <div class="category-section">
+            <h2 class="category-title">?? Ürün Kataloðu</h2>
+            <div class="doc-grid">
+                <div class="doc-card">
+                    <div class="doc-title">Güncel Ürün ve Hizmet Listesi</div>
+                    <div class="doc-meta">
+                        <span class="badge">Ürünler</span>
+                        43,318 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="2-Diskhastanesi - Güncel Ürün ve Hizmet Listesi.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="2-Diskhastanesi - Güncel Ürün ve Hizmet Listesi.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Web Sitesi -->
+        <div class="category-section">
+            <h2 class="category-title">?? Web Sitesi</h2>
+            <div class="doc-grid">
+                <div class="doc-card">
+                    <div class="doc-title">Web Sitesi Tüm Sayfalar</div>
+                    <div class="doc-meta">
+                        <span class="badge">Yapý</span>
+                        14,710 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="5-Web Siesi Tüm Sayfalar.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="5-Web Siesi Tüm Sayfalar.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="doc-title">Hakkýmýzda</div>
+                    <div class="doc-meta">
+                        <span class="badge">Kurumsal</span>
+                        4,522 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="6-Hakkýmýzda.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="6-Hakkýmýzda.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="doc-title">Veri Kurtarma Talep Formu</div>
+                    <div class="doc-meta">
+                        <span class="badge">Formlar</span>
+                        5,434 karakter
+                    </div>
+                    <div class="doc-actions">
+                        <a href="7-VeriKurtarmaTalepFormu.html" class="btn btn-html" target="_blank">HTML Görüntüle</a>
+                        <a href="7-VeriKurtarmaTalepFormu.txt" class="btn btn-txt" target="_blank">TXT Ýndir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px; text-align: center; color: #666;">
+            <p>?? <strong>Kaynak:</strong> SQL Server LocalDB (DiskHastanesiDocs)</p>
+            <p>?? <strong>Dýþa Aktarma Tarihi:</strong> 4 Ekim 2025, 19:52</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,983 @@
+========================================
+AI COUNCIL TASK #2
+CMS PANEL FEATURE ANALYSIS
+========================================
+Task ID: 2
+Module: CMS
+Created: January 2025
+Status: Analysis Phase
+
+
+========================================
+ROLE: GPT-4 ARCHITECT
+Specialization: System Architecture & Design Patterns
+========================================
+
+**CURRENT DATABASE ASSESSMENT:**
+
+**Strengths:**
+? Solid foundation with 16 tables
+? Multi-tenant architecture (Subdomains)
+? AI integration (Council, Chatbot)
+? CRM basics (Customers, Leads, Tickets)
+? Dynamic routing (CmsRoutes)
+
+**Critical Missing Features:**
+
+**1. CONTENT MANAGEMENT (High Priority)**
+? **Blog/Post System**
+   - Posts table (title, content, excerpt, featured image)
+   - Categories & Tags (many-to-many)
+   - Post revisions/versioning
+   - Draft/Published/Scheduled status
+   - Author attribution
+
+? **Media Library**
+   - MediaFiles table (images, videos, documents)
+   - Image optimization metadata
+   - Alt text, captions, credits
+   - Folder organization
+   - Usage tracking (where used)
+
+? **Content Blocks/Components**
+   - Reusable content blocks
+   - Block types (text, image, video, gallery, CTA)
+   - Block templates
+   - Visual page builder support
+
+**2. SEO & MARKETING (High Priority)**
+? **SEO Management**
+   - Meta titles/descriptions per page
+   - Open Graph tags
+   - Twitter Cards
+   - Canonical URLs
+   - XML Sitemap generation
+   - Robots.txt management
+
+? **Analytics Integration**
+   - Google Analytics tracking
+   - Event tracking
+   - Conversion goals
+   - A/B testing support
+
+**3. USER MANAGEMENT (Medium Priority)**
+? **Roles & Permissions**
+   - Role-based access control (RBAC)
+   - Granular permissions (create, edit, delete, publish)
+   - Content ownership
+   - Workflow approvals
+
+? **User Activity Log**
+   - Audit trail for all content changes
+   - Who changed what, when
+   - Rollback capability
+
+**4. MULTI-LANGUAGE (Medium Priority)**
+? **Internationalization**
+   - Content translations
+   - Language switcher
+   - Locale-specific URLs
+   - RTL support
+
+**5. FORM BUILDER (Low Priority for MVP)**
+? Contact forms
+? Lead capture forms
+? Custom form builder
+
+**RECOMMENDED NEW TABLES:**
+
+```sql
+-- Blog System
+CREATE TABLE CmsPosts (Id, Title, Slug, Content, Excerpt, FeaturedImageId, 
+                       AuthorId, CategoryId, Status, PublishedAt, TenantId);
+CREATE TABLE CmsCategories (Id, Name, Slug, ParentId, TenantId);
+CREATE TABLE CmsPostCategories (PostId, CategoryId); -- Many-to-many
+CREATE TABLE CmsPostRevisions (Id, PostId, Content, CreatedBy, CreatedAt);
+
+-- Media Library
+CREATE TABLE MediaLibrary (Id, FileName, FilePath, FileType, FileSize, 
+                           AltText, Caption, UploadedBy, TenantId);
+
+-- SEO
+CREATE TABLE SeoMetadata (Id, EntityType, EntityId, MetaTitle, MetaDescription, 
+                          OgImage, CanonicalUrl, TenantId);
+
+-- Permissions
+CREATE TABLE Roles (Id, Name, TenantId);
+CREATE TABLE Permissions (Id, RoleName, Resource, Action);
+CREATE TABLE UserRoles (UserId, RoleId);
+
+-- Activity Log
+CREATE TABLE AuditLog (Id, UserId, Action, EntityType, EntityId, 
+                       OldValue, NewValue, Timestamp, TenantId);
+```
+
+**MVP PRIORITY (3 months):**
+
+**Month 1:**
+1. Media Library + Upload management
+2. Blog system (Posts, Categories)
+3. SEO metadata for all content types
+4. Basic RBAC (Admin, Editor, Viewer)
+
+**Month 2:**
+5. Content blocks/components
+6. Post revisions
+7. Menu management enhancements
+8. Activity log
+
+**Month 3:**
+9. Advanced SEO (sitemap, Open Graph)
+10. Multi-language foundation
+11. Analytics integration
+12. Dashboard widgets
+
+**COMPETITOR COMPARISON:**
+
+| Feature | WordPress | Strapi | Contentful | DiskHastanesi | Priority |
+|---------|-----------|--------|------------|---------------|----------|
+| Blog System | ? | ? | ? | ? | **HIGH** |
+| Media Library | ? | ? | ? | ? | **HIGH** |
+| SEO Tools | ? | ?? | ? | ?? | **HIGH** |
+| Roles/Permissions | ? | ? | ? | ? | **MEDIUM** |
+| Multi-language | ? | ? | ? | ? | **MEDIUM** |
+| Page Builder | ? | ? | ? | ? | **LOW** |
+| Forms | ? | ?? | ? | ? | **LOW** |
+| Webhooks | ?? | ? | ? | ? | **LOW** |
+
+**CONFIDENCE: 90%**
+
+**SOURCES:**
+- WordPress Codex (database schema)
+- Strapi documentation
+- Contentful data model best practices
+
+---
+
+========================================
+ROLE: GEMINI 2.5 PRO ANALYST
+Specialization: Deep Research & Analysis
+========================================
+
+**DEEP COMPETITIVE ANALYSIS:**
+
+**Current Schema Grade: B- (70/100)**
+- Good: Multi-tenant, CRM integration, AI features
+- Missing: Core CMS features (blog, media, revisions)
+
+**CRITICAL GAPS (Must-Have for MVP):**
+
+**1. VERSIONING & WORKFLOW**
+? **Content Versioning**
+   - Every table needs: Version, IsDraft, PublishedVersion
+   - Change history tracking
+   - Compare versions side-by-side
+   - Rollback to previous versions
+
+**Implementation:**
+```sql
+CREATE TABLE ContentVersions (
+    Id INT PRIMARY KEY,
+    EntityType NVARCHAR(50), -- 'CmsPage', 'CmsPost'
+    EntityId INT,
+    Version INT,
+    Content NVARCHAR(MAX),
+    Status NVARCHAR(20), -- 'Draft', 'Published', 'Archived'
+    CreatedBy INT,
+    CreatedAt DATETIME,
+    PublishedAt DATETIME
+);
+```
+
+**2. ASSET MANAGEMENT (Beyond Simple Media)**
+? **Digital Asset Management (DAM)**
+   - Image variants (thumbnail, medium, large)
+   - Automatic image optimization (WebP conversion)
+   - Video transcoding
+   - CDN integration metadata
+   - Asset usage tracking
+   - Bulk operations
+
+**3. HEADLESS CMS CAPABILITIES**
+? **API-First Architecture**
+   - Content delivery API
+   - GraphQL endpoint (optional)
+   - Webhooks for content changes
+   - API keys management
+   - Rate limiting
+
+**Research Finding:** Modern CMS platforms are moving towards headless architecture. Consider:
+```
+Frontend: Vue.js (decoupled)
+    ? REST/GraphQL API
+Backend: ASP.NET Core
+    ? 
+Database: Azure SQL
+```
+
+**4. CONTENT MODELING**
+? **Dynamic Content Types**
+   - User-defined content types
+   - Custom fields per type
+   - Field validation rules
+   - Relationships between types
+
+Example: WordPress Custom Post Types equivalent
+```sql
+CREATE TABLE ContentTypes (
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(100), -- 'Product', 'Testimonial', 'FAQ'
+    Schema NVARCHAR(MAX), -- JSON schema definition
+    TenantId INT
+);
+
+CREATE TABLE ContentTypeFields (
+    Id INT PRIMARY KEY,
+    ContentTypeId INT,
+    FieldName NVARCHAR(50),
+    FieldType NVARCHAR(20), -- 'Text', 'RichText', 'Image', 'Date'
+    IsRequired BIT,
+    ValidationRules NVARCHAR(MAX) -- JSON
+);
+
+CREATE TABLE DynamicContent (
+    Id INT PRIMARY KEY,
+    ContentTypeId INT,
+    FieldValues NVARCHAR(MAX), -- JSON key-value pairs
+    TenantId INT
+);
+```
+
+**5. SCHEDULING & AUTOMATION**
+? **Content Scheduling**
+   - Publish at specific date/time
+   - Unpublish after expiration
+   - Recurring content (e.g., weekly newsletter)
+   - Bulk scheduling
+
+? **Workflow Automation**
+   - Auto-publish after approval
+   - Email notifications on status changes
+   - Integration with external services (Zapier-like)
+
+**6. SEARCH & FILTERING**
+? **Full-Text Search**
+   - Azure Cognitive Search integration
+   - Search across all content types
+   - Faceted search (filters)
+   - Search analytics
+
+**COMPETITOR DEEP DIVE:**
+
+**Strapi (Headless CMS Leader):**
+- Dynamic content types ?
+- GraphQL API ?
+- Role-based permissions ?
+- Plugin system ?
+- **Weakness:** No built-in page builder
+
+**Contentful (Enterprise):**
+- Content modeling (best-in-class) ?
+- Multi-environment (dev/staging/prod) ?
+- Webhooks & integrations ?
+- **Weakness:** Expensive, vendor lock-in
+
+**Umbraco (.NET Ecosystem):**
+- Document types (content modeling) ?
+- Media picker ?
+- Content versioning ?
+- **Weakness:** Monolithic, harder to scale
+
+**DIFFERENTIATION STRATEGY:**
+
+**What DiskHastanesi should focus on:**
+1. **AI-First CMS** (leverage your AI Council)
+   - AI content suggestions
+   - Auto SEO optimization
+   - Smart image tagging
+   - Chatbot for content Q&A
+
+2. **Data Recovery Industry Specific**
+   - Case study templates
+   - Service catalog builder
+   - Customer portal integration
+
+3. **Multi-Tenant SaaS**
+   - Tenant isolation
+   - Per-tenant customization
+   - White-label capability
+
+**MVP ROADMAP (Gemini's Recommendation):**
+
+**Sprint 1-2 (Weeks 1-4): Content Foundation**
+- [ ] Blog system (Posts, Categories, Tags)
+- [ ] Media library with Azure Blob Storage
+- [ ] Content versioning
+- [ ] SEO metadata
+
+**Sprint 3-4 (Weeks 5-8): Workflow & Permissions**
+- [ ] RBAC (Roles, Permissions)
+- [ ] Draft/Publish workflow
+- [ ] Activity log
+- [ ] Scheduled publishing
+
+**Sprint 5-6 (Weeks 9-12): Advanced Features**
+- [ ] Content blocks/components
+- [ ] Dynamic content types
+- [ ] API endpoints (REST)
+- [ ] Multi-language foundation
+
+**ESTIMATED DATABASE GROWTH:**
+- Current: 16 tables
+- Post-MVP: ~35-40 tables
+- Enterprise: ~60-80 tables
+
+**CONFIDENCE: 92%**
+
+**SOURCES:**
+- Strapi GitHub (architecture analysis)
+- Contentful developer docs
+- Azure CMS case studies
+
+---
+
+========================================
+ROLE: CLAUDE SONNET 4.5 SECURITY
+Specialization: Security & Best Practices
+========================================
+
+**SECURITY-FOCUSED FEATURE ASSESSMENT:**
+
+**CRITICAL SECURITY GAPS:**
+
+**1. CONTENT SECURITY**
+? **XSS Protection**
+   - Rich text editor sanitization
+   - Content Security Policy (CSP) headers
+   - Trusted HTML vs user HTML separation
+
+**Recommendation:**
+```csharp
+// Use AntiXSS library
+using Microsoft.Security.Application;
+
+public string SanitizeHtml(string content)
+{
+    return Encoder.HtmlEncode(content);
+}
+```
+
+? **CSRF Protection**
+   - Anti-forgery tokens on all forms
+   - SameSite cookie policy
+
+? **SQL Injection Prevention**
+   - Parameterized queries only
+   - Entity Framework best practices
+
+**2. ACCESS CONTROL (Missing)**
+
+**Critical Table:**
+```sql
+CREATE TABLE ContentPermissions (
+    Id INT PRIMARY KEY,
+    RoleId INT,
+    ContentType NVARCHAR(50), -- 'CmsPage', 'CmsPost'
+    Action NVARCHAR(20), -- 'View', 'Create', 'Edit', 'Delete', 'Publish'
+    IsAllowed BIT,
+    TenantId INT
+);
+
+CREATE TABLE ContentOwnership (
+    ContentId INT,
+    ContentType NVARCHAR(50),
+    OwnerId INT,
+    SharedWith NVARCHAR(MAX), -- JSON array of user IDs
+    TenantId INT
+);
+```
+
+**3. DATA PROTECTION**
+? **PII Handling**
+   - GDPR compliance (right to be forgotten)
+   - Data anonymization
+   - Export user data
+   - Consent management
+
+**Required Tables:**
+```sql
+CREATE TABLE UserConsents (
+    Id INT PRIMARY KEY,
+    UserId INT,
+    ConsentType NVARCHAR(50), -- 'Marketing', 'Analytics'
+    IsGranted BIT,
+    GrantedAt DATETIME,
+    RevokedAt DATETIME
+);
+
+CREATE TABLE DataDeletionRequests (
+    Id INT PRIMARY KEY,
+    UserId INT,
+    RequestedAt DATETIME,
+    ProcessedAt DATETIME,
+    Status NVARCHAR(20) -- 'Pending', 'Completed'
+);
+```
+
+**4. AUDIT & COMPLIANCE**
+? **Comprehensive Audit Log**
+
+**Enhanced Audit Log:**
+```sql
+CREATE TABLE SecurityAuditLog (
+    Id INT PRIMARY KEY,
+    UserId INT,
+    Action NVARCHAR(100),
+    EntityType NVARCHAR(50),
+    EntityId INT,
+    IpAddress NVARCHAR(45),
+    UserAgent NVARCHAR(500),
+    OldValue NVARCHAR(MAX),
+    NewValue NVARCHAR(MAX),
+    Timestamp DATETIME,
+    TenantId INT,
+    RiskLevel NVARCHAR(20) -- 'Low', 'Medium', 'High'
+);
+```
+
+**5. FILE UPLOAD SECURITY**
+? **Media Upload Validation**
+   - File type whitelist (not blacklist)
+   - Magic number verification
+   - Virus scanning (Azure Defender)
+   - Size limits per tenant
+   - Storage quota enforcement
+
+**Implementation:**
+```csharp
+public async Task<bool> ValidateUpload(IFormFile file)
+{
+    // Check extension
+    var allowedExtensions = new[] { ".jpg", ".png", ".pdf" };
+    var ext = Path.GetExtension(file.FileName);
+    if (!allowedExtensions.Contains(ext)) return false;
+    
+    // Check magic numbers (prevent rename attacks)
+    var magicNumbers = GetMagicNumbers(ext);
+    var fileHeader = await ReadFileHeader(file);
+    if (!magicNumbers.Contains(fileHeader)) return false;
+    
+    // Scan with Azure Defender
+    await ScanForMalware(file);
+    
+    return true;
+}
+```
+
+**6. MULTI-TENANT SECURITY**
+? **Tenant Isolation**
+   - Row-level security (RLS) in Azure SQL
+   - Tenant context in every query
+   - Cross-tenant data leakage prevention
+
+**Azure SQL RLS Setup:**
+```sql
+CREATE SCHEMA Security;
+GO
+
+CREATE FUNCTION Security.fn_TenantPredicate(@TenantId INT)
+RETURNS TABLE
+WITH SCHEMABINDING
+AS
+RETURN SELECT 1 AS result
+WHERE @TenantId = CAST(SESSION_CONTEXT(N'TenantId') AS INT);
+GO
+
+CREATE SECURITY POLICY Security.TenantFilter
+ADD FILTER PREDICATE Security.fn_TenantPredicate(TenantId)
+ON dbo.CmsPages,
+ADD FILTER PREDICATE Security.fn_TenantPredicate(TenantId)
+ON dbo.CmsPosts;
+GO
+```
+
+**7. AUTHENTICATION ENHANCEMENTS**
+? **MFA for Admin Users**
+? **Password policy enforcement**
+? **Session management**
+   - Idle timeout
+   - Concurrent session limits
+   - Device fingerprinting
+
+**8. RATE LIMITING & DDoS**
+? **API Rate Limiting**
+```csharp
+[EnableRateLimiting("fixed")]
+public class ContentApiController : ControllerBase
+{
+    // 100 requests per minute per IP
+}
+```
+
+**SECURITY MVP PRIORITIES:**
+
+**Phase 1 (Week 1-2):**
+1. CSRF tokens on all forms
+2. XSS sanitization in rich text editor
+3. Azure AD B2C integration
+4. Basic RBAC
+
+**Phase 2 (Week 3-4):**
+5. Audit logging
+6. File upload validation
+7. Tenant isolation (RLS)
+8. Content permissions
+
+**Phase 3 (Week 5-6):**
+9. GDPR compliance features
+10. Rate limiting
+11. MFA for admins
+12. Security headers (CSP, HSTS)
+
+**OWASP TOP 10 COMPLIANCE:**
+
+| Threat | Status | Mitigation |
+|--------|--------|------------|
+| Injection | ? | Use EF Core, parameterized queries |
+| Broken Auth | ?? | Azure AD B2C, MFA needed |
+| XSS | ? | AntiXSS library, CSP headers |
+| Insecure Design | ?? | Threat modeling needed |
+| Security Misconfig | ?? | Azure Policy enforcement |
+| Vulnerable Components | ? | Dependabot, SBOM |
+| CSRF | ? | Anti-forgery tokens |
+| Logging Failures | ? | Comprehensive audit log |
+
+**CONFIDENCE: 98%**
+
+**SOURCES:**
+- OWASP ASVS 4.0
+- Azure Security Baseline
+- GDPR compliance checklist
+
+---
+
+========================================
+ROLE: COPILOT DEV
+Specialization: Code Quality & Performance
+========================================
+
+**PERFORMANCE-FOCUSED FEATURE ANALYSIS:**
+
+**CURRENT SCHEMA PERFORMANCE ISSUES:**
+
+**1. MISSING INDEXES**
+? No indexes on foreign keys
+? No composite indexes for common queries
+? No full-text indexes for search
+
+**Required Indexes:**
+```sql
+-- CmsPages
+CREATE INDEX IX_CmsPages_TenantId_Status ON CmsPages(TenantId, Status) INCLUDE (Title, Slug);
+CREATE INDEX IX_CmsPages_Slug ON CmsPages(Slug) WHERE Status = 'Published';
+
+-- Future: CmsPosts
+CREATE INDEX IX_CmsPosts_CategoryId_PublishedAt ON CmsPosts(CategoryId, PublishedAt DESC);
+CREATE FULLTEXT INDEX ON CmsPosts(Title, Content);
+```
+
+**2. CACHING STRATEGY (Missing)**
+
+**Required Tables:**
+```sql
+CREATE TABLE CacheInvalidation (
+    Id INT PRIMARY KEY,
+    EntityType NVARCHAR(50),
+    EntityId INT,
+    InvalidatedAt DATETIME,
+    Reason NVARCHAR(200)
+);
+```
+
+**Caching Layers:**
+- **L1:** In-memory cache (IMemoryCache) - 5 min TTL
+- **L2:** Redis distributed cache - 30 min TTL
+- **L3:** Azure CDN - 1 hour TTL for static content
+
+**3. LAZY LOADING & EAGER LOADING**
+
+**Bad Query (N+1 problem):**
+```csharp
+// DON'T DO THIS
+var pages = context.CmsPages.ToList();
+foreach (var page in pages)
+{
+    var menu = context.WebsiteMenus.Find(page.MenuId); // N+1!
+}
+```
+
+**Good Query:**
+```csharp
+// DO THIS
+var pages = context.CmsPages
+    .Include(p => p.Menu)
+    .Where(p => p.TenantId == tenantId)
+    .AsNoTracking() // Read-only queries
+    .ToListAsync();
+```
+
+**4. PAGINATION (Missing)**
+
+**Required for ALL list endpoints:**
+```csharp
+public record PagedResult<T>(
+    List<T> Items,
+    int TotalCount,
+    int PageNumber,
+    int PageSize
+);
+
+public async Task<PagedResult<CmsPage>> GetPagesAsync(int page, int size)
+{
+    var query = context.CmsPages.Where(p => p.TenantId == tenantId);
+    var total = await query.CountAsync();
+    var items = await query
+        .OrderByDescending(p => p.UpdatedAt)
+        .Skip((page - 1) * size)
+        .Take(size)
+        .AsNoTracking()
+        .ToListAsync();
+    
+    return new PagedResult<CmsPage>(items, total, page, size);
+}
+```
+
+**5. BULK OPERATIONS**
+
+**Slow (one-by-one):**
+```csharp
+foreach (var page in pages)
+{
+    context.CmsPages.Add(page);
+    await context.SaveChangesAsync(); // 1000 DB calls!
+}
+```
+
+**Fast (bulk):**
+```csharp
+context.CmsPages.AddRange(pages);
+await context.SaveChangesAsync(); // 1 DB call
+```
+
+**6. QUERY OPTIMIZATION**
+
+**Slow Query Example:**
+```sql
+-- DON'T: Select all columns
+SELECT * FROM CmsPages WHERE TenantId = 1;
+```
+
+**Fast Query:**
+```sql
+-- DO: Select only needed columns
+SELECT Id, Title, Slug, Status 
+FROM CmsPages 
+WHERE TenantId = 1 AND Status = 'Published'
+ORDER BY PublishedAt DESC
+OFFSET 0 ROWS FETCH NEXT 20 ROWS ONLY;
+```
+
+**7. IMAGE OPTIMIZATION**
+
+**Required Features:**
+- Automatic WebP conversion
+- Responsive image generation (srcset)
+- Lazy loading metadata
+- Image CDN integration
+
+**Table:**
+```sql
+CREATE TABLE MediaVariants (
+    Id INT PRIMARY KEY,
+    OriginalMediaId INT,
+    VariantType NVARCHAR(20), -- 'Thumbnail', 'Medium', 'Large', 'WebP'
+    Width INT,
+    Height INT,
+    FilePath NVARCHAR(500),
+    FileSize BIGINT,
+    CdnUrl NVARCHAR(500)
+);
+```
+
+**8. REAL-TIME FEATURES**
+
+**SignalR for:**
+- Live preview of content changes
+- Collaborative editing (show who's editing)
+- Real-time notifications
+
+**Table:**
+```sql
+CREATE TABLE ContentLocks (
+    Id INT PRIMARY KEY,
+    ContentType NVARCHAR(50),
+    ContentId INT,
+    LockedBy INT,
+    LockedAt DATETIME,
+    ExpiresAt DATETIME
+);
+```
+
+**PERFORMANCE MVP PRIORITIES:**
+
+**Phase 1: Database Optimization**
+1. Add indexes on all foreign keys
+2. Composite indexes for common queries
+3. Full-text search on content
+
+**Phase 2: Caching**
+4. Implement Redis distributed cache
+5. Azure CDN for media files
+6. Cache invalidation strategy
+
+**Phase 3: Query Optimization**
+7. Pagination on all list endpoints
+8. Eager loading strategy
+9. Read-only queries (AsNoTracking)
+
+**Phase 4: Advanced**
+10. Image optimization pipeline
+11. SignalR for real-time features
+12. Background jobs (Hangfire)
+
+**PERFORMANCE TARGETS:**
+
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| API Response (p95) | <100ms | Application Insights |
+| Database Query | <50ms | EF Core logging |
+| Page Load (LCP) | <1.5s | Lighthouse |
+| CDN Hit Rate | >90% | Azure CDN analytics |
+| Concurrent Users | 1000+ | Load testing (k6) |
+
+**LOAD TESTING SCRIPT (k6):**
+```javascript
+import http from 'k6/http';
+import { check } from 'k6';
+
+export let options = {
+    stages: [
+        { duration: '2m', target: 100 },  // Ramp up
+        { duration: '5m', target: 100 },  // Steady
+        { duration: '2m', target: 0 },    // Ramp down
+    ],
+};
+
+export default function () {
+    let res = http.get('https://api.diskhastanesi.com/api/cms/pages');
+    check(res, {
+        'status is 200': (r) => r.status === 200,
+        'response time < 100ms': (r) => r.timings.duration < 100,
+    });
+}
+```
+
+**CONFIDENCE: 87%**
+
+**SOURCES:**
+- EF Core performance best practices
+- Azure SQL performance tuning guide
+- k6 load testing examples
+
+---
+
+========================================
+CONSENSUS ANALYSIS
+========================================
+
+**AGREEMENT SCORE: 85%**
+
+**UNANIMOUS PRIORITIES (100% consensus):**
+? Blog/Post system with categories
+? Media library with Azure Blob Storage
+? SEO metadata management
+? Content versioning
+? Role-based access control (RBAC)
+? Audit logging
+
+**STRONG CONSENSUS (75%+ agreement):**
+? Content blocks/components (3/4)
+? Multi-language support (3/4)
+? API-first architecture (3/4)
+? Scheduled publishing (3/4)
+
+**CONFLICTS:**
+
+**Dynamic Content Types:**
+- **Gemini:** High priority, allows flexibility
+- **GPT-4:** Medium priority, complex to implement
+- **Claude:** Low priority, YAGNI for MVP
+- **Copilot:** Medium priority, performance concerns
+
+**Page Builder:**
+- **GPT-4:** Low priority for MVP
+- **Gemini:** Not needed (content blocks sufficient)
+- **Claude:** Security concerns
+- **Copilot:** Performance overhead
+
+**Search Implementation:**
+- **GPT-4:** SQL full-text search
+- **Gemini:** Azure Cognitive Search
+- **Claude:** Elasticsearch (self-hosted security)
+- **Copilot:** SQL full-text + Redis cache
+
+---
+
+========================================
+FINAL RECOMMENDATIONS
+========================================
+
+**CRITICAL FEATURES (Must-Have for MVP):**
+
+**Week 1-2: Content Foundation**
+1. ? **CmsPosts** table (blog system)
+2. ? **CmsCategories** + **CmsPostCategories** (many-to-many)
+3. ? **MediaLibrary** table + Azure Blob integration
+4. ? **SeoMetadata** table (universal for all content types)
+
+**Week 3-4: Workflow & Security**
+5. ? **ContentVersions** table (versioning for all content)
+6. ? **Roles** + **Permissions** + **UserRoles** (RBAC)
+7. ? **SecurityAuditLog** table
+8. ? Draft/Publish workflow
+
+**Week 5-6: Advanced Content**
+9. ? **ContentBlocks** table (reusable components)
+10. ? **MediaVariants** table (responsive images)
+11. ? Scheduled publishing
+12. ? Full-text search (SQL)
+
+**Week 7-8: Performance & Polish**
+13. ? Database indexes optimization
+14. ? Redis caching layer
+15. ? API rate limiting
+16. ? Azure CDN integration
+
+**Week 9-12: Nice-to-Have**
+17. ?? Multi-language tables
+18. ?? Form builder
+19. ?? Webhooks
+20. ?? Dynamic content types
+
+**RECOMMENDED DATABASE ADDITIONS (20+ new tables):**
+
+```sql
+-- Core Content (Priority 1)
+CmsPosts
+CmsCategories
+CmsPostCategories
+CmsTags
+CmsPostTags
+MediaLibrary
+MediaVariants
+SeoMetadata
+ContentVersions
+ContentBlocks
+
+-- Security & Workflow (Priority 2)
+Roles
+Permissions
+UserRoles
+ContentPermissions
+SecurityAuditLog
+ContentLocks
+UserConsents
+
+-- Advanced (Priority 3)
+ContentSchedule
+Languages
+ContentTranslations
+FormDefinitions
+FormSubmissions
+Webhooks
+ApiKeys
+```
+
+**TOTAL DATABASE SIZE ESTIMATE:**
+- Current: 16 tables
+- Post-MVP: **40 tables**
+- 6 months: **55 tables**
+- 1 year: **70 tables**
+
+**COMPETITOR FEATURE PARITY:**
+
+| Feature Category | WordPress | Strapi | DiskHastanesi (Post-MVP) |
+|------------------|-----------|--------|---------------------------|
+| Content Management | 9/10 | 8/10 | **8/10** |
+| Media Management | 8/10 | 7/10 | **8/10** |
+| SEO Tools | 9/10 | 6/10 | **8/10** |
+| Security | 6/10 | 7/10 | **9/10** (Azure AD B2C) |
+| Performance | 5/10 | 8/10 | **9/10** (Azure) |
+| Multi-tenant | 3/10 | 5/10 | **10/10** |
+| AI Features | 4/10 | 2/10 | **10/10** (AI Council) |
+
+**DIFFERENTIATION:**
+- ? AI-powered content suggestions
+- ? Multi-tenant SaaS (unlike WordPress)
+- ? Modern tech stack (Vue.js 3 + .NET 8)
+- ? Security-first (Azure AD B2C, RBAC)
+
+**ESTIMATED EFFORT:**
+- MVP (12 weeks): **480 hours** (4 developers)
+- Full feature set (6 months): **1200 hours**
+
+========================================
+VOTING RESULTS
+========================================
+
+**Must-Have Features:**
+- Blog System: ???? (Unanimous)
+- Media Library: ???? (Unanimous)
+- SEO Metadata: ???? (Unanimous)
+- Versioning: ???? (Unanimous)
+- RBAC: ???? (Unanimous)
+
+**Should-Have Features:**
+- Content Blocks: ??? (GPT-4, Gemini, Claude)
+- Multi-language: ??? (GPT-4, Gemini, Copilot)
+- API-First: ??? (Gemini, Claude, Copilot)
+
+**Nice-to-Have Features:**
+- Dynamic Content Types: ?? (Gemini, Copilot)
+- Page Builder: ? (GPT-4 only)
+- Webhooks: ?? (Gemini, Claude)
+
+========================================
+HUMAN DECISION REQUIRED
+========================================
+
+**Question 1:** Should we implement dynamic content types in MVP?
+- **Gemini:** YES (flexibility for future)
+- **Others:** NO (too complex, YAGNI)
+- **Recommendation:** NO for MVP, add in Phase 2
+
+**Question 2:** Which search solution?
+- SQL Full-Text Search (simple, sufficient for MVP)
+- Azure Cognitive Search (powerful, $$$)
+- **Recommendation:** SQL full-text for MVP
+
+**Question 3:** Page builder in MVP?
+- **Recommendation:** NO, use content blocks instead
+
+========================================
+EXPORT OPTIONS
+========================================
+
+? Generate SQL migration scripts for new tables
+? Create Entity Framework models
+? Export feature roadmap to PROJECT_INDEX.md
+? Create competitor comparison matrix
+
+========================================
+END OF AI COUNCIL REPORT
+========================================

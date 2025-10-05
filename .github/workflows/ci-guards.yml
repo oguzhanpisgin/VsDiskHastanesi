@@ -1,0 +1,74 @@
+name: Surgical & SQL Guards CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main ]
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set BASE ref (PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "BASE_REF=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
+
+      - name: Set BASE ref (push)
+        if: ${{ github.event_name == 'push' }}
+        run: echo "BASE_REF=main" >> $GITHUB_ENV
+
+      - name: Stage diff files for guard scripts
+        shell: bash
+        run: |
+          git fetch origin $BASE_REF --depth=1 || true
+          # List changed files vs base
+          DIFF_FILES=$(git diff --name-only origin/$BASE_REF...HEAD || git diff --name-only HEAD^)
+          if [ -z "$DIFF_FILES" ]; then
+            echo "No diff files detected; skipping staging step."; exit 0
+          fi
+          echo "$DIFF_FILES" | xargs git add 2>/dev/null || true
+          echo "Staged files for guard evaluation:" && git diff --cached --name-only
+
+      - name: Run sync-rules (ensures context copies up to date)
+        shell: pwsh
+        run: ./sync-rules.ps1
+
+      - name: Migration lint
+        shell: pwsh
+        run: ./migration-lint.ps1
+
+      - name: Repeatable drift verify
+        shell: pwsh
+        run: ./verify-repeatable.ps1
+
+      - name: Wrapper include lint
+        shell: pwsh
+        run: |
+          if(Test-Path 'scripts/wrapper-include-lint.ps1'){ ./scripts/wrapper-include-lint.ps1 } else { Write-Host 'wrapper-include-lint script yok' }
+
+      - name: Surgical guards
+        shell: pwsh
+        run: |
+          if(Test-Path '.githooks/precommit-guards.ps1'){ ./githooks/precommit-guards.ps1 } else { Write-Host 'No surgical guard script found.' }
+
+      - name: SQL safety guards
+        shell: pwsh
+        run: |
+          if(Test-Path '.githooks/sql-safety-guards.ps1'){ ./githooks/sql-safety-guards.ps1 } else { Write-Host 'No SQL safety guard script found.' }
+
+      - name: Commit message lint
+        shell: pwsh
+        run: |
+          if(Test-Path 'scripts/commit-message-lint.ps1'){ ./scripts/commit-message-lint.ps1 -Base origin/$env:BASE_REF -Head HEAD } else { Write-Host 'commit-message-lint script yok' }
+
+      - name: Report summary
+        if: always()
+        shell: bash
+        run: echo "CI guard run completed (exit codes above reflect failures if any)."

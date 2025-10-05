@@ -1,0 +1,44 @@
+#!/bin/sh
+# commit-msg hook (sample). Copy to .git/hooks/commit-msg and make executable.
+# Enforces Conventional Commit + minimum subject clarity per surgical rules.
+# Allowed types: feat fix docs style refactor perf test chore security build ci
+# Format: type(scope?): short description
+# Scope (optional) must be lowercase kebab / dot / underscore tokens.
+# Subject must be <= 72 chars and >= 10 chars (excluding type/scope prefix) and not end with a period.
+
+MSG_FILE="$1"
+FIRST_LINE=$(head -n1 "$MSG_FILE")
+
+# Allow merge, revert, or version bump commits to pass
+echo "$FIRST_LINE" | grep -Eq "^(Merge|Revert|chore: release|chore\(release\):)" && exit 0
+
+REGEX='^(feat|fix|docs|style|refactor|perf|test|chore|security|build|ci)(\([a-z0-9._-]+\))?: [A-Za-z0-9].+'
+if ! echo "$FIRST_LINE" | grep -Eq "$REGEX"; then
+  echo "[COMMIT-MSG][FAIL] Conventional format değil: 'type(scope?): message'" >&2
+  exit 1
+fi
+
+# Extract subject (remove leading type(...) )
+SUBJECT=$(echo "$FIRST_LINE" | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|security|build|ci)(\([a-z0-9._-]+\))?: //')
+LEN=${#SUBJECT}
+if [ $LEN -lt 10 ]; then
+  echo "[COMMIT-MSG][FAIL] Açıklama çok kısa (<10): $SUBJECT" >&2
+  exit 1
+fi
+if [ $LEN -gt 72 ]; then
+  echo "[COMMIT-MSG][FAIL] Açıklama çok uzun (>72): $SUBJECT" >&2
+  exit 1
+fi
+if echo "$SUBJECT" | grep -Eq '\.$'; then
+  echo "[COMMIT-MSG][FAIL] Nokta ile bitmemeli." >&2
+  exit 1
+fi
+
+# Enforce no CAPITALIZED SHOUTING
+if echo "$SUBJECT" | grep -Eq '^[A-Z ]+$'; then
+  echo "[COMMIT-MSG][FAIL] Tamamen büyük harf kullanma." >&2
+  exit 1
+fi
+
+echo "[COMMIT-MSG] OK"
+exit 0

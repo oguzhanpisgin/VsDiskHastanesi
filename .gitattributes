@@ -1,0 +1,33 @@
+# Enforce consistent text normalization & UTF-8
+* text=auto
+
+# Use LF universally (CI / containers) – Windows git will translate in working tree if configured
+developers/ *.ps1 text eol=lf
+*.ps1 text eol=lf
+*.sql text eol=lf
+*.md  text eol=lf
+*.psm1 text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.cs text eol=lf
+
+# Treat these as text explicitly
+.gitattributes text
+.editorconfig text
+
+# Prevent accidental binary normalization
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
+# diff enhancements
+*.ps1 diff
+*.sql diff
+*.md  diff
+
+# Linguist overrides (if using GitHub)
+*.ps1 linguist-language=PowerShell
+*.psm1 linguist-language=PowerShell

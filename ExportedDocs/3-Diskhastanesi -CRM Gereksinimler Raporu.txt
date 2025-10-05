@@ -1,0 +1,268 @@
+﻿📑 Diskhastanesi CRM Gereksinimler Raporu (Tam Liste)
+1) Genel Tasarım İlkeleri
+Hedef: Standart CRM’den öte; telephony, uyumluluk, veri kurtarma, SLA ve danışmanlık süreçlerini tek panelde toplamak.
+Mimari: Servis tabanlı (microservices), REST+Webhook+Events, metadata-driven (Entity Manager).
+Uyumluluk: KVKK, GDPR, ISO 27001; veri yerelliği, rıza yönetimi, imha/anonimleştirme.
+SLA Şeffaflığı: Yanıt/çözüm süreleri müşteri portalında anlık görünür.
+Land & Expand: Recovery/IR sonrası cross-sell (yedekleme, ISO, SOC, FinOps).
+Data Residency: Her kayıt/dosya için region_code → belirli bölgede saklama.
+Audit & Traceability: Immutable loglar; erişim/silme kayıtları; W3C trace context.
+Security: Şifreleme (AES-256, TLS 1.2+), RBAC/ABAC, field-level masking.
+Extensibility: Studio/Entity Manager ile yeni entity/alan/ilişki tanımlanabilir.
+2) Ana Modüller
+Company & Contact Yönetimi: 360° müşteri görünümü, persona (CIO, CFO, CISO).
+Deals & Pipeline: Kanban + process bar, cross-sell motoru.
+Projects & Services: Altyapı, siber güvenlik, veri kurtarma, danışmanlık projeleri.
+Tickets / Incidents: SOC, IR, SLA bazlı destek kayıtları.
+SLAContracts: Yanıt/uptime hedefleri, raporlama, cezai maddeler.
+RecoveryCases: Disk/RAID/DB kurtarma, chain of custody, RTO/RPO.
+Compliance: KVKK/GDPR/ISO, DPIA, DSR, consent, imha politikaları.
+Communications: E-posta, arama, toplantı → unified timeline.
+ATS (Kariyer): Aday, başvuru, pipeline (ATS-lite).
+Finance: Teklif, sözleşme, fatura, FinOps tag.
+Files/Evidence: Delil deposu, hash, kms_key, legal hold.
+Analytics: C-level KPI panelleri (CFO maliyet, CIO uptime, CISO risk).
+Portal: Müşteri portalı (SLA, raporlar, dosyalar).
+Automation: Kural motoru, iş akışı, event tetikleyici.
+3) Veri Modeli (Delta)
+3.1 Tasarım İlkeleri
+UUID kimlikler, external_id desteği.
+created_at, updated_at, deleted_at.
+Soft delete + anonymize.
+Field-level PII tagging.
+Region_code zorunlu.
+Immutable audit trail.
+3.2 Çekirdek Varlıklar
+Company: legal_name, tax_id, sector, risk_score, churn_risk, region_code.
+Contact: full_name, title, emails[], phones[], role/persona, consent_refs.
+Deal: amount, stage, probability, channel, expected_close_date.
+Project: type (Infra|Cyber|ISO|Recovery), milestones, sla_id.
+Ticket/Incident: severity, category (SOC, OT/SCADA, HBYS, Backup), sla_id, chronology[], root_cause.
+SLAContract: scope, uptime_target, response_times[], penalties[], renewal_date.
+RecoveryCase: asset_type (HDD, SSD, RAID, DB, VM, Mobile), cause, rto_target, rpo_target, phase, chain_of_custody[], legal_hold.
+ComplianceRecord: regime (KVKK, GDPR, ISO…), processing_register[], dpia_refs[], policies[], audit_findings[].
+ConsentRecord: subject_id, lawful_basis, purposes[], proof_uri, expiry.
+EmailMessage: thread_id, direction, subject, headers, body_ref, attachments[].
+CallLog: direction, from_e164, to_e164, duration, outcome, recording_uri?, consent_flag, transcript_ref?.
+Meeting: start_ts, end_ts, attendees[], link, notes_ref.
+Candidate & JobApplication: skills, cv_uri, status_pipeline[], retention_expiry.
+Financial (Quote/Invoice/Order): lines[], taxes, status, external_erp_id.
+File/Evidence: file_name, mime, size, hash, kms_key_id, region_code, pii_flag, retention_policy_id.
+3.3 İlişkiler
+Company ↔ Contacts, Deals, Projects, Tickets, RecoveryCases, SLAContracts.
+Contact ↔ Deals (N-N), EmailMessages, CallLogs.
+Ticket ↔ EmailMessages, CallLogs, SLAContract.
+RecoveryCase ↔ Ticket, Company.
+Candidate ↔ JobApplication ↔ Consent.
+3.4 Retention Politikaları
+Contact/Email/Call: 12–36 ay, süre dolunca anonymize.
+Candidate/CV: 12–24 ay, imha.
+Call recording/transcript: yalnızca consent_flag=true, SLA süresince.
+Legal hold → silme ertelenir.
+3.5 Event Types
+deal.stage.changed, ticket.sla.breached, call.ended, email.received, consent.granted, recovery.phase.changed, dsr.completed.
+4) API & Entegrasyon Taslağı
+4.1 Genel
+REST /v1/*, Webhook, Events.
+Auth: OAuth2, PAT, mTLS opsiyonel.
+Başlıklar: Idempotency-Key, Request-Id, X-Region, X-PII-Mode.
+Hata modeli: RFC 7807 uyumlu.
+Rate limits + Retry-After.
+Distributed trace headers.
+4.2 Kaynaklar
+Companies: CRUD, merge, link-contact, attach-consent.
+Contacts: CRUD, request-consent, revoke-consent, anonymize.
+Deals: CRUD, transition-stage, close-won/lost.
+Projects: CRUD, add-milestone, link-sla.
+Tickets: CRUD, add-chronology, escalate, resolve, link-recovery.
+SLAContracts: CRUD, renew, publish-report.
+RecoveryCases: CRUD, set-phase, add-custody, legal-hold.
+Compliance: consents, DPIA, processing-register, DSR.
+Communications: emails (import-raw), calls (log, link-recording, set-consent), meetings.
+ATS: candidates, applications, files.
+Finance: quotes, invoices, ERP link.
+Files: upload (signed URL, region_code), hash-verify.
+Studio: entities, fields, hooks, layouts.
+Search: FTS, filters.
+Analytics: KPI dashboards, SLA reports.
+Portal: auth, tickets, reports, files.
+4.3 Entegrasyonlar
+E-posta: IMAP/Graph/Gmail, BCC dropbox, import raw MIME.
+CTI/VoIP: Webhook → call.started, call.ended, recording.ready; outbound call API; BYOC provider config; IVR/queue meta.
+Takvim: Microsoft 365, Google Calendar sync.
+E-imza: envelopes, callback.
+ERP: quote/invoice sync, external_id.
+SOC/SIEM: webhook events, ticket auto-open.
+4.4 Webhook Yönetimi
+/v1/webhooks register/list/delete.
+Events: company.created, contact.anonymized, deal.closed, ticket.sla.breached, call.ended, consent.granted, recovery.phase.changed, dsr.completed.
+Delivery: retry with backoff, HMAC sig, dead-letter queue.
+4.5 Güvenlik & Uyum
+OAuth2 scopes: crm.read, crm.write, calls.read, pii.read, studio.admin.
+Field masking, raw erişim yalnızca scope + policy.
+Data residency: X-Region zorunlu; export için compliance.override.
+KVKK/GDPR: DSR uçları, retention jobs, compliance logs.
+Recording_uri yalnızca consent_flag=true ise döner.
+4.6 Operasyon
+Versioning: /v1, kırıcı değişiklik → /v2.
+Idempotency: tüm yazmalarda, 24h cache.
+Bulk uçları: 1000 kayıt.
+Import/export: CSV/JSON, mask opsiyonu.
+Health & Metrics: /v1/admin/health, /v1/admin/metrics.
+Sandbox: /v1/sandbox/* uçları.
+4.7 UX/İstemci Sözleşmeleri
+Unified Timeline feed (email/call/meeting).
+Process Bar API (aşama kuralları, zorunlu alanlar).
+Kanban API (kolonlar, WIP limit, aging).
+Call Console API (<500 ms screen-pop, not/transkript paneli).
+Portal API (SLA görünürlük, rapor, dosya indirme).
+----------------------------------------------------------------------------------------------
+🛠️ Diskhastanesi CRM — Admin Dashboard Tasarım Raporu
+Amaç: Operasyon (SLA, Ticket, SOC/IR, Telephony), Satış (Pipeline), Uyum (KVKK/GDPR/ISO), Veri Kurtarma (RTO/RPO), İnsan (ATS), FinOps ve Entegrasyon sağlığını tek “komuta merkezi” ekranından yönetmek; müşteri portalında söz verdiğimiz şeffaflığı iç operasyonlarda da güvenceye almak.
+1) Bilgi Mimarisi ve Sayfa Yapısı
+1.1. Admin Home (Özet Komuta Paneli)
+Kritik KPI’lar (üst şerit):
+Açık Ticket sayısı / kritik oranı, SLA ihlali (bugün / 7g), MTTR, İlk Yanıt Süresi (FRT)
+Çağrı merkezi: çağrı hacmi, cevaplama oranı, kayıt aktif oranı, bekleme süresi (queue)
+IR/Recovery: aktif vakalar, RTO/RPO hedef uyumu, “chain of custody” istisnaları
+Uyum: açık DSR (erişim/silme) talepleri, yaklaşan retention bitişleri, DPO bekleyen onaylar
+Satış: pipeline tutarı, stage dönüşüm, riskli fırsat yüzdesi
+FinOps: bulut/servis maliyeti (ay), bütçe sapması
+Canlı Uyarılar: “SLA breach”, “Çağrı dalgası/IVR kuyruğu”, “SIEM alarm → ticket açıldı”, “DSR deadline < 24h”, “Data residency ihlali şüphesi”.
+1.2. Operasyon → SLA & Destek
+SLA ısı haritası (müşteri/kontrat kırılımı), ihlal trendi, kök neden dağılımı.
+Drilldown: sözleşme → ticket akışı → kronoloji/log/ekler.
+1.3. SOC/IR & Veri Kurtarma
+IR akışı (Diagnose → Contain → Eradicate → Recover) aşama bazlı kuyruk.
+Recovery laboratuvar panosu: varlık türü (HDD/SSD/RAID/VM/DB/Mobile), RTO/RPO hedef uyumu, delil zinciri (immutable kayıt).
+1.4. Telephony/Omnichannel
+Gerçek zamanlı çağrı paneli: anlık aramalar, acente durumları, cevapsız/voicemail, kayıt/transkript mevcut mu.
+VoIP/PBX sağlığı: trunk durumu, jitter/packet loss göstergeleri. (Bitrix24 telephony ve kayıt kabiliyetleri; OdooAsterisk entegrasyonu örüntüsü.) Bitrix24 Helpdesk+2Bitrix24 Helpdesk+2
+1.5. Satış & Pipeline
+Kanban ve Activity heatmap (gün/ajan bazlı); paylaşılabilir dashboard link’leri. (Pipedrive “Insights dashboards” benzeri.)  HYPERLINK "https://support.pipedrive.com/en/article/insights-dashboards?utm_source=chatgpt.com" \t "_blank" Pipedrive Support
+1.6. Uyum (KVKK/GDPR/ISO) & DPO Kokpiti
+DSR sırası (erişim/silme), DPIA/denetim durumları, retention takvimi, veri sınıfları.
+Data residency haritası: kayıt/dosya region_code dağılımı, bölge dışı erişim girişimleri. (Salesforce Hyperforce “data residency” yaklaşımından ilham.) Salesforce+2Salesforce+2
+1.7. İnsan (ATSlite)
+Başvuru hacmi, kanal performansı, “timetohire”, KVKK saklama geri sayımı; otomatik anonimleştirme kuyruğu.
+1.8. FinOps & Faturalama
+Bulut/izinli servis maliyeti trendi, birim maliyet (~kullanıcı/saat, cihaz/saha), bütçe sapma alarmı.
+1.9. Güvenlik & Erişim
+Kullanıcı/rol matrisi, oturum yönetimi, başarısız giriş anomali grafiği. (Dynamics onprem session management referansı.) Microsoft Learn
+1.10. Entegrasyon & Sistem Sağlığı
+Webhook hataları, gecikme (p95), retry/deadletter, API rate limit tüketimi; servis kesinti olayları.
+2) Rakiplerden “Ödünç” Alınacak İyi Özellikler → Panele Nasıl Ekleniyor?
+Kaynak ürün
+İyi özellik
+Admin Panel uyarlaması
+Salesforce
+Security Health Check: tek sayfada güvenlik skoru, baseline kıyas
+Security Health Score wideti: şifre politikası, 2FA, oturum süreleri, API anahtar yaşı → tek skor + düzelt butonları. (Aynı sayfada “Kendi baseline’ını yükle” opsiyonu.) Salesforce+1
+Salesforce Hyperforce
+Data residency kontrolü ve bölgesel atrest
+Data Residency Map: region_code bazlı obje/dosya ısı haritası, bölge dışına export denemelerinde uyarı/engel/istisna akışı. Salesforce+2Salesforce+2
+Dynamics 365
+Dashboard & Omnichannel realtime analytics
+Çağrı/agent gerçek zamanlı pano; ses/sohbet/konuşma durumu, agent performansı; trafik dalgası alarmı. Microsoft Learn+1
+Bitrix24 Telephony
+PBX bağlama seçenekleri, çağrı kaydı ve CRM’e otomatik işleme
+Telephony Setup Wizard + recording policy ekranı; kayıt varsa banner & IVR bilgilendirme göstergesi; screenpop sözleşmesi (<500 ms). Bitrix24 Helpdesk+2Bitrix24 Helpdesk+2
+Odoo VoIP (Asterisk)
+Yerel PBX entegrasyonu, aramayı timeline’a loglama
+CommsHub: Email/Call/Meeting tek timeline; Asterisk ayar doğrulama kontrolleri.  HYPERLINK "https://www.odoo.com/documentation/14.0/applications/general/voip/asterisk.html?utm_source=chatgpt.com" \t "_blank" Odoo
+Pipedrive
+Insights ile hızlı, paylaşılabilir satış panoları
+Shareable dashboard link (okumodu, 1h yenileme varsayılanı), pipeline conversion grafik seti.  HYPERLINK "https://support.pipedrive.com/en/article/insights-dashboards?utm_source=chatgpt.com" \t "_blank" Pipedrive Support
+SugarCRM Studio & Dashlets
+Kullanıcıların kendi dashlet’larını düzenleyebilmesi, Studio ile metadata tabanlı özelleştirme
+Dashlet Builder (liste/grafik/KPI) + Studio (entity/field/layout) admin sekmesi; değişiklikleri sürümleyip yayına alma. support.sugarcrm.com+1
+SuiteCRM
+Girişte kişiselleştirilebilir dashboard/dashlet
+Kişisel Admin görünümü: her admin kendi panosunu kişiselleştirebilir; global “default” şablon.  HYPERLINK "https://docs.suitecrm.com/user/introduction/user-interface/home-page/?utm_source=chatgpt.com" \t "_blank" SuiteCRM Documentation
+Freshsales “Freddy AI”
+Deal insights ve risk etiketleme
+AI Uyarıları: “Riskli fırsat”, “stale” aktiviteler, “kapanma olasılığı”; 30 dakikada bir yeniden skor.  HYPERLINK "https://support.freshsales.io/support/solutions/articles/50000000667-what-are-freddy-deal-insights-and-how-to-use-them-?utm_source=chatgpt.com" \t "_blank" Freshsales Classic+1
+3) Widget / Panel Envanteri (Admin için “tam liste”)
+Not: Tüm widget’lar zaman filtresi (Bugün / 7g / 30g / Özel) + drilldown içerir; dışa aktarma (CSV/PNG) ve paylaşılabilir bağlantı opsiyonu (RBAC denetimli).
+3.1 Operasyon & SLA
+SLA İhlal Sayacı (hedef: 0) → ihlal başına kök neden.
+MTTR & FRT Trend (p50/p90).
+Kategori Bazlı Ticket Dağılımı (SOC | Network | Backup | OT/SCADA | HBYS).
+SLA Sözleşmeleri Sağlık Kartları (uptime hedefi, ceza riski, yaklaşan yenileme).
+3.2 SOC/IR & Recovery
+IR Aşama Hunisi (Diagnose…Recover) + bekleme süresi ısı haritası.
+Recovery RTO/RPO Uyumu (varlık türüne göre) + delil zinciri eksik uyarıları.
+3.3 Telephony/Omnichannel
+Aktif Çağrılar ve Agent Durumu (gerçek zamanlı) + queue length. (Dynamics gözlemi.) Microsoft Learn
+Cevapsız/Voicemail Oranı + geriarama görevleri.
+Kayıt & Transkript Oranı (onaylı); kayıt yoksa kırmızı uyarı. (Bitrix24 kayıt politikasına benzer.) Bitrix24 Helpdesk
+3.4 Satış & Pipeline
+Pipeline Kanban + conversion grafiği (aşama aşama).  HYPERLINK "https://support.pipedrive.com/en/article/insights-dashboards?utm_source=chatgpt.com" \t "_blank" Pipedrive Support
+AI Deal Insights (risk/olası kapanış zamanı).  HYPERLINK "https://support.freshsales.io/support/solutions/articles/50000000667-what-are-freddy-deal-insights-and-how-to-use-them-?utm_source=chatgpt.com" \t "_blank" Freshsales Classic
+Aktivite Yoğunluğu (heatmap): arama/eposta/toplantı.
+3.5 Uyum & DPO
+DSR Kuyruğu (SLA geri sayımı), tamamlanan DSR raporları.
+DPIA/Denetim Durumu (açık bulgular, kontrol boşlukları).
+Retention Takvimi (bu hafta anonimize edilecek kayıtlar).
+Security Health Score (Salesforce Health Check benzeri tek skor + düzelt).  HYPERLINK "https://help.salesforce.com/s/articleView?id=xcloud.security_health_check.htm&language=en_US&type=5&utm_source=chatgpt.com" \t "_blank" Salesforce
+Data Residency Map (bölge dışı erişim/ihraç denemeleri, istisna talepleri).  HYPERLINK "https://help.salesforce.com/s/articleView?id=000795008&language=en_US&type=1&utm_source=chatgpt.com" \t "_blank" Salesforce
+3.6 İnsan (ATS)
+Başvuru Hunisi: alınan → görüşme → teklif → işe alındı; kanal performansı.
+KVKK Saklama Sayaçları: süresi dolan adayların otomatik anonimleştirme kuyruğu.
+3.7 FinOps
+Aylık Maliyet Trend + bütçe sapma; hizmet/müşteri kırılımı.
+Maliyet Optimizasyon Aksiyon Listesi (kullanılmayan kaynaklar, pik saatler).
+3.8 Güvenlik & Erişim
+Rol/İzin Haritası (satır/alan bazlı), “PII mask” politika kapsaması.
+Oturum Yönetimi: aktif oturumlar, zorla sonlandırma, timeout politikası. (Dynamics onprem referansı.) Microsoft Learn
+3.9 Entegrasyon & Sağlık
+Webhook Teslimat Başarısı (%), p95 gecikme, retry/DeadLetter sayacı.
+API Rate Limit Kullanımı, hata kodu dağılımı.
+4) Kullanıcı Rolleri ve Yetki (Admin Odaklı)
+System Admin: tüm modüller + Studio (entity/field/layout), policy değişiklikleri. (Sugar Studio esinli.) support.sugarcrm.com
+Ops Admin: Ticket/SLA/IR/Recovery, Telephony.
+Compliance Admin (DPO): DSR, DPIA, retention, residency istisnaları.
+Sales Admin: pipeline, kural motoru, hedefler.
+HR Admin: ATS, saklama politikaları.
+Alanbazlı maskeleme: email/telefon/ses kaydı/transkript PII mask; “raw” görüntüleme yalnızca yetkili scope ile.
+5) UX İlkeleri (Admin)
+Komuta Paneli Layout: üst KPI şeridi + 2 sütun widget ızgarası; dragdrop ve kaydedilebilir yerleşim. (SuiteCRM & Sugar “dashlet” yaklaşımı.)  HYPERLINK "https://docs.suitecrm.com/user/introduction/user-interface/home-page/?utm_source=chatgpt.com" \t "_blank" SuiteCRM Documentation+1
+Unified Timeline: eposta/çağrı/toplantı tek bileşende (Odoo & Dynamics esinli). Odoo+1
+Dark mode, responsive; Erişilebilirlik (kontrast/klavye/nv).
+Paylaşılabilir Dashboard Link: salt okunur, zaman damgalı, iptal edilebilir. (Pipedrive Insights)  HYPERLINK "https://support.pipedrive.com/en/article/insights-dashboards?utm_source=chatgpt.com" \t "_blank" Pipedrive Support
+6) Uyarı & Otomasyon Politikaları
+SLA breach → anlık bildirim + ilgili sözleşme kartında “rootcause zorunlu”.
+Çağrı Dalgası (agent occupancy > %85, queue> N) → geçici IVR kuralı öner. (Dynamics omnichannel mantığı.) Microsoft Learn
+Kayıt Yok (consent_flag=false) → transkript üretme, panelde kırmızı rozet. (Bitrix24 kayıt politikasını takip eden davranış.) Bitrix24 Helpdesk
+DSR deadline < 24h → Escalation to DPO.
+Residency ihlali denemesi → blokla, “istisna talebi” oluştur.  HYPERLINK "https://help.salesforce.com/s/articleView?id=000795008&language=en_US&type=1&utm_source=chatgpt.com" \t "_blank" Salesforce
+AI Deal Risk (Freddy benzeri) → sahibine görev ve önerilen sonraki adım.  HYPERLINK "https://support.freshsales.io/support/solutions/articles/50000000667-what-are-freddy-deal-insights-and-how-to-use-them-?utm_source=chatgpt.com" \t "_blank" Freshsales Classic
+7) Kabul Kriterleri (örnek)
+Screenpop: inbound çağrıda < 500 ms içinde kişi/şirket kartı açılır; tanınmıyorsa Lead önerilir. (Bitrix24 “CRMTelephony” kullanıcı deneyimi.) Bitrix24 Helpdesk
+CallLog: çağrı bitiminden ≤ 10 sn sonra timeline’da görünür; recording_uri yalnızca consent_flag=true ise. Bitrix24 Helpdesk
+Security Health Score: 80+ hedef; altına düşerse “Fix” aksiyonları tek tıkla (şifre politikası, 2FA, IP sınırı…).  HYPERLINK "https://help.salesforce.com/s/articleView?id=xcloud.security_health_check.htm&language=en_US&type=5&utm_source=chatgpt.com" \t "_blank" Salesforce
+Residency Map: tüm PII dosyalarında region_code boş olamaz; bölge dışı export’ta “compliance override” gerekir.  HYPERLINK "https://help.salesforce.com/s/articleView?id=mktg.mc_overview_hyperforce.htm&language=en_US&type=5&utm_source=chatgpt.com" \t "_blank" Salesforce
+DSR: talep alımından tamamlamaya kadar audit trail ve indirilebilir rapor PDF üretilir.
+8) Eklemeler (Öneri)
+Setup Assistant (İlk Kurulum Sihirbazı): Telephony, eposta, portal, DSR/SLA/retention politikalarını adım adım tamamlama (Salesforce “Setup” deneyimine benzer netlik).  HYPERLINK "https://help.salesforce.com/s/articleView?id=000373082&language=en_US&type=3&utm_source=chatgpt.com" \t "_blank" Salesforce
+“Security Health Check” benzeri Kurum Bazlı Baseline: ISO 27001 / KVKK gereksinimleriyle uyumlu yerel baseline yüklenebilir; skor buna göre hesaplanır.  HYPERLINK "https://help.salesforce.com/s/articleView?id=xcloud.security_health_check.htm&language=en_US&type=5&utm_source=chatgpt.com" \t "_blank" Salesforce
+Omnichannel GerçekZamanlı “WarRoom”: ayrılmış tam ekran; voice/chat/eposta yükü, agent işyükü, devre dışı entegrasyon alarm panosu. Microsoft Learn
+Studio / Entity Manager (Admin): yeni entity/alan/ilişki yaratma, layout/dashlet dizaynı, değişiklik seti ile yayın. (Sugar Studio) support.sugarcrm.com
+Data Residency “WhatIf” Simülatörü: farklı bölge politikaları uygulandığında etkilenecek kayıt/rapor tahmini.  HYPERLINK "https://help.salesforce.com/s/articleView?id=mktg.mc_overview_hyperforce.htm&language=en_US&type=5&utm_source=chatgpt.com" \t "_blank" Salesforce
+AI Operasyon İçgörüleri:
+IR/Recovery özeti: çağrı/eposta/transkriptlerden vaka özeti + “sonraki adım” önerisi.
+Deal Risk/Win Predict: Freddy benzeri skor + nedenler.  HYPERLINK "https://support.freshsales.io/support/solutions/articles/50000000667-what-are-freddy-deal-insights-and-how-to-use-them-?utm_source=chatgpt.com" \t "_blank" Freshsales Classic
+FinOps İyileştirme Rehberi: bulut tüketim anomali algılama + otomatik aksiyon önerileri.
+9) Diskhastanesi Bağlamına Neden Uyar?
+Tek noktadan çözüm ortağı vaadinizi (altyapı + MSSP/SOC + Recovery + GRC) tek panelde görünür kılar; çapraz satış yollarını somutlaştırır.
+SLA şeffaflığı ve kriz sonrası proaktif paketlere geçiş (Yedekleme, ISO 27001, MSSP) için net köprüler kurar.
+DPO/uyum kokpiti ile KVKK/GDPR’de süreklilik ve denetlenebilirlik sağlar.
+Kısa kıyas özeti (Admin odaklı)
+Salesforce: Health Check + Hyperforce → güvenlik skoru + veri yerelliği (Diskhastanesi: aynı mantıkta Health Score + Residency Map). Salesforce+1
+Dynamics 365: Realtime Omnichannel Analytics → çağrı/agent canlı pano. Microsoft Learn
+Bitrix24: Telephony + call recording → CTI sihirbazı + kayıt politikası + screenpop. Bitrix24 Helpdesk+1
+Odoo: VoIP/Asterisk → yerel PBX uyumu ve timeline log.  HYPERLINK "https://www.odoo.com/documentation/14.0/applications/general/voip/asterisk.html?utm_source=chatgpt.com" \t "_blank" Odoo
+Pipedrive: Insights → paylaşılabilir satış panosu.  HYPERLINK "https://support.pipedrive.com/en/article/insights-dashboards?utm_source=chatgpt.com" \t "_blank" Pipedrive Support
+Sugar/Suite: Dashlet/Studio → özelleştirilebilir admin panosu + metadatadriven yapı. support.sugarcrm.com+2support.sugarcrm.com+2
+Hazırsanız, bunu admin_dashboard_requirements.md olarak düzenleyip (bölüm başlıkları + widget kabul kriterleri + uyarı politikalarıyla) tek dosyada sunabilirim.
+

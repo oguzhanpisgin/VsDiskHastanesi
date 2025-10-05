@@ -1,0 +1,27 @@
+name: Security Scan
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: ''
+        continue-on-error: true
+      - name: Dotnet Vulnerable Packages
+        if: hashFiles('**/*.csproj') != ''
+        run: |
+          for f in $(git ls-files '*.csproj'); do
+            echo "Scanning $f";
+            dotnet list $f package --vulnerable || true;
+          done
+      - name: Summary
+        run: echo "Security scan completed (see logs)."

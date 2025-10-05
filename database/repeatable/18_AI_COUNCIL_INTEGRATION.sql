@@ -1,0 +1,2 @@
+-- Repeatable Wrapper: 18_AI_COUNCIL_INTEGRATION
+:r database/18_AI_COUNCIL_INTEGRATION.sql
