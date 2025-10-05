@@ -1,8 +1,10 @@
 # Enforce consistent text normalization & UTF-8
 * text=auto
 
-# Use LF universally (CI / containers) – Windows git will translate in working tree if configured
-developers/ *.ps1 text eol=lf
+# Use LF universally (CI / containers); Windows can translate in working tree if configured
+# Fixed: invalid pattern 'developers/ *.ps1' (space broke syntax). If needed, target scripts under developers folder:
+# developers/*.ps1 text eol=lf
+
 *.ps1 text eol=lf
 *.sql text eol=lf
 *.md  text eol=lf
