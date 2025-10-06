@@ -1,134 +1,101 @@
 # Visual Studio Çalışma Kuralları (Cerrahi Müdahale + Parçalama)
-Version: 1.2
+Version: 1.3 (Canonical)
 
 Bu kurallar küçük, izole ve güvenli değişiklikler yapmayı zorunlu kılar. Amaç: Gereksiz kapsam büyümesini ve zincirleme hataları önlemek.
 
 ## 1. Cerrahi Müdahale Protokolü
-0. Workspace Context Desteği: Hata düzeltmeye başlamadan ÖNCE `.copilot/context.md` içindeki `RuleHash` ile `docs/VS_WORKFLOW_RULES.md` güncel mi kontrol et; farklıysa `pwsh -File ./sync-rules.ps1` çalıştır ve güncel bağlamla devam et.
+0. Workspace Context Desteği: Hata düzeltmeye başlamadan ÖNCE `.copilot/context.md` içindeki `RuleHash` ile bu dosya hash’ini karşılaştır; farklıysa senkron script çalıştır.
 1. Belirtiyi Yakala: Tek (en erken) hata mesajını kopyala; ikincil hataları yok say.
 2. Kök Sebep Sınıflandır: (Kod / SQL nesnesi eksik / Yol (path) / İzin / Yapılandırma / Performans).
-3. Etki Haritası: Değişmesi muhtemel maksimum 1–2 dosya listesi çıkar (fazlası = kapsam kayması uyarısı).
+3. Etki Haritası: En fazla 1–2 dosya hedefle (fazlası = kapsam kayması uyarısı).
 4. Koruyucu İnceleme: Değişiklik öncesi dosyayı oku (tahmin yok).
 5. Minimal Yama: Sadece gereken satırlar; refactor yok; stil dokunma.
-6. Doğrulama: (a) Derle / sqlcmd test (b) Hata giderildi mi? (c) Yeni uyarı açtı mı?
-7. Geri Dönüş Kriteri: Hata kaybolduysa dur; ek “iyileştirme” ayrı görev.
-8. İz Kaydı: Commit mesajı formatı: fix(scope): root-cause -> action (örn: `fix(sql-bootstrap): repeatable wrapper path düzeltildi`).
-9. Guard Ölçütü: Her `GRANT EXECUTE` öncesi `IF OBJECT_ID(...,'P') IS NOT NULL` zorunlu.
+6. Doğrulama: Derle veya `sqlcmd` test → hata giderildi mi?
+7. Geri Dönüş Kriteri: Hata kaybolduysa dur; iyileştirme ayrı görev.
+8. İz Kaydı: Commit mesajı `fix(scope): root-cause -> action` biçiminde.
+9. Guard Ölçütü: Her `GRANT EXECUTE` öncesi `IF OBJECT_ID(...,'P') IS NOT NULL`.
 
-## 2. İşleri Parçalara Ayır (Decomposition)
-Kural: Tek PR / commit = Tek niyet.
-- 1 Niyet = 1 Başlık, 1 Test/Doğrulama.
-- Ayrı Türler: (Şema) (Kod) (Bakım Script) (Belgeleme) karışmaz.
-- 50+ satır net yeni kod => Alt göreve böl (örn: model + migration + service ayrı).
-- Atomik Görev Diff Limiti: Maksimum 400 net satır değişiklik (eklenen + silinen). >400 ise PR böl veya önce plan/issue aç.
-- Refactor Politikası: Yapısal / geniş kapsam >400 satır değişiklik = ayrı issue + onay.
+## 2. Parçalama (Decomposition)
+- Tek PR / commit = Tek niyet.
+- 50+ satır net yeni kod => alt görevlere böl.
+- Atomik diff (eklenen+silinen) ≤ 400 satır.
+- Şema + kod + doküman aynı commit’te karışma.
 
-Checklist (Başlamadan):
-[ ] Problem ifadesi tek cümle mi?
+Checklist:
+[ ] Problem tek cümle mi?
 [ ] Ölçülebilir bitiş kriteri var mı?
-[ ] Dokunulacak dosya listesi < 5 mi?
-[ ] Yan etkiler (performans / security) değerlendirildi mi?
+[ ] Dokunulacak dosya < 5 mi?
+[ ] Yan etki (perf/security) değerlendirildi mi?
 
-## 3. VS İçinde Uygulama Akışı
-1. Sorunu Aç: Output / Error List ilk girdi.
-2. Dosyayı Oku: Değişiklik yapmadan önce mevcut içerik.
-3. Lokal Test: Mümkünse script veya tekil build (`run_build`).
-4. Yama Uygula: Sadece hedef satırlar.
-5. Hızlı Doğrula: Derle (veya `sqlcmd` tek script). Fail -> geri dön.
-6. Commit & Push: Mesaj formatı (bkz 6).
-7. (Opsiyonel) İkinci PR: Refactor / temizlik (asla ilk fix ile aynı değil).
+## 3. VS İçinde Akış
+1. Sorunu Aç → 2. Oku → 3. Lokal test → 4. Yama → 5. Derle → 6. Commit → 7. (Opsiyonel) Refactor ayrı.
 
-## 4. SQL Örneği (Yaşadığımız Sorun Modeli)
-Vaka: `:r ..\00_MASTER_SCHEMA.sql` -> Invalid filename.
-Cerrahi Çözüm:
-- Sadece wrapper dosyalardaki relative path kalıbını standardize et (`:r database/00_MASTER_SCHEMA.sql`).
-- Eksik proc (örn. `sp_SchemaDriftCheck`) önce stub olarak ekle, sonra GRANT et.
-- Role script içinde GRANT satırlarını korumalı: `IF OBJECT_ID('dbo.sp_SchemaDriftCheck','P') IS NOT NULL GRANT EXECUTE ...`.
-- Ardından `MASTER.sql` yeniden çalıştır, maintenance script Light mod test.
+## 4. SQL Örneği
+`IF OBJECT_ID('dbo.X','P') IS NULL EXEC('CREATE PROCEDURE dbo.X AS BEGIN SET NOCOUNT ON; SELECT 1; END');`
+Ardından `ALTER PROCEDURE`.
 
 ## 5. İdempotent Desenler
-SQL Nesne Oluşturma: `IF OBJECT_ID('dbo.X','P') IS NULL EXEC('CREATE PROCEDURE dbo.X AS BEGIN SET NOCOUNT ON; /* stub */ END');`
-Grant Koşulu: `IF OBJECT_ID('dbo.X','P') IS NOT NULL GRANT EXECUTE ON dbo.X TO app_ops;`
-Migration Guard: Değişiklik önce varlık kontrolü (kolon, tablo, index).
+- Guarded CREATE + ALTER.
+- Tablo guard: `IF OBJECT_ID('dbo.T','U') IS NULL`.
+- GRANT guardlı.
 
-## 6. Commit / Branch Standartları
-Branch İsimleri: `feature/*`, `fix/*`, `refactor/*`, `chore/*`, `hotfix/*`.
-Conventional Commit Tipleri: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`, `security:`, `build:`, `ci:`.
-TECHDEBT İşaretleme: Geciken bilinçli borç satırı başında `-- TECHDEBT:` veya kod yorumunda aynı prefix.
-SemVer & CHANGELOG: Sürüm artışı SemVer; her sürümde `CHANGELOG.md` güncellenir (Henüz yoksa ilk stable release öncesi eklenir).
+## 6. Commit / Branch
+- Branch: feature/*, fix/*, refactor/*, chore/*, hotfix/*.
+- Conventional commit tipleri: feat|fix|docs|refactor|perf|test|chore|security|build|ci.
 
-## 7. Karar Analizi (5 Şapka Checklist)
-Büyük karar / mimari PR description içinde şu başlıklar kısa madde halinde yanıtlanır:
-- Mimar: Yapısal etkiler / alternatif neden elendi?
-- Geliştirici: Bakım maliyeti / karmaşıklık değişimi?
-- Güvenlik: Ek saldırı yüzeyi / secret / yetki etkisi?
-- Performans: p95 etkisi / kaynak kullanımı?
-- UX (varsa): Kullanıcı akışı / öğrenme eğrisi?
+## 7. Karar Analizi (5 Şapka)
+Mimar / Geliştirici / Güvenlik / Performans / UX kısa maddeler.
 
-## 8. Test Stratejisi (Aşamalı)
-Öncelik: Failing test ekle -> Fix -> Yeşil.
-Coverage Hedefleri (kademeli): Başlangıç ≈ %60, orta vadede %70, stabil aşamada %80+, çekirdek katmanlar %85+.
-Performans Testi: Kritik sorgular için ileride micro-benchmark (.NET Benchmark) planlanır.
+## 8. Test Stratejisi
+Failing test ekle → Fix → Yeşil. Coverage hedefleri kademeli (çekirdek > %85).
 
 ## 9. Performans SLO
-Başlangıç İlke: p95 kritik bakım prosedürü çalışma süresi < 5s (lokal). API katmanı geldiğinde genel p95 endpoint < 500ms hedeflenir.
-İzleme Mekanizmi Hazırlığı: İleride Application Insights / özel metrik tablo (OpsDailyMetrics) üzerinden.
+p95 kritik prosedür <5s (lokal). Gelecekte API p95 <500ms.
 
-## 10. Güvenlik Temelleri
-- Secret commit etme: Yasak (örnek: connection string, API key). Maskelenmiş örnek `.env.example`.
-- Bağımlılık taraması: GitHub Dependabot + `dotnet list package --vulnerable` per commit/CI.
-- Koşullu GRANT kuralı (bkz 1.9 & 4).
-- Potansiyel injection: Parametrik sorgu zorunlu.
+## 10. Güvenlik
+- Secrets commit yok.
+- Dependabot / `dotnet list package --vulnerable` izlenir.
+- Parametrik sorgu zorunlu.
 
-## 11. Pre-commit Fail-Fast
-`.githooks` içindeki örnek hook genişletilebilir:
-Zorunlu Kontroller (Fail-Fast):
-1. Migration lint (`migration-lint.ps1`) OK.
-2. Repeatable drift (`verify-repeatable.ps1`) OK.
-3. (Gelecek) Unit test hızlı çalıştır (opsiyonel başlangıç). 
-Hızlı başarısızlık = erken geri dönüş.
+## 11. Pre-commit Kontroller
+- Migration lint OK
+- Repeatable drift OK
+- (Opsiyonel) hızlı test
 
-## 12. Senkronizasyon & Kurallar Bakımı
-- Tek Canonical Dosya: `docs/VS_WORKFLOW_RULES.md`.
-- Güncelleme Adımı: Düzenle -> `pwsh -File ./sync-rules.ps1` -> Diff kontrol -> Commit.
-- Senkron Script Sağlar: `.copilot/context.md` + `.github/copilot-instructions.md` güncel kopya.
-- Sürüm Alanı: Başta `Version: X.Y` artır (patch: netleştirme, minor: yeni kural, major: davranışsal kırılım).
+## 12. Senkron & Kurallar
+Canonical: bu dosya. Türetilenler: `.github/copilot-instructions.md`, `RULES_CHECKLIST.md`.
 
-## 13. MCP / Drift / Heartbeat (Gelecek Şablonları)
-Hazırlık Amaçlı Placeholder:
-- MCP Heartbeat (gelecek): `/.mcp/heartbeat.json` – senkron zaman damgası.
-- Drift izleme: Şema dosyası hash vs canlı DB hash (governance prosedürü) günlük rapor.
-- AI Destekli Dokümantasyon: Kurallar değişince otomatik PR açıklama taslağı.
-Bu bölüm aktif değil; planlama referansı.
+## 13. Gelecek Placeholder
+Heartbeat, drift raporu, otomatik dokümantasyon (aktif değil).
 
 ## 14. Hızlı Karar Matrisi
 | Durum | Eylem |
 |-------|-------|
-| Tek kayıp prosedür | Stub + yeniden çalıştır |
-| Zincirli 5+ hata | İlk hatayı çöz, yeniden çalıştır, kalanları sırala |
-| Path hatası | Sadece path düzelt, refactor beklet |
-| Rol grant nesne yok | Koşullu grant + stub |
-| Diff > 400 satır | PR böl / plan issue ekle |
-| Güvenlik açığı bağımlılık | Versiyon yükselt + CHANGELOG girdisi |
+| Tek kayıp proc | Stub + yeniden çalıştır |
+| Zincirli çok hata | İlkini çöz, yeniden çalıştır |
+| Path hatası | Yalnız path düzelt |
+| Grant nesne yok | Koşullu grant + stub |
+| Diff >400 | PR böl | 
+| Güvenlik açığı | Versiyon yükselt + CHANGELOG |
 
-## 15. Onay Eşiği (Stop Criteria)
-- İlk niyet gerçekleşti mi? -> EVET: dur. -> HAYIR: Nedeni yeniden sınıflandır.
-- Ek gereksinim ortaya çıktı mı? -> Yeni task aç, current commit genişletme.
+## 15. Onay Eşiği
+İlk niyet gerçekleştiyse dur. Yeni gereksinim = yeni task.
 
-## 16. İnceleme (Review) Soruları
-1. Bu değişiklik tek niyetli mi?
-2. Gereksiz satır / format değişikliği eklenmiş mi?
-3. Tüm guard / idempotent kontrolleri mevcut mu?
-4. Rollback gerekirse tek commit revert yeterli mi?
-5. 5 Şapka maddeleri (varsa) kısa ve yeterli mi?
-6. Diff satır limiti aşıldıysa gerekçe & plan var mı?
+## 16. İnceleme Soruları
+Tek niyet? Gereksiz diff? Guard’lar tam? Revert kolay mı? 5 Şapka maddeleri var mı? Diff limiti aşıldı mı?
 
-## 17. Mini Sözlük
-- Cerrahi Müdahale: Minimum dosya + minimum satır + doğrudan kök sebep.
-- Drift: Şema dosyaları ile gerçek DB farkı.
-- Guard: Varlık kontrolü (IF NOT EXISTS...).
-- Atomik Görev: Tek amaç + küçük diff + bağımsız test edilebilir.
-- SLO: Ölçülen hizmet seviyesi hedefi (örn. p95 süre).
+## 17. Sözlük
+Cerrahi Müdahale / Drift / Guard / Atomik Görev / SLO.
+
+## 18. Teknoloji Sürüm & Uyumluluk
+Amaç: Stabil & uyumlu sürümler.
+Adımlar: İncele (bundle) → Issue (mevcut vs önerilen + risk + rollback) → Onay → `SystemMetadata` güncelle (`TechStack_*`) → Uygula → CHANGELOG.
+Kısıt: Preview yok (özel onay hariç), zincir test edilmeden merge yok.
+Checklist:
+[ ] Bundle incelendi
+[ ] Issue referansı commit mesajında
+[ ] Rollback planı yazıldı
+[ ] Governance etkisi yok
 
 ---
-Uygulama: Her yeni geliştirici bu dosyayı ilk gün okumalı; ihlaller PR review'da `needs-scope-reduce` etiketi ile işaretlenir.
+Uygulama: İhlaller PR’da `needs-scope-reduce` etiketi alır.
