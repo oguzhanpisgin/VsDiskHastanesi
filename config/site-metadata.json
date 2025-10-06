@@ -4,17 +4,38 @@
     {
       "id": "cio",
       "title": "CIO / IT Director",
-      "pains": ["siber risk", "uyum", "maliyet kontrol", "hibrit karmaşıklık"]
+      "pains": [
+        "siber risk",
+        "uyum",
+        "maliyet kontrol",
+        "hibrit karmaÅŸÄ±klÄ±k"
+      ]
     }
   ],
-  "tone": ["güvenilir", "uzman", "yenilikçi"],
-  "performance": {"LCP": 2500, "CLS": 0.1, "INP": 200},
+  "tone": [
+    "gÃ¼venilir",
+    "uzman",
+    "yenilikÃ§i"
+  ],
+  "performance": {
+    "LCP": 2500,
+    "CLS": 0.1,
+    "INP": 200
+  },
   "accessibility": "WCAG2.2-AA",
   "defaultSchema": "LocalBusiness",
   "internalLinkStrategy": "parent+2siblings+1cta",
   "contentRefreshCadence": "quarterly-core",
-  "psychologySelected": [1,3,4,9],
-  "mediaPlaceholderStyle": "[GÖRSEL: açıklama]",
-  "kpis": {"targetOrganicVisits90d": null, "targetConversionRate": null},
-  "updatedAtUtc": null
+  "psychologySelected": [
+    1,
+    3,
+    4,
+    9
+  ],
+  "mediaPlaceholderStyle": "[GÃ–RSEL: aÃ§Ä±klama]",
+  "kpis": {
+    "targetOrganicVisits90d": null,
+    "targetConversionRate": null
+  },
+  "updatedAtUtc": "2025-10-06T19:26:43Z"
 }

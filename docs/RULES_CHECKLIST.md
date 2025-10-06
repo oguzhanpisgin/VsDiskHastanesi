@@ -1,34 +1,33 @@
-# Cerrahi Kurallar Checklist (Version: 1.3)
+# Cerrahi Kurallar Checklist (Version: 1.4)
 
-> RuleHash: b199774518b15dc671f223de9f2b6e8af567a1d62d1f0c9ef159f1217d207307
-> Otomatik üretildi: sync-rules.ps1. Düzenleme için canonical dosyayı güncelleyin.
+> RuleHash: 69b7fc4b12c400daea21efac6a1b266554bb228df73dbae9ee2b3e3059c3aad3
+> Otomatik üretildi: sync-rules.ps1.
 
-## Ön Çıkış (Before Commit)
-- [ ] Problem tek cümle (Belirti net)
-- [ ] Ölçülebilir bitiş kriteri tanımlı
-- [ ] Dokunulan dosya sayısı ≤ 5 (aksi halde gerekçe)
-- [ ] Net diff < 400 satır (aksi halde plan/gerekçe)
-- [ ] Mixed domain (docs + database) yok / override gerekçeli
-- [ ] SQL idempotent guard (IF OBJECT_ID / IF (NOT) EXISTS)
-- [ ] Secret / credential izleği yok (password, key, AccountKey)
-- [ ] Repeatable drift OK (verify-repeatable.ps1)
+## Ön Çıkış
+- [ ] Problem tek cümle
+- [ ] Ölçülebilir bitiş
+- [ ] Dosya sayısı ≤5
+- [ ] Net diff <400
+- [ ] Domain karışımı yok / gerekçeli
+- [ ] Guard desenleri (OBJECT / COLUMN / INDEX / GRANT)
+- [ ] Secret yok
+- [ ] Repeatable drift OK
 - [ ] Migration lint OK
-- [ ] Commit mesajı Conventional (type(scope): açıklama)
+- [ ] Commit conventional
 
-## PR Aşaması
-- [ ] 5 Şapka risk değerlendirme (gerekirse) eklendi
-- [ ] Performans p95 etkisi değerlendirildi (kritik sorgu değiştiyse)
-- [ ] Refactor ayrı PR (ilk cerrahi fix değil)
-- [ ] Rollback tek commit revert ile mümkün
+## PR
+- [ ] 5 Şapka (gerekiyorsa)
+- [ ] p95 etkisi değerlendirildi
+- [ ] Rollback tek commit
 
-## SQL Özel
-- [ ] CREATE PROCEDURE öncesi IF OBJECT_ID ... IS NULL
-- [ ] DROP/ALTER TABLE guard (IF EXISTS / IF NOT EXISTS) var
-- [ ] Çok seviyeli :r include yok (>1 .. )
-- [ ] Dinamik SQL parametreli (string birleştirme yok)
+## SQL
+- [ ] CREATE guard
+- [ ] Kolon / index guard
+- [ ] Çoklu derin :r yok
+- [ ] Dinamik SQL parametreli
 
 ## Çıkış
-- [ ] Go/No-Go gate (risk & compliance) gerekirse çalıştırıldı
+- [ ] Go/No-Go gate (gerekiyorsa)
 
 ---
-_Bu dosya otomatik; manuel düzenlemeyin._
+_Otomatik dosya_

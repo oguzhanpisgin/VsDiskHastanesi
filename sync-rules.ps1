@@ -1,97 +1,83 @@
-<#
-Synchronize canonical rules file to dependent copies.
-Source: docs/VS_WORKFLOW_RULES.md
-Targets:
-  .copilot/context.md (embed header + content)
-  .github/copilot-instructions.md (exact mirror)
-  docs/RULES_CHECKLIST.md (distilled actionable checklist)
-  .copilot/rulehash.txt (SHA256 of canonical rules)
-#>
-[CmdletBinding()]param()
+[CmdletBinding()]param(
+  [string]$SqlServer='(localdb)\MSSQLLocalDB',
+  [string]$Database='DiskHastanesiDocs',
+  [switch]$NoDbUpdate
+)
 $ErrorActionPreference='Stop'
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$src = Join-Path $root 'docs/VS_WORKFLOW_RULES.md'
-if(-not (Test-Path $src)){ throw "Canonical file not found: $src" }
+$src  = Join-Path $root 'docs/VS_WORKFLOW_RULES.md'
+if(!(Test-Path $src)){ throw "Canonical file not found: $src" }
 $content = Get-Content $src -Raw
-# Compute rule hash
-$sha256 = [System.Security.Cryptography.SHA256]::Create()
-$bytes = [Text.Encoding]::UTF8.GetBytes($content)
-$hash = ($sha256.ComputeHash($bytes) | ForEach-Object { $_.ToString('x2') }) -join ''
-# Ensure .copilot
+$hash = ([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($content)) | ForEach-Object { $_.ToString('x2') }) -join ''
+$utf8 = New-Object System.Text.UTF8Encoding($false)
 $copilotDir = Join-Path $root '.copilot'
-if(-not (Test-Path $copilotDir)){ New-Item -ItemType Directory -Path $copilotDir | Out-Null }
+if(!(Test-Path $copilotDir)){ New-Item -ItemType Directory -Path $copilotDir | Out-Null }
 $ruleHashFile = Join-Path $copilotDir 'rulehash.txt'
-[IO.File]::WriteAllText($ruleHashFile,$hash,[Text.UTF8Encoding]::new($false))
-$copilotPath = Join-Path $copilotDir 'context.md'
-$headerLines = @(
+[IO.File]::WriteAllText($ruleHashFile,$hash,$utf8)
+$contextPath = Join-Path $copilotDir 'context.md'
+$header = @(
   '# AUTO-GENERATED (DO NOT EDIT HERE)',
   '# Kaynak (Canonical): docs/VS_WORKFLOW_RULES.md',
   "# RuleHash: $hash",
-  '# Bu dosya sync-rules.ps1 tarafından güncellenir.',
-  '',
-  'Bu depo için Visual Studio çalışma kuralları tek kaynaktan yönetilir:',
-  '',
-  'Kanonik dosya: docs/VS_WORKFLOW_RULES.md',
-  '',
-  'Güncelleme yaparken yalnızca kanonik dosyayı düzenle, ardından:',
-  '  pwsh -File .\sync-rules.ps1',
-  'veya commit sırasında pre-commit hook otomatik senkronize eder.',
-  '',
-  'Dosya içeriği aşağıdadır (otomatik gömülü):',
+  '# Sync: sync-rules.ps1',
   '',
   '---',
-  '',
   ''
-)
-$header = $headerLines -join [Environment]::NewLine
-$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-[IO.File]::WriteAllText($copilotPath, ($header + $content), $utf8NoBom)
-# Ensure .github
+) -join [Environment]::NewLine
+[IO.File]::WriteAllText($contextPath, ($header + $content), $utf8)
 $ghDir = Join-Path $root '.github'
-if(-not (Test-Path $ghDir)){ New-Item -ItemType Directory -Path $ghDir | Out-Null }
-$ghFile = Join-Path $ghDir 'copilot-instructions.md'
-[IO.File]::WriteAllText($ghFile, $content, $utf8NoBom)
-
-# Distilled checklist generation (RULES_CHECKLIST.md)
+if(!(Test-Path $ghDir)){ New-Item -ItemType Directory -Path $ghDir | Out-Null }
+[IO.File]::WriteAllText((Join-Path $ghDir 'copilot-instructions.md'), $content, $utf8)
 $checklistPath = Join-Path $root 'docs/RULES_CHECKLIST.md'
-$version = ($content | Select-String -Pattern 'Version:\s*([0-9]+\.[0-9]+)' -AllMatches | ForEach-Object { $_.Matches } | Select-Object -First 1 | ForEach-Object { $_.Groups[1].Value })
-if(-not $version){ $version = 'UNKNOWN' }
+$version = ($content | Select-String -Pattern 'Version:\s*([0-9]+\.[0-9]+)' | ForEach-Object { $_.Matches[0].Groups[1].Value } | Select-Object -First 1)
+if(!$version){ $version = 'UNKNOWN' }
 $checklist = @(
   "# Cerrahi Kurallar Checklist (Version: $version)",
-  '',
+  "",
   "> RuleHash: $hash",
-  '> Otomatik üretildi: sync-rules.ps1. Düzenleme için canonical dosyayı güncelleyin.',
-  '',
-  '## Ön Çıkış (Before Commit)',
-  '- [ ] Problem tek cümle (Belirti net)',
-  '- [ ] Ölçülebilir bitiş kriteri tanımlı',
-  '- [ ] Dokunulan dosya sayısı ≤ 5 (aksi halde gerekçe)',
-  '- [ ] Net diff < 400 satır (aksi halde plan/gerekçe)',
-  '- [ ] Mixed domain (docs + database) yok / override gerekçeli',
-  '- [ ] SQL idempotent guard (IF OBJECT_ID / IF (NOT) EXISTS)',
-  '- [ ] Secret / credential izleği yok (password, key, AccountKey)',
-  '- [ ] Repeatable drift OK (verify-repeatable.ps1)',
-  '- [ ] Migration lint OK',
-  '- [ ] Commit mesajı Conventional (type(scope): açıklama)',
-  '',
-  '## PR Aşaması',
-  '- [ ] 5 Şapka risk değerlendirme (gerekirse) eklendi',
-  '- [ ] Performans p95 etkisi değerlendirildi (kritik sorgu değiştiyse)',
-  '- [ ] Refactor ayrı PR (ilk cerrahi fix değil)',
-  '- [ ] Rollback tek commit revert ile mümkün',
-  '',
-  '## SQL Özel',
-  '- [ ] CREATE PROCEDURE öncesi IF OBJECT_ID ... IS NULL',
-  '- [ ] DROP/ALTER TABLE guard (IF EXISTS / IF NOT EXISTS) var',
-  '- [ ] Çok seviyeli :r include yok (>1 .. )',
-  '- [ ] Dinamik SQL parametreli (string birleştirme yok)',
-  '',
-  '## Çıkış',
-  '- [ ] Go/No-Go gate (risk & compliance) gerekirse çalıştırıldı',
-  '',
-  '---',
-  '_Bu dosya otomatik; manuel düzenlemeyin._'
+  "> Otomatik üretildi: sync-rules.ps1.",
+  "",
+  "## Ön Çıkış",
+  "- [ ] Problem tek cümle",
+  "- [ ] Ölçülebilir bitiş",
+  "- [ ] Dosya sayısı ≤5",
+  "- [ ] Net diff <400",
+  "- [ ] Domain karışımı yok / gerekçeli",
+  "- [ ] Guard desenleri (OBJECT / COLUMN / INDEX / GRANT)",
+  "- [ ] Secret yok",
+  "- [ ] Repeatable drift OK",
+  "- [ ] Migration lint OK",
+  "- [ ] Commit conventional",
+  "",
+  "## PR",
+  "- [ ] 5 Şapka (gerekiyorsa)",
+  "- [ ] p95 etkisi değerlendirildi",
+  "- [ ] Rollback tek commit",
+  "",
+  "## SQL",
+  "- [ ] CREATE guard",
+  "- [ ] Kolon / index guard",
+  "- [ ] Çoklu derin :r yok",
+  "- [ ] Dinamik SQL parametreli",
+  "",
+  "## Çıkış",
+  "- [ ] Go/No-Go gate (gerekiyorsa)",
+  "",
+  "---",
+  "_Otomatik dosya_"
 ) -join [Environment]::NewLine
-[IO.File]::WriteAllText($checklistPath, $checklist, $utf8NoBom)
-
-Write-Host "[OK] Rules synchronized (UTF-8 no BOM + checklist + RuleHash $hash)."
+[IO.File]::WriteAllText($checklistPath,$checklist,$utf8)
+if(-not $NoDbUpdate){
+  try{
+    if(Get-Command sqlcmd -ErrorAction SilentlyContinue){
+      $sql="EXEC dbo.sp_SetMetadata @Key='RuleHash',@Value='$hash'"
+      sqlcmd -S $SqlServer -d $Database -Q $sql -b 1>$null 2>$null
+      Write-Host "[OK] RuleHash persisted to DB."
+    } else {
+      Write-Host "[WARN] sqlcmd not found; skipping DB update."
+    }
+  } catch {
+    Write-Host "[WARN] DB persist failed: $($_.Exception.Message)"
+  }
+}
+Write-Host "[OK] Rules synchronized (hash $hash)."

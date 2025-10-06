@@ -1,0 +1,304 @@
+{
+  "generatedAtUtc": "2025-10-06T19:26:51Z",
+  "site": {
+    "brand": "Diskhastanesi",
+    "personas": [
+      {
+        "id": "cio",
+        "title": "CIO / IT Director",
+        "pains": [
+          "siber risk",
+          "uyum",
+          "maliyet kontrol",
+          "hibrit karmaÅŸÄ±klÄ±k"
+        ]
+      }
+    ],
+    "tone": [
+      "gÃ¼venilir",
+      "uzman",
+      "yenilikÃ§i"
+    ],
+    "performance": {
+      "LCP": 2500,
+      "CLS": 0.1,
+      "INP": 200
+    },
+    "accessibility": "WCAG2.2-AA",
+    "defaultSchema": "LocalBusiness",
+    "internalLinkStrategy": "parent+2siblings+1cta",
+    "contentRefreshCadence": "quarterly-core",
+    "psychologySelected": [
+      1,
+      3,
+      4,
+      9
+    ],
+    "mediaPlaceholderStyle": "[GÃ–RSEL: aÃ§Ä±klama]",
+    "kpis": {
+      "targetOrganicVisits90d": null,
+      "targetConversionRate": null
+    },
+    "updatedAtUtc": "2025-10-06T19:26:43Z"
+  },
+  "externalSources": [
+    {
+      "name": "FluentUI",
+      "type": "changelog",
+      "candidates": [
+        "https://raw.githubusercontent.com/microsoft/fluentui/main/packages/react/CHANGELOG.md",
+        "https://raw.githubusercontent.com/microsoft/fluentui/main/packages/react-components/CHANGELOG.md"
+      ]
+    },
+    {
+      "name": "SchemaOrg",
+      "type": "readme",
+      "url": "https://raw.githubusercontent.com/schemaorg/schemaorg/main/README.md"
+    },
+    {
+      "name": "CoreWebVitals",
+      "type": "page",
+      "url": "https://web.dev/articles/vitals"
+    },
+    {
+      "name": "SeoCoreUpdates",
+      "type": "page",
+      "url": "https://developers.google.com/search/updates/ranking"
+    },
+    {
+      "name": "KeywordGap",
+      "type": "npm",
+      "url": "https://registry.npmjs.org/wappalyzer/latest"
+    }
+  ],
+  "ui": {
+    "hero": [
+      "Stack",
+      "Text",
+      "Button"
+    ],
+    "benefits": [
+      "Card",
+      "CardHeader",
+      "CardFooter"
+    ],
+    "faq": [
+      "Accordion"
+    ],
+    "cta": [
+      "Stack",
+      "Button"
+    ],
+    "timeline": [
+      "Stack",
+      "Divider"
+    ],
+    "metrics": [
+      "Table",
+      "Badge"
+    ],
+    "caseStudies": [
+      "Card",
+      "Image"
+    ],
+    "contact": [
+      "Form",
+      "TextField",
+      "Button"
+    ]
+  },
+  "psychology": [
+    {
+      "id": 1,
+      "name": "Sosyal Kanıt",
+      "usage": "Referans logoları, vaka özeti, kısa alıntı"
+    },
+    {
+      "id": 3,
+      "name": "Otorite",
+      "usage": "Sertifikalar bölümü, uzman ekip biyografileri"
+    },
+    {
+      "id": 4,
+      "name": "Karşılıklılık",
+      "usage": "Ücretsiz e-kitap / whitepaper indir ve form"
+    },
+    {
+      "id": 9,
+      "name": "Hikayeleştirme",
+      "usage": "Zaman tüneli, başarı hikayesi anlatımı"
+    }
+  ],
+  "pages": [
+    {
+      "url": "/hakkimizda",
+      "primary_keyword": "kurumsal disk çözümleri",
+      "secondary_keywords": "kurumsal veri; teknoloji danışmanlığı",
+      "intent": "Informational",
+      "schema_type": "AboutPage",
+      "modules": "hero;timeline;benefits;contact"
+    },
+    {
+      "url": "/veri-kurtarma/raid-sunucu-veri-kurtarma",
+      "primary_keyword": "RAID veri kurtarma",
+      "secondary_keywords": "sunucu veri kurtarma; bozulmuş raid",
+      "intent": "Transactional",
+      "schema_type": "Service",
+      "modules": "hero;benefits;faq;cta"
+    },
+    {
+      "url": "/siber-guvenlik/yonetilen-guvenlik-hizmetleri-mssp-soc",
+      "primary_keyword": "SOC hizmeti",
+      "secondary_keywords": "yönetilen güvenlik; 7/24 izleme",
+      "intent": "Transactional",
+      "schema_type": "Service",
+      "modules": "hero;benefits;faq;cta"
+    },
+    {
+      "url": "/danismanlik/kvkk-uyum-danismanligi",
+      "primary_keyword": "KVKK uyum danışmanlığı",
+      "secondary_keywords": "verbis danışmanlığı; kvkk teknik tedbir",
+      "intent": "Informational",
+      "schema_type": "Service",
+      "modules": "hero;benefits;faq;cta"
+    }
+  ],
+  "repeatableHashes": [
+    {
+      "file": "00_MASTER_SCHEMA.sql",
+      "sha256": "33dfb621dedfa7fcb28dda7dca1c7eea4ccc5b79ba404f8b24c3c7305eed8a43"
+    },
+    {
+      "file": "01_INDEXES.sql",
+      "sha256": "ebb73727972cdb73dd8339324d3aa205689c8cea2800db224b0f9193cbf9cd4d"
+    },
+    {
+      "file": "02_VIEWS.sql",
+      "sha256": "2f40a5f4881550834ca84d3ac0b033a712695a05627926714859f4b4fe164096"
+    },
+    {
+      "file": "03_SEED_DATA.sql",
+      "sha256": "31f4b21b5fc23afd372be31c64d8cc9c1523f6670aa0d4a0c3c46c338f0574df"
+    },
+    {
+      "file": "04_SYNC_SYSTEM.sql",
+      "sha256": "e09e468c91cbddd60a96858747f55aa797e08096a399e034af54fc1a9d30558e"
+    },
+    {
+      "file": "05_CHATBOT_SYSTEM.sql",
+      "sha256": "8fe1c8fa70fb507a2ffcec30596d2a39cdc5d3d579e8970ffbdb7e0f23136e45"
+    },
+    {
+      "file": "06_CMS_ROUTES.sql",
+      "sha256": "06d19e09236752c247b7684239b1097554e64725457caa50dd7950913963f6ff"
+    },
+    {
+      "file": "07_SUBDOMAINS.sql",
+      "sha256": "82d0d3eeb3fc544fd69aa366e088fdd36d702a834abf10df25c3a6d62d091979"
+    },
+    {
+      "file": "08_CRM_EXTENSIONS.sql",
+      "sha256": "4245fbbcaa69cf0731c930a9debbfee3a5b62f64a23899f5639b8370f79f48f3"
+    },
+    {
+      "file": "08_CRM_SYSTEM.sql",
+      "sha256": "6561ee3723a98da2b44446ade3ef575d17fc56c66460725a33d5bd9585f35bda"
+    },
+    {
+      "file": "09_WEBSITE_STRUCTURE.sql",
+      "sha256": "dd89008d25aa895642d62a6ed058dbc0727ee1383774ca3d6bd0d0face08d896"
+    },
+    {
+      "file": "10_AI_COUNCIL.sql",
+      "sha256": "2b2f50afab7c5f3981fd8350df41f89437516dd8ab74ab39fe861ff0046dd9f4"
+    },
+    {
+      "file": "11_CMS_CONTENT.sql",
+      "sha256": "ddf9a9e8c505bc653a948f314100c139be4fe0279a7205eee6bd666eb5d87495"
+    },
+    {
+      "file": "12_CRM_MAINTENANCE.sql",
+      "sha256": "bd74c5cef83700be650a7d5f40034883e94b0026a006a3613475c5c9340dd9cd"
+    },
+    {
+      "file": "12_CRM_VALIDATION.sql",
+      "sha256": "f5d40cea7056a9881d522c816d72076873a5cf340a93f41036d75ceae8097c91"
+    },
+    {
+      "file": "12_DB_MIGRATION_INFRA.sql",
+      "sha256": "87218f39edb9093597bfc9efc7920d58813fb324fbeef1e1da32840e984bec44"
+    },
+    {
+      "file": "13_DB_OPERATIONS.sql",
+      "sha256": "25cd08b8131102cab1b9e3a966f2d497d1ed16e2eb46dbcd793bc44670cde4f6"
+    },
+    {
+      "file": "14_DB_GOVERNANCE_PROCS.sql",
+      "sha256": "dec70653550926c7adb0244ec811c10d7aa1f23ca6c2b49a1f40f3f74c0b67fd"
+    },
+    {
+      "file": "15_SECURITY_ROLES.sql",
+      "sha256": "28460df57539c4796847e1555193a76d4b471b591751787efb89670099f6e38e"
+    },
+    {
+      "file": "16_SEARCH_MAINTENANCE.sql",
+      "sha256": "bcc8f687b864d414caec8d21346cfa1d3e17f435f86f8b02d289fe3700a7eb26"
+    },
+    {
+      "file": "17_ADVANCED_GOVERNANCE.sql",
+      "sha256": "32a2aaf6eb692e351a5605cb0f2ecf1eb7257c5edabf4c7bf1fa353aadab427e"
+    },
+    {
+      "file": "18_AI_COUNCIL_INTEGRATION.sql",
+      "sha256": "0030e922b36bf0d2b5d2d6bf1845f98f6a6208543b89757223df2fd20d32a8b6"
+    },
+    {
+      "file": "19_CONTENT_STRATEGY.sql",
+      "sha256": "569856330301a504d9c12f14e4302b91bd9aa57437b2a93045f4919c4343291c"
+    },
+    {
+      "file": "20_BACKLOG_TASKS.sql",
+      "sha256": "28e45fd403cc754b1782f7312598bcf88dcacf196c3e2c644e9dacc38e703e90"
+    },
+    {
+      "file": "21_PROJECT_KICKOFF.sql",
+      "sha256": "02ad5ed671b59108b3b23aef9f27eb027495ed08ebf18954d2f6cc9cf33b79d3"
+    },
+    {
+      "file": "22_EXTERNAL_VERSION_KEYS.sql",
+      "sha256": "f44eb219c66c66d3c4c4030d419a5ff5fd1feeaf9768da8fa15378f797b3d756"
+    },
+    {
+      "file": "24_VERSION_SUMMARY.sql",
+      "sha256": "dfb15188b5d76af4ca3dbf1f0f3197292670e68e9df318e9cc30a22de7b46d24"
+    },
+    {
+      "file": "25_EXTERNAL_FETCH_LOG.sql",
+      "sha256": "bb42ebaa3c49da22516c1be582e61b23c104be2540d267ce8c09cd6b60618e0e"
+    },
+    {
+      "file": "26_EXTERNAL_FETCH_RETENTION.sql",
+      "sha256": "26b503d1a9c70c30d453d7a906fa01a30d91ae44bb726203fad381bc26a7766f"
+    },
+    {
+      "file": "27_EXTERNAL_FETCH_HEALTH.sql",
+      "sha256": "e57804f004b036d0ca323d252f23a0c72d513bc5baf8248c6e724e6563155d64"
+    },
+    {
+      "file": "28_METADATA_API.sql",
+      "sha256": "75145f9b671b3cf7ad293aa53b5b8c54e973bbf43f7be127bd57c20414f0e122"
+    },
+    {
+      "file": "29_DOCUMENTS_STAGING.sql",
+      "sha256": "dbb6f8a9fcbe008763eed66038aefced12b9e1ca6413a9fcf70ad828b16bf005"
+    }
+  ],
+  "rules": {
+    "hash": "69b7fc4b12c400daea21efac6a1b266554bb228df73dbae9ee2b3e3059c3aad3",
+    "text": "# Visual Studio Çalışma Kuralları (Cerrahi Müdahale + Parçalama)\r\nVersion: 1.4 (Canonical)\r\n\r\nBu kurallar küçük, izole ve güvenli değişiklikler yapmayı zorunlu kılar. Amaç: Gereksiz kapsam büyümesini ve zincirleme hataları önlemek.\r\n\r\n## 1. Cerrahi Müdahale Protokolü\r\n0. Workspace Context: `.copilot/context.md` içindeki RuleHash ile bu dosya hash’i aynı değilse önce `pwsh -File ./sync-rules.ps1`.\r\n1. Tek Belirti: Yalnız en erken hata mesajını hedef al.\r\n2. Kök Sebep Sınıfı: Kod | SQL Nesnesi Eksik | Path | İzin | Yapılandırma | Performans.\r\n3. Etki Haritası: Maks 1–2 dosya.\r\n4. Önce Oku: Değişiklik öncesi dosyayı incele.\r\n5. Minimal Yama: Gerekli satırlar dışında dokunma.\r\n6. Doğrulama: Derle / sqlcmd → Belirti kayboldu mu? Yeni uyarı açıldı mı?\r\n7. Stop: Belirti giderildiyse dur; iyileştirme = ayrı görev.\r\n8. Commit Formatı: `fix(scope): root-cause -> action`.\r\n9. GRANT Guard: `IF OBJECT_ID(...,'P') IS NOT NULL` olmadan GRANT yok.\r\n\r\n## 2. Parçalama\r\n- Tek PR = Tek niyet.\r\n- >50 net yeni satır → alt görev.\r\n- Net diff (add+del) ≤ 400 satır (aksi böl).\r\n- Şema / kod / doküman tek commit’te karışma.\r\nChecklist: Problem tek cümle? Bitiş ölçülebilir? Dosya <5? Yan etki değerlendirildi?\r\n\r\n## 3. Akış\r\nAç → Oku → Lokal test → Yama → Derle → Commit → (Refactor ikinci PR).\r\n\r\n## 4. SQL Örnekleri\r\nStub: `IF OBJECT_ID('dbo.X','P') IS NULL EXEC('CREATE PROCEDURE dbo.X AS BEGIN SET NOCOUNT ON; SELECT 1; END');`\r\nIndex Guard: `IF NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_T_Col' AND object_id=OBJECT_ID('dbo.T')) CREATE INDEX IX_T_Col ON dbo.T(Col);`\r\nKolon Guard: `IF COL_LENGTH('dbo.T','YeniKolon') IS NULL ALTER TABLE dbo.T ADD YeniKolon INT NULL;`\r\n\r\n## 5. İdempotent Desenler\r\n- Obj create guard (procedure, view, function).\r\n- Tablo guard (`IF OBJECT_ID(...,'U') IS NULL`).\r\n- Kolon guard (`COL_LENGTH`).\r\n- Index guard.\r\n- GRANT guard.\r\n\r\n## 6. Commit & Branch\r\nBranch adları: feature/* fix/* refactor/* chore/* hotfix/*.\r\nConventional tip: feat | fix | docs | refactor | perf | test | chore | security | build | ci.\r\n\r\n## 7. Karar Analizi (5 Şapka)\r\n≥200 net satır veya mimari değişim: Mimar / Dev / Güvenlik / Performans / UX maddeleri zorunlu.\r\n\r\n## 8. Test Stratejisi\r\nFailing test → Fix → Yeşil. Çekirdek coverage hedefi >%85. CI: coverlet + threshold.\r\n\r\n## 9. Performans SLO\r\np95 kritik prosedür <5s lokal. API p95 hedef <500ms (gelecek). `perf-smoke.ps1` ile ölç.\r\n\r\n## 10. Güvenlik\r\nSecrets commit yok. Dependabot + `dotnet list package --vulnerable` + gitleaks. Parametrik sorgu zorunlu.\r\n\r\n## 11. Pre-commit Kontroller\r\nmigration-lint OK, verify-repeatable OK, RuleHash güncel, (opsiyonel hızlı test).\r\n\r\n## 12. Senkron\r\nCanonical: bu dosya. `sync-rules.ps1` → `.copilot/context.md`, `.github/copilot-instructions.md`, `docs/RULES_CHECKLIST.md` + RuleHash dosyası + (varsa) DB `SystemMetadata.RuleHash` update.\r\n\r\n## 13. Roadmap Placeholder\r\nHeartbeat, drift raporu, otomatik dokümantasyon – aktif değil.\r\n\r\n## 14. Karar Matrisi\r\n| Durum | Eylem |\r\n|------|-------|\r\n| Tek kayıp proc | Stub + rerun |\r\n| Zincirli 5+ hata | İlk hatayı düzelt, tekrar çalıştır |\r\n| Path hatası | Sadece path düzelt |\r\n| Grant nesne yok | Stub + koşullu GRANT |\r\n| Diff >400 | PR böl |\r\n| Güvenlik açığı (CVSS ≥7) | Versiyon yükselt + CHANGELOG |\r\n\r\n## 15. Onay & Rollback\r\nNiyet gerçekleştiyse dur. Rollback tek commit revert ile mümkün olmalı.\r\n\r\n## 16. İnceleme Soruları\r\nNiyet tek mi? Gereksiz diff yok mu? Guard’lar tam mı? Revert kolay mı? 5 Şapka gerekli mi & eklendi mi? Diff limiti ihlal edildi mi? Commit formatı düzgün mü?\r\n\r\n## 17. Sözlük\r\nCerrahi Müdahale / Drift / Context Drift / Guard / Atomik Görev / SLO.\r\n\r\n## 18. Teknoloji Uyumluluk\r\nAdımlar: Bundle incele → Issue (mevcut vs önerilen + risk + rollback) → Onay → SystemMetadata (TechStack_*) → Uygula → CHANGELOG.\r\nKısıt: Preview yalnız exp branch + izolasyon. Checklist: Bundle | IssueRef | Rollback | Governance etkisi.\r\n\r\n## 19. Komut Format & Context\r\n`<No>. <ENV>: <komut>` (ENV: PowerShell7|SQL|Git|Shell). Zincir karakter yok (`; && |`).\r\nContext doğrula: Local hash → DB hash → mismatch ise sadece senkron komutları döndür.\r\nFormat ihlali yanıt prefix: `FormatViolation:`.\r\n\r\nÖrnek:\r\n1. PowerShell7: $h=(Get-FileHash docs/VS_WORKFLOW_RULES.md -Algorithm SHA256).Hash\r\n2. SQL: SELECT MetadataValue FROM SystemMetadata WHERE MetadataKey='RuleHash';\r\n3. PowerShell7: pwsh -File ./scripts/sync-context.ps1 -EmitBundle\r\n\r\n## 20. Otomasyon\r\n- perf-smoke.ps1: sp_VersionSummary süre ölçümü JSON çıktı.\r\n- tech-audit.ps1: outdated & vulnerable raporu (isteğe bağlı SystemMetadata güncelle).\r\n- generate-changelog.ps1: Son tag → HEAD fark taslağı ekler.\r\n- check-rules-hash.ps1: Hash mismatch → exit 9.\r\n- rules-metrics.ps1 (planlı): PR etiket istatistikleri.\r\n\r\n---\r\nUygulama: İhlaller PR’da `needs-scope-reduce` etiketi alır.\r\n"
+  },
+  "copilot": {
+    "hash": "69b7fc4b12c400daea21efac6a1b266554bb228df73dbae9ee2b3e3059c3aad3",
+    "text": "# Visual Studio Çalışma Kuralları (Cerrahi Müdahale + Parçalama)\r\nVersion: 1.4 (Canonical)\r\n\r\nBu kurallar küçük, izole ve güvenli değişiklikler yapmayı zorunlu kılar. Amaç: Gereksiz kapsam büyümesini ve zincirleme hataları önlemek.\r\n\r\n## 1. Cerrahi Müdahale Protokolü\r\n0. Workspace Context: `.copilot/context.md` içindeki RuleHash ile bu dosya hash’i aynı değilse önce `pwsh -File ./sync-rules.ps1`.\r\n1. Tek Belirti: Yalnız en erken hata mesajını hedef al.\r\n2. Kök Sebep Sınıfı: Kod | SQL Nesnesi Eksik | Path | İzin | Yapılandırma | Performans.\r\n3. Etki Haritası: Maks 1–2 dosya.\r\n4. Önce Oku: Değişiklik öncesi dosyayı incele.\r\n5. Minimal Yama: Gerekli satırlar dışında dokunma.\r\n6. Doğrulama: Derle / sqlcmd → Belirti kayboldu mu? Yeni uyarı açıldı mı?\r\n7. Stop: Belirti giderildiyse dur; iyileştirme = ayrı görev.\r\n8. Commit Formatı: `fix(scope): root-cause -> action`.\r\n9. GRANT Guard: `IF OBJECT_ID(...,'P') IS NOT NULL` olmadan GRANT yok.\r\n\r\n## 2. Parçalama\r\n- Tek PR = Tek niyet.\r\n- >50 net yeni satır → alt görev.\r\n- Net diff (add+del) ≤ 400 satır (aksi böl).\r\n- Şema / kod / doküman tek commit’te karışma.\r\nChecklist: Problem tek cümle? Bitiş ölçülebilir? Dosya <5? Yan etki değerlendirildi?\r\n\r\n## 3. Akış\r\nAç → Oku → Lokal test → Yama → Derle → Commit → (Refactor ikinci PR).\r\n\r\n## 4. SQL Örnekleri\r\nStub: `IF OBJECT_ID('dbo.X','P') IS NULL EXEC('CREATE PROCEDURE dbo.X AS BEGIN SET NOCOUNT ON; SELECT 1; END');`\r\nIndex Guard: `IF NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_T_Col' AND object_id=OBJECT_ID('dbo.T')) CREATE INDEX IX_T_Col ON dbo.T(Col);`\r\nKolon Guard: `IF COL_LENGTH('dbo.T','YeniKolon') IS NULL ALTER TABLE dbo.T ADD YeniKolon INT NULL;`\r\n\r\n## 5. İdempotent Desenler\r\n- Obj create guard (procedure, view, function).\r\n- Tablo guard (`IF OBJECT_ID(...,'U') IS NULL`).\r\n- Kolon guard (`COL_LENGTH`).\r\n- Index guard.\r\n- GRANT guard.\r\n\r\n## 6. Commit & Branch\r\nBranch adları: feature/* fix/* refactor/* chore/* hotfix/*.\r\nConventional tip: feat | fix | docs | refactor | perf | test | chore | security | build | ci.\r\n\r\n## 7. Karar Analizi (5 Şapka)\r\n≥200 net satır veya mimari değişim: Mimar / Dev / Güvenlik / Performans / UX maddeleri zorunlu.\r\n\r\n## 8. Test Stratejisi\r\nFailing test → Fix → Yeşil. Çekirdek coverage hedefi >%85. CI: coverlet + threshold.\r\n\r\n## 9. Performans SLO\r\np95 kritik prosedür <5s lokal. API p95 hedef <500ms (gelecek). `perf-smoke.ps1` ile ölç.\r\n\r\n## 10. Güvenlik\r\nSecrets commit yok. Dependabot + `dotnet list package --vulnerable` + gitleaks. Parametrik sorgu zorunlu.\r\n\r\n## 11. Pre-commit Kontroller\r\nmigration-lint OK, verify-repeatable OK, RuleHash güncel, (opsiyonel hızlı test).\r\n\r\n## 12. Senkron\r\nCanonical: bu dosya. `sync-rules.ps1` → `.copilot/context.md`, `.github/copilot-instructions.md`, `docs/RULES_CHECKLIST.md` + RuleHash dosyası + (varsa) DB `SystemMetadata.RuleHash` update.\r\n\r\n## 13. Roadmap Placeholder\r\nHeartbeat, drift raporu, otomatik dokümantasyon – aktif değil.\r\n\r\n## 14. Karar Matrisi\r\n| Durum | Eylem |\r\n|------|-------|\r\n| Tek kayıp proc | Stub + rerun |\r\n| Zincirli 5+ hata | İlk hatayı düzelt, tekrar çalıştır |\r\n| Path hatası | Sadece path düzelt |\r\n| Grant nesne yok | Stub + koşullu GRANT |\r\n| Diff >400 | PR böl |\r\n| Güvenlik açığı (CVSS ≥7) | Versiyon yükselt + CHANGELOG |\r\n\r\n## 15. Onay & Rollback\r\nNiyet gerçekleştiyse dur. Rollback tek commit revert ile mümkün olmalı.\r\n\r\n## 16. İnceleme Soruları\r\nNiyet tek mi? Gereksiz diff yok mu? Guard’lar tam mı? Revert kolay mı? 5 Şapka gerekli mi & eklendi mi? Diff limiti ihlal edildi mi? Commit formatı düzgün mü?\r\n\r\n## 17. Sözlük\r\nCerrahi Müdahale / Drift / Context Drift / Guard / Atomik Görev / SLO.\r\n\r\n## 18. Teknoloji Uyumluluk\r\nAdımlar: Bundle incele → Issue (mevcut vs önerilen + risk + rollback) → Onay → SystemMetadata (TechStack_*) → Uygula → CHANGELOG.\r\nKısıt: Preview yalnız exp branch + izolasyon. Checklist: Bundle | IssueRef | Rollback | Governance etkisi.\r\n\r\n## 19. Komut Format & Context\r\n`<No>. <ENV>: <komut>` (ENV: PowerShell7|SQL|Git|Shell). Zincir karakter yok (`; && |`).\r\nContext doğrula: Local hash → DB hash → mismatch ise sadece senkron komutları döndür.\r\nFormat ihlali yanıt prefix: `FormatViolation:`.\r\n\r\nÖrnek:\r\n1. PowerShell7: $h=(Get-FileHash docs/VS_WORKFLOW_RULES.md -Algorithm SHA256).Hash\r\n2. SQL: SELECT MetadataValue FROM SystemMetadata WHERE MetadataKey='RuleHash';\r\n3. PowerShell7: pwsh -File ./scripts/sync-context.ps1 -EmitBundle\r\n\r\n## 20. Otomasyon\r\n- perf-smoke.ps1: sp_VersionSummary süre ölçümü JSON çıktı.\r\n- tech-audit.ps1: outdated & vulnerable raporu (isteğe bağlı SystemMetadata güncelle).\r\n- generate-changelog.ps1: Son tag → HEAD fark taslağı ekler.\r\n- check-rules-hash.ps1: Hash mismatch → exit 9.\r\n- rules-metrics.ps1 (planlı): PR etiket istatistikleri.\r\n\r\n---\r\nUygulama: İhlaller PR’da `needs-scope-reduce` etiketi alır.\r\n"
+  }
+}

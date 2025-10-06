@@ -150,7 +150,11 @@ if(-not $SkipKeywordGap){
     'https://raw.githubusercontent.com/wappalyzer/wappalyzer/master/src/technologies.json',
     'https://raw.githubusercontent.com/wappalyzer/wappalyzer/main/src/technologies.json',
     'https://raw.githubusercontent.com/wappalyzer/wappalyzer/master/src/technologies/index.json',
-    'https://raw.githubusercontent.com/wappalyzer/wappalyzer/main/src/technologies/index.json'
+    'https://raw.githubusercontent.com/wappalyzer/wappalyzer/main/src/technologies/index.json',
+    # New fallbacks: package.json (stable) and npm registry metadata
+    'https://raw.githubusercontent.com/wappalyzer/wappalyzer/master/package.json',
+    'https://raw.githubusercontent.com/wappalyzer/wappalyzer/main/package.json',
+    'https://registry.npmjs.org/wappalyzer/latest'
   )
   Fetch-And-Process -Name 'KeywordGap' -Getter { Fetch-WithFallback 'KeywordGap' $keywordCandidates } -Parser { param($raw) @{ 'KeywordGap_RefDate'=(Get-Date).ToString('yyyy-MM-dd') } } -RawExt 'json'
 }

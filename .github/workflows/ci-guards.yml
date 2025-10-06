@@ -68,6 +68,28 @@ jobs:
         run: |
           if(Test-Path 'scripts/commit-message-lint.ps1'){ ./scripts/commit-message-lint.ps1 -Base origin/$env:BASE_REF -Head HEAD } else { Write-Host 'commit-message-lint script yok' }
 
+
+      - name: Perf smoke
+        shell: pwsh
+        run: |
+          if(Test-Path 'scripts/perf-smoke.ps1'){ pwsh -File scripts/perf-smoke.ps1 | Tee-Object perf-smoke.json } else { Write-Host 'perf-smoke.ps1 yok' }
+
+      - name: Upload perf smoke artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-smoke
+          path: perf-smoke.json
+
+      - name: Tech audit
+        shell: pwsh
+        run: |
+          if(Test-Path 'scripts/tech-audit.ps1'){ pwsh -File scripts/tech-audit.ps1 } else { Write-Host 'tech-audit.ps1 yok' }
+
+      - name: Rules hash check
+        shell: pwsh
+        run: |
+          if(Test-Path 'scripts/check-rules-hash.ps1'){ pwsh -File scripts/check-rules-hash.ps1 } else { Write-Host 'check-rules-hash.ps1 yok' }
       - name: Report summary
         if: always()
         shell: bash

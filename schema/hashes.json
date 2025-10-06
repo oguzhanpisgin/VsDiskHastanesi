@@ -1,0 +1,130 @@
+[
+  {
+    "file": "00_MASTER_SCHEMA.sql",
+    "sha256": "33dfb621dedfa7fcb28dda7dca1c7eea4ccc5b79ba404f8b24c3c7305eed8a43"
+  },
+  {
+    "file": "01_INDEXES.sql",
+    "sha256": "ebb73727972cdb73dd8339324d3aa205689c8cea2800db224b0f9193cbf9cd4d"
+  },
+  {
+    "file": "02_VIEWS.sql",
+    "sha256": "2f40a5f4881550834ca84d3ac0b033a712695a05627926714859f4b4fe164096"
+  },
+  {
+    "file": "03_SEED_DATA.sql",
+    "sha256": "31f4b21b5fc23afd372be31c64d8cc9c1523f6670aa0d4a0c3c46c338f0574df"
+  },
+  {
+    "file": "04_SYNC_SYSTEM.sql",
+    "sha256": "e09e468c91cbddd60a96858747f55aa797e08096a399e034af54fc1a9d30558e"
+  },
+  {
+    "file": "05_CHATBOT_SYSTEM.sql",
+    "sha256": "8fe1c8fa70fb507a2ffcec30596d2a39cdc5d3d579e8970ffbdb7e0f23136e45"
+  },
+  {
+    "file": "06_CMS_ROUTES.sql",
+    "sha256": "06d19e09236752c247b7684239b1097554e64725457caa50dd7950913963f6ff"
+  },
+  {
+    "file": "07_SUBDOMAINS.sql",
+    "sha256": "82d0d3eeb3fc544fd69aa366e088fdd36d702a834abf10df25c3a6d62d091979"
+  },
+  {
+    "file": "08_CRM_EXTENSIONS.sql",
+    "sha256": "4245fbbcaa69cf0731c930a9debbfee3a5b62f64a23899f5639b8370f79f48f3"
+  },
+  {
+    "file": "08_CRM_SYSTEM.sql",
+    "sha256": "6561ee3723a98da2b44446ade3ef575d17fc56c66460725a33d5bd9585f35bda"
+  },
+  {
+    "file": "09_WEBSITE_STRUCTURE.sql",
+    "sha256": "dd89008d25aa895642d62a6ed058dbc0727ee1383774ca3d6bd0d0face08d896"
+  },
+  {
+    "file": "10_AI_COUNCIL.sql",
+    "sha256": "2b2f50afab7c5f3981fd8350df41f89437516dd8ab74ab39fe861ff0046dd9f4"
+  },
+  {
+    "file": "11_CMS_CONTENT.sql",
+    "sha256": "ddf9a9e8c505bc653a948f314100c139be4fe0279a7205eee6bd666eb5d87495"
+  },
+  {
+    "file": "12_CRM_MAINTENANCE.sql",
+    "sha256": "bd74c5cef83700be650a7d5f40034883e94b0026a006a3613475c5c9340dd9cd"
+  },
+  {
+    "file": "12_CRM_VALIDATION.sql",
+    "sha256": "f5d40cea7056a9881d522c816d72076873a5cf340a93f41036d75ceae8097c91"
+  },
+  {
+    "file": "12_DB_MIGRATION_INFRA.sql",
+    "sha256": "87218f39edb9093597bfc9efc7920d58813fb324fbeef1e1da32840e984bec44"
+  },
+  {
+    "file": "13_DB_OPERATIONS.sql",
+    "sha256": "25cd08b8131102cab1b9e3a966f2d497d1ed16e2eb46dbcd793bc44670cde4f6"
+  },
+  {
+    "file": "14_DB_GOVERNANCE_PROCS.sql",
+    "sha256": "dec70653550926c7adb0244ec811c10d7aa1f23ca6c2b49a1f40f3f74c0b67fd"
+  },
+  {
+    "file": "15_SECURITY_ROLES.sql",
+    "sha256": "28460df57539c4796847e1555193a76d4b471b591751787efb89670099f6e38e"
+  },
+  {
+    "file": "16_SEARCH_MAINTENANCE.sql",
+    "sha256": "bcc8f687b864d414caec8d21346cfa1d3e17f435f86f8b02d289fe3700a7eb26"
+  },
+  {
+    "file": "17_ADVANCED_GOVERNANCE.sql",
+    "sha256": "32a2aaf6eb692e351a5605cb0f2ecf1eb7257c5edabf4c7bf1fa353aadab427e"
+  },
+  {
+    "file": "18_AI_COUNCIL_INTEGRATION.sql",
+    "sha256": "0030e922b36bf0d2b5d2d6bf1845f98f6a6208543b89757223df2fd20d32a8b6"
+  },
+  {
+    "file": "19_CONTENT_STRATEGY.sql",
+    "sha256": "569856330301a504d9c12f14e4302b91bd9aa57437b2a93045f4919c4343291c"
+  },
+  {
+    "file": "20_BACKLOG_TASKS.sql",
+    "sha256": "28e45fd403cc754b1782f7312598bcf88dcacf196c3e2c644e9dacc38e703e90"
+  },
+  {
+    "file": "21_PROJECT_KICKOFF.sql",
+    "sha256": "02ad5ed671b59108b3b23aef9f27eb027495ed08ebf18954d2f6cc9cf33b79d3"
+  },
+  {
+    "file": "22_EXTERNAL_VERSION_KEYS.sql",
+    "sha256": "f44eb219c66c66d3c4c4030d419a5ff5fd1feeaf9768da8fa15378f797b3d756"
+  },
+  {
+    "file": "24_VERSION_SUMMARY.sql",
+    "sha256": "dfb15188b5d76af4ca3dbf1f0f3197292670e68e9df318e9cc30a22de7b46d24"
+  },
+  {
+    "file": "25_EXTERNAL_FETCH_LOG.sql",
+    "sha256": "bb42ebaa3c49da22516c1be582e61b23c104be2540d267ce8c09cd6b60618e0e"
+  },
+  {
+    "file": "26_EXTERNAL_FETCH_RETENTION.sql",
+    "sha256": "26b503d1a9c70c30d453d7a906fa01a30d91ae44bb726203fad381bc26a7766f"
+  },
+  {
+    "file": "27_EXTERNAL_FETCH_HEALTH.sql",
+    "sha256": "e57804f004b036d0ca323d252f23a0c72d513bc5baf8248c6e724e6563155d64"
+  },
+  {
+    "file": "28_METADATA_API.sql",
+    "sha256": "75145f9b671b3cf7ad293aa53b5b8c54e973bbf43f7be127bd57c20414f0e122"
+  },
+  {
+    "file": "29_DOCUMENTS_STAGING.sql",
+    "sha256": "dbb6f8a9fcbe008763eed66038aefced12b9e1ca6413a9fcf70ad828b16bf005"
+  }
+]
