@@ -1,0 +1,10 @@
+{
+  "hero": ["Stack", "Text", "Button"],
+  "benefits": ["Card", "CardHeader", "CardFooter"],
+  "faq": ["Accordion"],
+  "cta": ["Stack", "Button"],
+  "timeline": ["Stack", "Divider"],
+  "metrics": ["Table", "Badge"],
+  "caseStudies": ["Card", "Image"],
+  "contact": ["Form", "TextField", "Button"]
+}

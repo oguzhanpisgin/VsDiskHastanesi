@@ -1,0 +1,30 @@
+[
+  {
+    "name": "FluentUI",
+    "type": "changelog",
+    "candidates": [
+      "https://raw.githubusercontent.com/microsoft/fluentui/main/packages/react/CHANGELOG.md",
+      "https://raw.githubusercontent.com/microsoft/fluentui/main/packages/react-components/CHANGELOG.md"
+    ]
+  },
+  {
+    "name": "SchemaOrg",
+    "type": "readme",
+    "url": "https://raw.githubusercontent.com/schemaorg/schemaorg/main/README.md"
+  },
+  {
+    "name": "CoreWebVitals",
+    "type": "page",
+    "url": "https://web.dev/articles/vitals"
+  },
+  {
+    "name": "SeoCoreUpdates",
+    "type": "page",
+    "url": "https://developers.google.com/search/updates/ranking"
+  },
+  {
+    "name": "KeywordGap",
+    "type": "npm",
+    "url": "https://registry.npmjs.org/wappalyzer/latest"
+  }
+]

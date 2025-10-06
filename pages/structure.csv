@@ -1,0 +1,5 @@
+url,primary_keyword,secondary_keywords,intent,schema_type,modules
+/hakkimizda,kurumsal disk çözümleri,"kurumsal veri; teknoloji danışmanlığı",Informational,AboutPage,"hero;timeline;benefits;contact"
+/veri-kurtarma/raid-sunucu-veri-kurtarma,RAID veri kurtarma,"sunucu veri kurtarma; bozulmuş raid",Transactional,Service,"hero;benefits;faq;cta"
+/siber-guvenlik/yonetilen-guvenlik-hizmetleri-mssp-soc,SOC hizmeti,"yönetilen güvenlik; 7/24 izleme",Transactional,Service,"hero;benefits;faq;cta"
+/danismanlik/kvkk-uyum-danismanligi,KVKK uyum danışmanlığı,"verbis danışmanlığı; kvkk teknik tedbir",Informational,Service,"hero;benefits;faq;cta"
