@@ -1,106 +1,130 @@
 # Visual Studio Çalışma Kuralları (Cerrahi Müdahale + Parçalama)
-Version: 1.4 (Canonical)
+Version: 1.3 (Canonical)
 
 Bu kurallar küçük, izole ve güvenli değişiklikler yapmayı zorunlu kılar. Amaç: Gereksiz kapsam büyümesini ve zincirleme hataları önlemek.
 
 ## 1. Cerrahi Müdahale Protokolü
-0. Workspace Context: `.copilot/context.md` içindeki RuleHash ile bu dosya hash’i aynı değilse önce `pwsh -File ./sync-rules.ps1`.
-1. Tek Belirti: Yalnız en erken hata mesajını hedef al.
-2. Kök Sebep Sınıfı: Kod | SQL Nesnesi Eksik | Path | İzin | Yapılandırma | Performans.
-3. Etki Haritası: Maks 1–2 dosya.
-4. Önce Oku: Değişiklik öncesi dosyayı incele.
-5. Minimal Yama: Gerekli satırlar dışında dokunma.
-6. Doğrulama: Derle / sqlcmd → Belirti kayboldu mu? Yeni uyarı açıldı mı?
-7. Stop: Belirti giderildiyse dur; iyileştirme = ayrı görev.
-8. Commit Formatı: `fix(scope): root-cause -> action`.
-9. GRANT Guard: `IF OBJECT_ID(...,'P') IS NOT NULL` olmadan GRANT yok.
+0. Workspace Context Desteği: Hata düzeltmeye başlamadan ÖNCE `.copilot/context.md` içindeki `RuleHash` ile bu dosya hash’ini karşılaştır; farklıysa senkron script çalıştır.
+1. Belirtiyi Yakala: Tek (en erken) hata mesajını kopyala; ikincil hataları yok say.
+2. Kök Sebep Sınıflandır: (Kod / SQL nesnesi eksik / Yol (path) / İzin / Yapılandırma / Performans).
+3. Etki Haritası: En fazla 1–2 dosya hedefle (fazlası = kapsam kayması uyarısı).
+4. Koruyucu İnceleme: Değişiklik öncesi dosyayı oku (tahmin yok).
+5. Minimal Yama: Sadece gereken satırlar; refactor yok; stil dokunma.
+6. Doğrulama: Derle veya `sqlcmd` test → hata giderildi mi?
+7. Geri Dönüş Kriteri: Hata kaybolduysa dur; iyileştirme ayrı görev.
+8. İz Kaydı: Commit mesajı `fix(scope): root-cause -> action` biçiminde.
+9. Guard Ölçütü: Her `GRANT EXECUTE` öncesi `IF OBJECT_ID(...,'P') IS NOT NULL`.
 
-## 2. Parçalama
-- Tek PR = Tek niyet.
-- >50 net yeni satır → alt görev.
-- Net diff (add+del) ≤ 400 satır (aksi böl).
-- Şema / kod / doküman tek commit’te karışma.
-Checklist: Problem tek cümle? Bitiş ölçülebilir? Dosya <5? Yan etki değerlendirildi?
+## 2. Parçalama (Decomposition)
+- Tek PR / commit = Tek niyet.
+- 50+ satır net yeni kod => alt görevlere böl.
+- Atomik diff (eklenen+silinen) ≤ 400 satır.
+- Şema + kod + doküman aynı commit’te karışma.
 
-## 3. Akış
-Aç → Oku → Lokal test → Yama → Derle → Commit → (Refactor ikinci PR).
+Checklist:
+[ ] Problem tek cümle mi?
+[ ] Ölçülebilir bitiş kriteri var mı?
+[ ] Dokunulacak dosya < 5 mi?
+[ ] Yan etki (perf/security) değerlendirildi mi?
 
-## 4. SQL Örnekleri
-Stub: `IF OBJECT_ID('dbo.X','P') IS NULL EXEC('CREATE PROCEDURE dbo.X AS BEGIN SET NOCOUNT ON; SELECT 1; END');`
-Index Guard: `IF NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_T_Col' AND object_id=OBJECT_ID('dbo.T')) CREATE INDEX IX_T_Col ON dbo.T(Col);`
-Kolon Guard: `IF COL_LENGTH('dbo.T','YeniKolon') IS NULL ALTER TABLE dbo.T ADD YeniKolon INT NULL;`
+## 3. VS İçinde Akış
+1. Sorunu Aç → 2. Oku → 3. Lokal test → 4. Yama → 5. Derle → 6. Commit → 7. (Opsiyonel) Refactor ayrı.
+
+## 4. SQL Örneği
+`IF OBJECT_ID('dbo.X','P') IS NULL EXEC('CREATE PROCEDURE dbo.X AS BEGIN SET NOCOUNT ON; SELECT 1; END');`
+Ardından `ALTER PROCEDURE`.
 
 ## 5. İdempotent Desenler
-- Obj create guard (procedure, view, function).
-- Tablo guard (`IF OBJECT_ID(...,'U') IS NULL`).
-- Kolon guard (`COL_LENGTH`).
-- Index guard.
-- GRANT guard.
+- Guarded CREATE + ALTER.
+- Tablo guard: `IF OBJECT_ID('dbo.T','U') IS NULL`.
+- GRANT guardlı.
 
-## 6. Commit & Branch
-Branch adları: feature/* fix/* refactor/* chore/* hotfix/*.
-Conventional tip: feat | fix | docs | refactor | perf | test | chore | security | build | ci.
+## 6. Commit / Branch
+- Branch: feature/*, fix/*, refactor/*, chore/*, hotfix/*.
+- Conventional commit tipleri: feat|fix|docs|refactor|perf|test|chore|security|build|ci.
 
 ## 7. Karar Analizi (5 Şapka)
-≥200 net satır veya mimari değişim: Mimar / Dev / Güvenlik / Performans / UX maddeleri zorunlu.
+Mimar / Geliştirici / Güvenlik / Performans / UX kısa maddeler.
 
 ## 8. Test Stratejisi
-Failing test → Fix → Yeşil. Çekirdek coverage hedefi >%85. CI: coverlet + threshold.
+Failing test ekle → Fix → Yeşil. Coverage hedefleri kademeli (çekirdek > %85).
 
 ## 9. Performans SLO
-p95 kritik prosedür <5s lokal. API p95 hedef <500ms (gelecek). `perf-smoke.ps1` ile ölç.
+p95 kritik prosedür <5s (lokal). Gelecekte API p95 <500ms.
 
 ## 10. Güvenlik
-Secrets commit yok. Dependabot + `dotnet list package --vulnerable` + gitleaks. Parametrik sorgu zorunlu.
+- Secrets commit yok.
+- Dependabot / `dotnet list package --vulnerable` izlenir.
+- Parametrik sorgu zorunlu.
 
 ## 11. Pre-commit Kontroller
-migration-lint OK, verify-repeatable OK, RuleHash güncel, (opsiyonel hızlı test).
+- Migration lint OK
+- Repeatable drift OK
+- (Opsiyonel) hızlı test
 
-## 12. Senkron
-Canonical: bu dosya. `sync-rules.ps1` → `.copilot/context.md`, `.github/copilot-instructions.md`, `docs/RULES_CHECKLIST.md` + RuleHash dosyası + (varsa) DB `SystemMetadata.RuleHash` update.
+## 12. Senkron & Kurallar
+Canonical: bu dosya. Türetilenler: `.github/copilot-instructions.md`, `RULES_CHECKLIST.md`.
 
-## 13. Roadmap Placeholder
-Heartbeat, drift raporu, otomatik dokümantasyon – aktif değil.
+## 13. Gelecek Placeholder
+Heartbeat, drift raporu, otomatik dokümantasyon (aktif değil).
 
-## 14. Karar Matrisi
+## 14. Hızlı Karar Matrisi
 | Durum | Eylem |
-|------|-------|
-| Tek kayıp proc | Stub + rerun |
-| Zincirli 5+ hata | İlk hatayı düzelt, tekrar çalıştır |
-| Path hatası | Sadece path düzelt |
-| Grant nesne yok | Stub + koşullu GRANT |
-| Diff >400 | PR böl |
-| Güvenlik açığı (CVSS ≥7) | Versiyon yükselt + CHANGELOG |
+|-------|-------|
+| Tek kayıp proc | Stub + yeniden çalıştır |
+| Zincirli çok hata | İlkini çöz, yeniden çalıştır |
+| Path hatası | Yalnız path düzelt |
+| Grant nesne yok | Koşullu grant + stub |
+| Diff >400 | PR böl | 
+| Güvenlik açığı | Versiyon yükselt + CHANGELOG |
 
-## 15. Onay & Rollback
-Niyet gerçekleştiyse dur. Rollback tek commit revert ile mümkün olmalı.
+## 15. Onay Eşiği
+İlk niyet gerçekleştiyse dur. Yeni gereksinim = yeni task.
 
 ## 16. İnceleme Soruları
-Niyet tek mi? Gereksiz diff yok mu? Guard’lar tam mı? Revert kolay mı? 5 Şapka gerekli mi & eklendi mi? Diff limiti ihlal edildi mi? Commit formatı düzgün mü?
+Tek niyet? Gereksiz diff? Guard’lar tam? Revert kolay mı? 5 Şapka maddeleri var mı? Diff limiti aşıldı mı?
 
 ## 17. Sözlük
-Cerrahi Müdahale / Drift / Context Drift / Guard / Atomik Görev / SLO.
+Cerrahi Müdahale / Drift / Guard / Atomik Görev / SLO.
 
-## 18. Teknoloji Uyumluluk
-Adımlar: Bundle incele → Issue (mevcut vs önerilen + risk + rollback) → Onay → SystemMetadata (TechStack_*) → Uygula → CHANGELOG.
-Kısıt: Preview yalnız exp branch + izolasyon. Checklist: Bundle | IssueRef | Rollback | Governance etkisi.
+## 18. Teknoloji Sürüm & Uyumluluk
+Amaç: Stabil & uyumlu sürümler.
+Adımlar: İncele (bundle) → Issue (mevcut vs önerilen + risk + rollback) → Onay → `SystemMetadata` güncelle (`TechStack_*`) → Uygula → CHANGELOG.
+Kısıt: Preview yok (özel onay hariç), zincir test edilmeden merge yok.
+Checklist:
+[ ] Bundle incelendi
+[ ] Issue referansı commit mesajında
+[ ] Rollback planı yazıldı
+[ ] Governance etkisi yok
 
-## 19. Komut Format & Context
-`<No>. <ENV>: <komut>` (ENV: PowerShell7|SQL|Git|Shell). Zincir karakter yok (`; && |`).
-Context doğrula: Local hash → DB hash → mismatch ise sadece senkron komutları döndür.
-Format ihlali yanıt prefix: `FormatViolation:`.
+## 19. Komut Sunum & Workspace Context Danışma Standardı
+Amaç: Çalıştırılabilir komutların tutarlı, güvenli ve context-doğrulanmış formatla verilmesi.
 
-Örnek:
+Format:
+`<No>. <ENV>: <komut>`
+ENV (izinli): PowerShell7 | SQL | Git | Shell
+- PowerShell varsayılan: 7.5.3 (`pwsh`).
+- Tek satır = tek adım (komut zinciri yok: `;` `&&` `|`).
+
+Context Doğrulama (AI içsel):
+1. Local hash: SHA256(docs/VS_WORKFLOW_RULES.md)
+2. DB hash: SELECT MetadataValue FROM SystemMetadata WHERE MetadataKey='RuleHash';
+3. Farklı ise önce senkron komutları döndür.
+
+Yanıt Şablonu:
+Context: OK | MISMATCH
+Planned Steps: (kısa liste)
+Komutlar:
 1. PowerShell7: $h=(Get-FileHash docs/VS_WORKFLOW_RULES.md -Algorithm SHA256).Hash
 2. SQL: SELECT MetadataValue FROM SystemMetadata WHERE MetadataKey='RuleHash';
-3. PowerShell7: pwsh -File ./scripts/sync-context.ps1 -EmitBundle
+3. PowerShell7: pwsh -File .\scripts\sync-context.ps1 -EmitBundle
 
-## 20. Otomasyon
-- perf-smoke.ps1: sp_VersionSummary süre ölçümü JSON çıktı.
-- tech-audit.ps1: outdated & vulnerable raporu (isteğe bağlı SystemMetadata güncelle).
-- generate-changelog.ps1: Son tag → HEAD fark taslağı ekler.
-- check-rules-hash.ps1: Hash mismatch → exit 9.
-- rules-metrics.ps1 (planlı): PR etiket istatistikleri.
+Kısıtlar:
+- Çoklu ortam tek satırda istenirse format ihlali uyar.
+- Komutlar idempotent olmalı veya uyarı içermeli.
+
+CI Öneri: `check-rules-hash.ps1` mismatch → exit 9.
 
 ---
 Uygulama: İhlaller PR’da `needs-scope-reduce` etiketi alır.
+

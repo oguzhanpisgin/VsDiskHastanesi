@@ -1,6 +1,6 @@
-# Cerrahi Kurallar Checklist (Version: 1.4)
+# Cerrahi Kurallar Checklist (Version: 1.3)
 
-> RuleHash: 69b7fc4b12c400daea21efac6a1b266554bb228df73dbae9ee2b3e3059c3aad3
+> RuleHash: 2fe22b7632609e284cabf467144574f48f18a5232d8dec896441cddb510b3522
 > Otomatik üretildi: sync-rules.ps1.
 
 ## Ön Çıkış

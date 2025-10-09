@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build.BuildSolution",
+      "type": "shell",
+      "command": "dotnet build ./ -c Release",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": ["$msCompile"]
+    }
+  ]
+}
