@@ -1,0 +1,15 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: diskhastanesi-local-sql
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: '${SA_PASSWORD}'
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "grep -q 'SQL Server is now ready for client connections' /var/opt/mssql/log/errorlog"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
